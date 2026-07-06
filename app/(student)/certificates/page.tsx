@@ -21,7 +21,7 @@ export default function CertificatesPage() {
               <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-brand-orange/10">
                 <Award className="h-7 w-7 text-brand-orange" />
               </div>
-              <h3 className="mb-1 font-semibold text-white">{cert.courseName}</h3>
+              <h3 className="mb-1 font-semibold text-text-primary">{cert.courseName}</h3>
               <p className="mb-4 text-xs text-text-secondary">Completed {cert.completionDate}</p>
               <div className="flex items-center gap-3 border-t border-border-glass pt-4">
                 <button className="cursor-pointer flex items-center gap-1.5 text-xs font-medium text-brand-orange transition-colors hover:text-brand-orange/80">
@@ -29,7 +29,7 @@ export default function CertificatesPage() {
                 </button>
                 <Link
                   href={`/verify/${cert.id}`}
-                  className="flex items-center gap-1.5 text-xs font-medium text-text-secondary transition-colors hover:text-white"
+                  className="flex items-center gap-1.5 text-xs font-medium text-text-secondary transition-colors hover:text-text-primary"
                 >
                   <ExternalLink className="h-3.5 w-3.5" /> Verify
                 </Link>
@@ -40,7 +40,7 @@ export default function CertificatesPage() {
       ) : (
         <div className="flex flex-col items-center justify-center rounded-xl border border-border-glass bg-surface-dark py-20">
           <Award className="mb-3 h-12 w-12 text-text-secondary" />
-          <p className="text-lg font-medium text-white">No certificates yet</p>
+          <p className="text-lg font-medium text-text-primary">No certificates yet</p>
           <p className="mt-1 text-sm text-text-secondary">Complete courses to earn certificates</p>
         </div>
       )}

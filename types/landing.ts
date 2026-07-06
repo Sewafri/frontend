@@ -48,3 +48,30 @@ export interface Category {
   label: string;
   value: string;
 }
+
+export interface TrackCourse {
+  id: string;
+  title: string;
+  slug: string;
+  duration: string;
+  studentsCount: number;
+}
+
+export interface Track {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  color: string;
+  courses: TrackCourse[];
+}
+
+export interface Update {
+  id: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  date: string;
+  href: string;
+  image?: string;
+}

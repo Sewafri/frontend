@@ -16,10 +16,15 @@ export interface Course {
   updatedAt: Date
 }
 
+export type LessonType = "video" | "article" | "quiz" | "exercise" | "code"
+
 export interface Lesson {
   id: string
   courseId: string
   title: string
   videoUrl: string | null
   order: number
+  type?: LessonType
+  codeContent?: string
+  codeLanguage?: string
 }

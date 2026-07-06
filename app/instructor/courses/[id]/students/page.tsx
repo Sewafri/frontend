@@ -1,7 +1,6 @@
 import { PageHeader } from "@/components/ui/page-header";
 import GlassCard from "@/components/ui/glass-card";
 import ProgressBar from "@/components/ui/progress-bar";
-import { Users } from "lucide-react";
 
 const ENROLLED_STUDENTS = [
   { id: "s1", name: "Alex Johnson", email: "alex@example.com", progress: 65, lastActive: "2 hours ago", grade: "B+" },
@@ -34,7 +33,7 @@ export default function StudentProgressPage() {
             <tbody>
               {ENROLLED_STUDENTS.map((s) => (
                 <tr key={s.id} className="border-b border-border-glass last:border-0">
-                  <td className="py-3 font-medium text-white">{s.name}</td>
+                  <td className="py-3 font-medium text-text-primary">{s.name}</td>
                   <td className="py-3 text-text-secondary">{s.email}</td>
                   <td className="py-3">
                     <ProgressBar value={s.progress} size="sm" className="max-w-[120px]" />
@@ -42,10 +41,10 @@ export default function StudentProgressPage() {
                   <td className="py-3 text-text-secondary">{s.lastActive}</td>
                   <td className="py-3">
                     <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                      s.grade.startsWith("A") ? "bg-green-500/10 text-green-400" :
-                      s.grade.startsWith("B") ? "bg-blue-500/10 text-blue-400" :
-                      s.grade.startsWith("C") ? "bg-yellow-500/10 text-yellow-400" :
-                      "bg-red-500/10 text-red-400"
+                       s.grade.startsWith("A") ? "bg-accent-green/10 text-accent-green" :
+                       s.grade.startsWith("B") ? "bg-accent-blue/10 text-accent-blue" :
+                       s.grade.startsWith("C") ? "bg-accent-amber/10 text-accent-amber" :
+                       "bg-accent-red/10 text-accent-red"
                     }`}>{s.grade}</span>
                   </td>
                 </tr>

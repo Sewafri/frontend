@@ -26,9 +26,11 @@ const bestStreak = (() => {
   return Math.max(max, cur);
 })();
 
+const accentMap = ["brand", "green", "blue", "purple"] as const;
+
 export default function MyLearningPage() {
   return (
-    <div className="">
+    <div>
       <PageHeader
         title="My Learning"
         description="Track your progress and continue learning"
@@ -36,27 +38,27 @@ export default function MyLearningPage() {
 
       {/* Stat Cards */}
       <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {STUDENT_STATS.map((stat) => (
-          <StatCard key={stat.label} {...stat} />
+        {STUDENT_STATS.map((stat, i) => (
+          <StatCard key={stat.label} {...stat} accent={accentMap[i]} />
         ))}
       </div>
 
       {/* Continue Learning */}
       <section className="mb-8">
-        <h2 className="mb-4 text-lg font-semibold text-white">Continue Learning</h2>
+        <h2 className="mb-4 text-lg font-semibold text-text-primary">Continue Learning</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           {CONTINUE_COURSES.map((course) => (
-            <Link key={course.id} href={`/my-learning/${course.id}`} className="group block cursor-pointer">
-              <GlassCard>
+            <Link key={course.id} href={`/my-learning/${course.id}`} className="group block">
+              <GlassCard variant="interactive">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-brand-orange/10">
-                    <BookOpen className="h-6 w-6 text-brand-orange" />
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-brand-500/10">
+                    <BookOpen className="h-6 w-6 text-brand-500" />
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-sm font-semibold text-white transition-colors group-hover:text-brand-orange">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-sm font-semibold text-text-primary transition-colors group-hover:text-brand-500">
                       {course.title}
                     </h3>
-                    <p className="mt-0.5 text-xs text-text-secondary">{course.category}</p>
+                    <p className="mt-0.5 text-xs text-text-tertiary">{course.category}</p>
                     <ProgressBar value={course.progress} size="sm" className="mt-3" />
                   </div>
                 </div>
@@ -70,42 +72,42 @@ export default function MyLearningPage() {
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Deadlines */}
         <section>
-          <h2 className="mb-4 text-lg font-semibold text-white">Upcoming Deadlines</h2>
+          <h2 className="mb-4 text-lg font-semibold text-text-primary">Upcoming Deadlines</h2>
           <GlassCard>
             {UPCOMING_DEADLINES.length > 0 ? (
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {UPCOMING_DEADLINES.map((dl) => (
                   <div
                     key={dl.id}
-                    className={`flex items-center gap-3 rounded-lg p-3 ${
-                      dl.urgent ? "bg-red-500/5" : "bg-surface-card"
+                    className={`flex items-center gap-3 rounded-lg p-3 transition-colors ${
+                      dl.urgent ? "bg-accent-red/5" : "hover:bg-surface-card-hover"
                     }`}
                   >
                     <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${
                       dl.type === "assignment"
-                        ? "bg-brand-orange/10"
+                        ? "bg-brand-500/10"
                         : dl.type === "quiz"
-                          ? "bg-blue-500/10"
-                          : "bg-purple-500/10"
+                          ? "bg-accent-blue/10"
+                          : "bg-accent-purple/10"
                     }`}>
                       {dl.type === "quiz" ? (
-                        <Calendar className="h-4 w-4 text-blue-400" />
+                        <Calendar className="h-4 w-4 text-accent-blue" />
                       ) : dl.type === "project" ? (
-                        <Clock className="h-4 w-4 text-purple-400" />
+                        <Clock className="h-4 w-4 text-accent-purple" />
                       ) : (
-                        <BookOpen className="h-4 w-4 text-brand-orange" />
+                        <BookOpen className="h-4 w-4 text-brand-500" />
                       )}
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium text-white">{dl.title}</span>
+                        <span className="text-sm font-medium text-text-primary">{dl.title}</span>
                         {dl.urgent && (
-                          <span className="rounded bg-red-500/10 px-1.5 py-0.5 text-[10px] font-medium text-red-400">
+                          <span className="rounded bg-accent-red/10 px-1.5 py-0.5 text-[10px] font-medium text-accent-red">
                             URGENT
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-text-secondary">{dl.course} &mdash; {dl.date}</p>
+                      <p className="text-xs text-text-tertiary">{dl.course} &mdash; {dl.date}</p>
                     </div>
                   </div>
                 ))}
@@ -118,13 +120,13 @@ export default function MyLearningPage() {
 
         {/* Streak */}
         <section>
-          <h2 className="mb-4 text-lg font-semibold text-white">Learning Streak</h2>
+          <h2 className="mb-4 text-lg font-semibold text-text-primary">Learning Streak</h2>
           <GlassCard>
             <div className="flex flex-col items-center py-4">
-              <div className="mb-2 flex h-16 w-16 items-center justify-center rounded-full bg-brand-orange/10">
-                <Flame className="h-8 w-8 text-brand-orange" />
+              <div className="mb-2 flex h-16 w-16 items-center justify-center rounded-full bg-brand-500/10">
+                <Flame className="h-8 w-8 text-brand-500" />
               </div>
-              <span className="text-3xl font-bold text-white">{currentStreak}</span>
+              <span className="text-3xl font-bold text-text-primary">{currentStreak}</span>
               <span className="text-sm text-text-secondary">day streak</span>
               <div className="mt-4 flex gap-1.5">
                 {LEARNING_STREAK.map((active, i) => (
@@ -132,15 +134,15 @@ export default function MyLearningPage() {
                     key={i}
                     className={`flex h-8 w-8 items-center justify-center rounded-lg text-xs font-medium ${
                       active
-                        ? "bg-brand-orange text-white"
-                        : "bg-surface-card text-text-secondary"
+                        ? "bg-brand-500 text-text-primary"
+                        : "bg-surface-sunken text-text-tertiary"
                     }`}
                   >
                     {STREAK_DAYS[i]}
                   </div>
                 ))}
               </div>
-              <p className="mt-4 text-xs text-text-secondary">
+              <p className="mt-4 text-xs text-text-tertiary">
                 {bestStreak} day best streak
               </p>
             </div>

@@ -37,7 +37,7 @@ export default function CourseDetailPage() {
     return (
       <div className="flex flex-col items-center justify-center py-20">
         <BookOpen className="mb-3 h-12 w-12 text-text-secondary" />
-        <h2 className="text-xl font-semibold text-white">Course not found</h2>
+        <h2 className="text-xl font-semibold text-text-primary">Course not found</h2>
         <p className="mt-1 text-sm text-text-secondary">
           This course may have been removed or doesn&apos;t exist.
         </p>
@@ -56,13 +56,13 @@ export default function CourseDetailPage() {
         description={course.description}
       />
 
-      <div className="mb-8 overflow-hidden rounded-xl border border-border-glass bg-gradient-to-br from-gray-900 to-gray-800">
+      <div className="mb-8 overflow-hidden rounded-xl border border-border-glass bg-gradient-to-br from-neutral-800 to-neutral-700">
         <div className="flex flex-col gap-6 p-8 lg:flex-row lg:items-center">
           <div className="flex-1">
             <span className="mb-3 inline-block rounded-full bg-brand-orange/10 px-3 py-1 text-xs font-medium text-brand-orange">
               {course.category}
             </span>
-            <h1 className="mb-2 text-2xl font-bold text-white lg:text-3xl">{course.title}</h1>
+            <h1 className="mb-2 text-2xl font-bold text-text-primary lg:text-3xl">{course.title}</h1>
             <p className="mb-4 text-text-secondary">{course.description}</p>
             <div className="flex flex-wrap items-center gap-4 text-sm text-text-secondary">
               <span className="flex items-center gap-1.5">
@@ -70,7 +70,7 @@ export default function CourseDetailPage() {
                 {course.instructor.name}
               </span>
               <span className="flex items-center gap-1.5">
-                <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" />
+                <Star className="h-4 w-4 fill-accent-amber text-accent-amber" />
                 {course.rating}
               </span>
               <span className="flex items-center gap-1.5">
@@ -87,7 +87,7 @@ export default function CourseDetailPage() {
             <span className="text-3xl font-bold text-brand-orange">
               ${course.price}
             </span>
-            <button className="cursor-pointer rounded-lg bg-brand-orange px-8 py-3 font-medium text-white transition-colors hover:bg-brand-orange/90">
+            <button className="cursor-pointer rounded-lg bg-brand-orange px-8 py-3 font-medium text-text-primary transition-colors hover:bg-brand-orange/90">
               Enroll Now
             </button>
           </div>
@@ -97,13 +97,13 @@ export default function CourseDetailPage() {
       <div className="grid gap-8 lg:grid-cols-3">
         {/* Curriculum */}
         <div className="lg:col-span-2">
-          <h2 className="mb-4 text-lg font-semibold text-white">Course Curriculum</h2>
+          <h2 className="mb-4 text-lg font-semibold text-text-primary">Course Curriculum</h2>
           <div className="space-y-3">
             {CURRICULUM.map((section, i) => (
               <details key={i} className="group rounded-xl border border-border-glass bg-surface-dark">
                 <summary className="flex cursor-pointer items-center justify-between px-5 py-4">
                   <div>
-                    <span className="text-sm font-medium text-white">{section.title}</span>
+                    <span className="text-sm font-medium text-text-primary">{section.title}</span>
                     <span className="ml-3 text-xs text-text-secondary">
                       {section.lessons.length} lessons &middot; {section.duration}
                     </span>
@@ -126,7 +126,7 @@ export default function CourseDetailPage() {
         {/* Sidebar */}
         <div>
           <div className="rounded-xl border border-border-glass bg-surface-dark p-5">
-            <h3 className="mb-3 text-sm font-semibold text-white">This Course Includes</h3>
+            <h3 className="mb-3 text-sm font-semibold text-text-primary">This Course Includes</h3>
             <ul className="space-y-2 text-sm text-text-secondary">
               <li className="flex items-center gap-2">
                 <Play className="h-4 w-4 text-brand-orange" /> 20+ hours on-demand video

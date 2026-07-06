@@ -1,36 +1,35 @@
 import { PageHeader } from "@/components/ui/page-header";
 import GlassCard from "@/components/ui/glass-card";
 import { ALL_CERTIFICATES } from "@/constants/dashboard";
-import { Award, Download, Eye } from "lucide-react";
-import Link from "next/link";
+import { Download } from "lucide-react";
 
 export default function AdminCertificatesPage() {
   return (
-    <div className="">
+    <div>
       <PageHeader
         title="Certificates"
         description="Manage course completion certificates"
       />
 
-      <GlassCard>
+      <GlassCard className="p-0">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-border-glass text-xs text-text-secondary">
-                <th className="pb-3 font-medium">Course</th>
-                <th className="pb-3 font-medium">Student</th>
-                <th className="pb-3 font-medium">Completed</th>
-                <th className="pb-3 font-medium">Download</th>
+              <tr className="border-b border-border-default text-xs text-text-tertiary">
+                <th className="px-6 pb-3 pt-4 font-medium">Course</th>
+                <th className="px-6 pb-3 pt-4 font-medium">Student</th>
+                <th className="px-6 pb-3 pt-4 font-medium">Completed</th>
+                <th className="px-6 pb-3 pt-4 font-medium">Download</th>
               </tr>
             </thead>
             <tbody>
               {ALL_CERTIFICATES.map((cert) => (
-                <tr key={cert.id} className="border-b border-border-glass last:border-0">
-                  <td className="py-3 font-medium text-white">{cert.courseName}</td>
-                  <td className="py-3 text-text-secondary">Student</td>
-                  <td className="py-3 text-text-secondary">{cert.completionDate}</td>
-                  <td className="py-3">
-                    <button className="cursor-pointer flex items-center gap-1 text-xs text-brand-orange hover:underline">
+                <tr key={cert.id} className="border-b border-border-default transition-colors hover:bg-surface-card-hover last:border-0">
+                  <td className="px-6 py-3.5 font-medium text-text-primary">{cert.courseName}</td>
+                  <td className="px-6 py-3.5 text-text-secondary">Student</td>
+                  <td className="px-6 py-3.5 text-text-secondary">{cert.completionDate}</td>
+                  <td className="px-6 py-3.5">
+                    <button className="flex cursor-pointer items-center gap-1.5 text-xs font-medium text-brand-500 transition-colors hover:text-brand-600">
                       <Download className="h-3.5 w-3.5" /> Download
                     </button>
                   </td>

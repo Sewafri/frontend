@@ -24,15 +24,15 @@ export function RatingStars({ rating, reviewCount, size = "sm" }: RatingStarsPro
             className={cn(
               "transition-colors",
               i < fullStars
-                ? "fill-[#FF7000] text-[#FF7000]"
+                ? "fill-accent-amber text-accent-amber"
                 : i === fullStars && hasHalfStar
-                  ? "fill-[#FF7000]/50 text-[#FF7000]/50"
-                  : "fill-[#DCE3F1] text-[#DCE3F1] dark:fill-[#212734] dark:text-[#212734]"
+                  ? "fill-accent-amber/50 text-accent-amber/50"
+                  : "fill-text-tertiary/30 text-text-tertiary/30"
             )}
           />
         ))}
       </div>
-      <span className="text-sm font-medium text-[#858EAD]">
+      <span className="text-sm font-medium text-text-tertiary">
         {rating.toFixed(1)}
         {reviewCount !== undefined && (
           <span className="ml-1 font-normal">({reviewCount.toLocaleString()})</span>

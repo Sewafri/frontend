@@ -42,7 +42,7 @@ export default function ApprovalCard({
             {applicant.initials}
           </div>
           <div>
-            <h4 className="font-semibold text-white">{applicant.name}</h4>
+            <h4 className="font-semibold text-text-primary">{applicant.name}</h4>
             <p className="text-sm text-text-secondary">{applicant.email}</p>
             <div className="mt-2 flex items-center gap-3 text-xs text-text-secondary">
               <span className="flex items-center gap-1">
@@ -62,13 +62,13 @@ export default function ApprovalCard({
             <div className="flex items-center gap-2">
               <button
                 onClick={onApprove}
-                className="flex items-center gap-1 rounded-lg bg-green-500/10 px-3 py-1.5 text-xs font-medium text-green-400 transition-colors hover:bg-green-500/20"
+                className="flex items-center gap-1 rounded-lg bg-accent-green/10 px-3 py-1.5 text-xs font-medium text-accent-green transition-colors hover:bg-accent-green/20"
               >
                 <Check className="h-3.5 w-3.5" /> Approve
               </button>
               <button
                 onClick={onReject}
-                className="flex items-center gap-1 rounded-lg bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 transition-colors hover:bg-red-500/20"
+                className="flex items-center gap-1 rounded-lg bg-accent-red/10 px-3 py-1.5 text-xs font-medium text-accent-red transition-colors hover:bg-accent-red/20"
               >
                 <X className="h-3.5 w-3.5" /> Reject
               </button>

@@ -23,7 +23,7 @@ export default function ApplicationsPage() {
   };
 
   return (
-    <div className="">
+    <div>
       <PageHeader
         title="Applications"
         description="Review instructor applications"

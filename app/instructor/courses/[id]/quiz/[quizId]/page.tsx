@@ -47,7 +47,7 @@ export default function QuizEditorPage() {
   return (
     <div className="">
       <div className="mb-6 flex items-center gap-3">
-        <Link href={`/instructor/courses/${params.id}/quiz`} className="flex items-center gap-1 text-sm text-text-secondary hover:text-white">
+        <Link href={`/instructor/courses/${params.id}/quiz`} className="flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary">
           <ArrowLeft className="h-4 w-4" /> Back to Quizzes
         </Link>
       </div>
@@ -56,7 +56,7 @@ export default function QuizEditorPage() {
         title="Edit Quiz"
         description={`Quiz: ${params.quizId}`}
         actions={
-          <button onClick={addQuestion} className="cursor-pointer flex items-center gap-2 rounded-lg bg-surface-card px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10">
+          <button onClick={addQuestion} className="cursor-pointer flex items-center gap-2 rounded-lg bg-surface-card px-4 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-surface-card-hover">
             <Plus className="h-4 w-4" /> Add Question
           </button>
         }
@@ -66,15 +66,15 @@ export default function QuizEditorPage() {
         {questions.map((q, idx) => (
           <GlassCard key={q.id}>
             <div className="flex items-start justify-between mb-3">
-              <span className="text-sm font-medium text-white">Question {idx + 1}</span>
-              <button onClick={() => removeQuestion(q.id)} className="cursor-pointer text-red-400 hover:text-red-300"><Trash2 className="h-4 w-4" /></button>
+              <span className="text-sm font-medium text-text-primary">Question {idx + 1}</span>
+              <button onClick={() => removeQuestion(q.id)} aria-label="Remove question" className="cursor-pointer text-accent-red hover:text-accent-red/80"><Trash2 className="h-4 w-4" /></button>
             </div>
-            <input type="text" value={q.text} onChange={(e) => updateQuestion(q.id, e.target.value)} placeholder="Enter question..." className="mb-3 w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2 text-sm text-white placeholder-text-secondary outline-none focus:border-brand-orange/50" />
+            <input type="text" value={q.text} onChange={(e) => updateQuestion(q.id, e.target.value)} placeholder="Enter question..." aria-label="Question text" className="mb-3 w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2 text-sm text-text-primary placeholder-text-secondary outline-none focus:border-brand-orange/50" />
             <div className="space-y-2">
               {q.options.map((opt, optIdx) => (
                 <div key={optIdx} className="flex items-center gap-2">
-                  <input type="radio" name={`correct-${q.id}`} checked={q.correct === optIdx} onChange={() => setCorrect(q.id, optIdx)} className="accent-brand-orange" />
-                  <input type="text" value={opt} onChange={(e) => updateOption(q.id, optIdx, e.target.value)} placeholder={`Option ${optIdx + 1}`} className="flex-1 rounded-lg border border-border-glass bg-surface-card px-3 py-2 text-sm text-white placeholder-text-secondary outline-none focus:border-brand-orange/50" />
+                  <input type="radio" name={`correct-${q.id}`} checked={q.correct === optIdx} onChange={() => setCorrect(q.id, optIdx)} aria-label={`Mark option ${optIdx + 1} as correct`} className="accent-brand-orange" />
+                  <input type="text" value={opt} onChange={(e) => updateOption(q.id, optIdx, e.target.value)} placeholder={`Option ${optIdx + 1}`} aria-label={`Option ${optIdx + 1}`} className="flex-1 rounded-lg border border-border-glass bg-surface-card px-3 py-2 text-sm text-text-primary placeholder-text-secondary outline-none focus:border-brand-orange/50" />
                 </div>
               ))}
             </div>
@@ -83,7 +83,7 @@ export default function QuizEditorPage() {
       </div>
 
       <div className="mt-6 flex justify-end">
-        <button className="cursor-pointer flex items-center gap-2 rounded-lg bg-brand-orange px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-orange/90">
+        <button className="cursor-pointer flex items-center gap-2 rounded-lg bg-brand-orange px-6 py-2.5 text-sm font-medium text-text-primary transition-colors hover:bg-brand-orange/90">
           <Save className="h-4 w-4" /> Save Quiz
         </button>
       </div>

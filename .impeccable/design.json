@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-06T00:00:00.000Z",
+  "title": "Design System: SewAfri",
+  "extensions": {
+    "colorMeta": {
+      "primary": { "role": "primary", "displayName": "Burnt Orange", "canonical": "oklch(0.65 0.18 45)", "tonalRamp": ["oklch(0.15 0.04 30)", "oklch(0.25 0.08 35)", "oklch(0.35 0.12 38)", "oklch(0.45 0.15 40)", "oklch(0.55 0.17 42)", "oklch(0.65 0.18 45)", "oklch(0.75 0.14 48)", "oklch(0.85 0.08 50)"] },
+      "neutral-50": { "role": "neutral", "displayName": "Warm Ivory", "canonical": "oklch(0.99 0.002 80)", "tonalRamp": [] },
+      "neutral-100": { "role": "neutral", "displayName": "Cream", "canonical": "oklch(0.97 0.005 80)", "tonalRamp": [] },
+      "neutral-200": { "role": "neutral", "displayName": "Warm Beige", "canonical": "oklch(0.92 0.008 80)", "tonalRamp": [] },
+      "neutral-300": { "role": "neutral", "displayName": "Warm Taupe", "canonical": "oklch(0.86 0.01 75)", "tonalRamp": [] },
+      "neutral-400": { "role": "neutral", "displayName": "Warm Stone", "canonical": "oklch(0.7 0.015 70)", "tonalRamp": [] },
+      "neutral-500": { "role": "neutral", "displayName": "Warm Stone Muted", "canonical": "oklch(0.55 0.015 65)", "tonalRamp": [] },
+      "neutral-600": { "role": "neutral", "displayName": "Warm Slate", "canonical": "oklch(0.4 0.01 60)", "tonalRamp": [] },
+      "neutral-700": { "role": "neutral", "displayName": "Warm Ash", "canonical": "oklch(0.3 0.01 55)", "tonalRamp": [] },
+      "neutral-800": { "role": "neutral", "displayName": "Dark Earth", "canonical": "oklch(0.2 0.01 50)", "tonalRamp": [] },
+      "neutral-900": { "role": "neutral", "displayName": "Charcoal", "canonical": "oklch(0.17 0.01 45)", "tonalRamp": [] },
+      "surface-raised": { "role": "surface", "displayName": "Pure White", "canonical": "oklch(1 0 80)", "tonalRamp": [] },
+      "surface": { "role": "surface", "displayName": "Warm Sand", "canonical": "oklch(0.985 0.003 80)", "tonalRamp": [] },
+      "surface-sunken": { "role": "surface", "displayName": "Faded Clay", "canonical": "oklch(0.95 0.005 75)", "tonalRamp": [] },
+      "dark-surface-raised": { "role": "surface", "displayName": "Deep Espresso", "canonical": "oklch(0.18 0.005 70)", "tonalRamp": [] },
+      "dark-surface": { "role": "surface", "displayName": "Dark Earth", "canonical": "oklch(0.15 0.005 70)", "tonalRamp": [] },
+      "dark-surface-sunken": { "role": "surface", "displayName": "Midnight Soil", "canonical": "oklch(0.12 0.005 70)", "tonalRamp": [] },
+      "accent-green": { "role": "accent", "displayName": "Leaf Green", "canonical": "oklch(0.6 0.2 145)", "tonalRamp": [] },
+      "accent-red": { "role": "accent", "displayName": "Ruby", "canonical": "oklch(0.58 0.2 25)", "tonalRamp": [] },
+      "accent-blue": { "role": "accent", "displayName": "Sky Blue", "canonical": "oklch(0.55 0.15 250)", "tonalRamp": [] },
+      "accent-amber": { "role": "accent", "displayName": "Honey", "canonical": "oklch(0.7 0.18 80)", "tonalRamp": [] },
+      "accent-purple": { "role": "accent", "displayName": "Amethyst", "canonical": "oklch(0.55 0.15 310)", "tonalRamp": [] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero headlines on the landing page and major section titles only." },
+      "heading": { "displayName": "Heading", "purpose": "Page titles (h1), dashboard headers." },
+      "title": { "displayName": "Title", "purpose": "Card titles, section headings." },
+      "body": { "displayName": "Body", "purpose": "Paragraphs, descriptions, body content. Max 70ch." },
+      "label": { "displayName": "Label", "purpose": "Button text, input labels, metadata, stats." }
+    },
+    "shadows": [
+      { "name": "subtle-edge", "value": "0 1px 2px 0 rgb(0 0 0 / 0.05)", "purpose": "Default shadow on cards at rest." },
+      { "name": "hover-lift", "value": "0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05)", "purpose": "Interactive cards and stat cards on hover." },
+      { "name": "modal-elevation", "value": "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.05)", "purpose": "Modals, dialogs, dropdown menus." },
+      { "name": "brand-glow", "value": "0 0 20px rgb(255 112 0 / 0.15)", "purpose": "Featured cards and accent elements." }
+    ],
+    "motion": [
+      { "name": "ease-standard", "value": "cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Default easing for state transitions." },
+      { "name": "duration-200", "value": "200ms", "purpose": "Standard state transition duration (hover, focus, active)." },
+      { "name": "duration-300", "value": "300ms", "purpose": "Scale/transform transitions (image zoom, card lift)." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" },
+      { "name": "2xl", "value": "1536px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single call-to-action per view. Burnt Orange with white text, rounded corners.",
+      "html": "<button class=\"ds-btn-primary\">Get Started</button>",
+      "css": ".ds-btn-primary { background: #ff7000; color: #fff; font-family: Geist, sans-serif; font-size: 0.875rem; font-weight: 500; padding: 0.5rem 1rem; border: none; border-radius: 0.75rem; cursor: pointer; transition: background 0.2s, transform 0.2s; line-height: 1.25; } .ds-btn-primary:hover { background: #e05a00; } .ds-btn-primary:focus-visible { outline: 2px solid #ff7000; outline-offset: 2px; } .ds-btn-primary:active { transform: translateY(1px); }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary action with border and transparent background.",
+      "html": "<button class=\"ds-btn-outline\">Cancel</button>",
+      "css": ".ds-btn-outline { background: transparent; color: #1c1917; font-family: Geist, sans-serif; font-size: 0.875rem; font-weight: 500; padding: 0.5rem 1rem; border: 1px solid #e5e0d8; border-radius: 0.75rem; cursor: pointer; transition: background 0.2s, transform 0.2s; line-height: 1.25; } .ds-btn-outline:hover { background: #f5f5f4; } .ds-btn-outline:focus-visible { outline: 2px solid #ff7000; outline-offset: 2px; } .ds-btn-outline:active { transform: translateY(1px); }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Tertiary action with no border, minimal presence.",
+      "html": "<button class=\"ds-btn-ghost\">Edit</button>",
+      "css": ".ds-btn-ghost { background: transparent; color: #78716c; font-family: Geist, sans-serif; font-size: 0.875rem; font-weight: 500; padding: 0.5rem 1rem; border: none; border-radius: 0.75rem; cursor: pointer; transition: background 0.2s, color 0.2s; line-height: 1.25; } .ds-btn-ghost:hover { background: #f5f5f4; color: #1c1917; } .ds-btn-ghost:focus-visible { outline: 2px solid #ff7000; outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Clean, minimal text input with warm border and brand-colored focus ring.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Enter your name\" />",
+      "css": ".ds-input { width: 100%; height: 2rem; min-width: 0; background: transparent; color: #1c1917; font-family: Geist, sans-serif; font-size: 0.875rem; padding: 0.5rem 0.625rem; border: 1px solid #e5e0d8; border-radius: 0.5rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; line-height: 1.25; box-sizing: border-box; } .ds-input::placeholder { color: #a8a29e; } .ds-input:focus { border-color: #ff7000; box-shadow: 0 0 0 3px rgba(255, 112, 0, 0.15); } .ds-input:disabled { opacity: 0.5; cursor: not-allowed; }"
+    },
+    {
+      "name": "Default Card",
+      "kind": "card",
+      "refersTo": "card-default",
+      "description": "Standard content container with subtle border and shadow at rest.",
+      "html": "<div class=\"ds-card-default\"><h3 style=\"font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1rem;margin:0 0 0.5rem;color:#1c1917;line-height:1.4;\">Card Title</h3><p style=\"font-family:Geist,sans-serif;font-size:0.875rem;color:#78716c;margin:0;line-height:1.6;\">This is a default card with a subtle border and shadow. Content goes here.</p></div>",
+      "css": ".ds-card-default { background: #ffffff; border: 1px solid #ede9e3; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); }"
+    },
+    {
+      "name": "Interactive Card",
+      "kind": "card",
+      "refersTo": "card-interactive",
+      "description": "Clickable card that lifts on hover — used for course cards, stat cards, and navigation tiles.",
+      "html": "<div class=\"ds-card-interactive\" tabindex=\"0\" role=\"button\"><h3 style=\"font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1rem;margin:0 0 0.5rem;color:#1c1917;line-height:1.4;\">Interactive Card</h3><p style=\"font-family:Geist,sans-serif;font-size:0.875rem;color:#78716c;margin:0;line-height:1.6;\">Hover over me — I lift and glow.</p></div>",
+      "css": ".ds-card-interactive { background: #ffffff; border: 1px solid #ede9e3; border-radius: 1rem; padding: 1.5rem; cursor: pointer; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s; } .ds-card-interactive:hover { transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -2px rgba(0,0,0,0.05); } .ds-card-interactive:focus-visible { outline: 2px solid #ff7000; outline-offset: 2px; }"
+    },
+    {
+      "name": "Featured Card",
+      "kind": "card",
+      "refersTo": "card-featured",
+      "description": "Premium content card with brand glow and subtle gradient overlay.",
+      "html": "<div class=\"ds-card-featured\"><h3 style=\"font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1rem;margin:0 0 0.5rem;color:#1c1917;line-height:1.4;position:relative;z-index:1;\">Featured Course</h3><p style=\"font-family:Geist,sans-serif;font-size:0.875rem;color:#78716c;margin:0;line-height:1.6;position:relative;z-index:1;\">This card has a subtle orange glow and gradient for premium content.</p></div>",
+      "css": ".ds-card-featured { position: relative; overflow: hidden; background: #ffffff; border: 1px solid rgba(255,112,0,0.2); border-radius: 1rem; padding: 1.5rem; box-shadow: 0 0 20px rgba(255,112,0,0.15); } .ds-card-featured::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,112,0,0.05) 0%, transparent 100%); pointer-events: none; }"
+    },
+    {
+      "name": "Stat Card",
+      "kind": "card",
+      "refersTo": "card-stat",
+      "description": "Dashboard stat display with accent-colored icon capsule and hover glow.",
+      "html": "<div class=\"ds-card-stat\"><div style=\"display:flex;justify-content:space-between;align-items:flex-start;\"><div><p style=\"font-family:Geist,sans-serif;font-size:0.875rem;font-weight:500;color:#78716c;margin:0 0 0.25rem;\">Total Revenue</p><p style=\"font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;color:#1c1917;margin:0;line-height:1.15;\">$12,450</p><p style=\"font-family:Geist,sans-serif;font-size:0.75rem;font-weight:500;color:#22c55e;margin:0.25rem 0 0;\"><span style=\"display:inline-block;width:6px;height:6px;border-radius:50%;background:#22c55e;margin-right:4px;vertical-align:middle;\"></span>+12.5% from last month</p></div><div style=\"width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:0.5rem;background:rgba(255,112,0,0.1);color:#ff7000;border:1px solid rgba(255,112,0,0.2);\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"12\" y1=\"1\" x2=\"12\" y2=\"23\"/><path d=\"M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6\"/></svg></div></div></div>",
+      "css": ".ds-card-stat { position: relative; overflow: hidden; background: #ffffff; border-radius: 1rem; padding: 1.25rem; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); border: 1px solid #ede9e3; transition: transform 0.2s, box-shadow 0.2s; } .ds-card-stat:hover { transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -2px rgba(0,0,0,0.05); }"
+    },
+    {
+      "name": "Sidebar Nav Link",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Dashboard sidebar navigation item with role-colored active indicator.",
+      "html": "<a class=\"ds-nav-link ds-nav-link--active\" href=\"#\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"3\" width=\"7\" height=\"7\"/><rect x=\"14\" y=\"3\" width=\"7\" height=\"7\"/><rect x=\"14\" y=\"14\" width=\"7\" height=\"7\"/><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\"/></svg><span>Dashboard</span></a>",
+      "css": ".ds-nav-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.625rem 0.75rem; border-radius: 0.5rem; color: #78716c; font-family: Geist, sans-serif; font-size: 0.875rem; font-weight: 500; text-decoration: none; transition: background 0.15s, color 0.15s; position: relative; } .ds-nav-link:hover { background: #f5f2ed; color: #1c1917; } .ds-nav-link--active { background: rgba(255,112,0,0.1); color: #ff7000; } .ds-nav-link--active::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 2px; height: 1.25rem; border-radius: 999px; background: #ff7000; }"
+    },
+    {
+      "name": "Course Card",
+      "kind": "card",
+      "refersTo": "card-course",
+      "description": "Full course listing card with thumbnail, category pill, metadata, and pricing.",
+      "html": "<div class=\"ds-card-course\"><div style=\"position:relative;height:160px;background:#f0ede8;border-radius:1rem 1rem 0 0;display:flex;align-items:center;justify-content:center;overflow:hidden;\"><span style=\"position:absolute;right:12px;top:12px;background:rgba(255,112,0,0.9);color:#fff;font-family:Geist,sans-serif;font-size:11px;font-weight:600;padding:2px 10px;border-radius:999px;backdrop-filter:blur(4px);\">Web Dev</span></div><div style=\"padding:1rem;space-y:12px;\"><h3 style=\"font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.875rem;color:#1c1917;margin:0 0 0.5rem;line-height:1.3;\">Full-Stack JavaScript</h3><p style=\"font-family:Geist,sans-serif;font-size:0.75rem;color:#78716c;margin:0 0 0.75rem;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;\">Learn modern JavaScript from fundamentals to advanced full-stack development.</p><div style=\"display:flex;gap:12px;font-size:0.75rem;color:#a8a29e;margin-bottom:0.75rem;\"><span style=\"display:flex;align-items:center;gap:4px;\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"#f59e0b\" stroke=\"#f59e0b\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polygon points=\"12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2\"/></svg>4.8</span><span style=\"display:flex;align-items:center;gap:4px;\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2\"/><circle cx=\"9\" cy=\"7\" r=\"4\"/><path d=\"M22 21v-2a4 4 0 0 0-3-3.87\"/><path d=\"M16 3.13a4 4 0 0 1 0 7.75\"/></svg>1.2k</span><span style=\"display:flex;align-items:center;gap:4px;\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><polyline points=\"12 6 12 12 16 14\"/></svg>12 weeks</span></div><div style=\"display:flex;justify-content:space-between;align-items:center;border-top:1px solid #ede9e3;padding-top:0.75rem;\"><span style=\"font-size:0.75rem;color:#a8a29e;\">Jane Doe</span><span style=\"font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:#ff7000;\">25,000 FCFA</span></div></div></div>",
+      "css": ".ds-card-course { overflow: hidden; border-radius: 1rem; background: #ffffff; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); border: 1px solid #ede9e3; transition: transform 0.2s, box-shadow 0.2s; } .ds-card-course:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.05); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Baobab Canopy",
+    "overview": "Rooted, sheltering, and generous \u2014 like the iconic African baobab that serves as a village gathering place, SewAfri\u2019s design provides shade for learning, growth, and connection. The interface is warm without being saccharine, confident without being loud. Every surface feels deliberately placed by a human designer who respects the learner\u2019s time and attention.\n\nThe system explicitly rejects the generic corporate edtech aesthetic (sterile blues, rigid card grids, dense table UIs) and the telltale signs of AI-generated design (identical cards, templated gradients, stale symmetry). Instead, it favors varied card styles, intentional asymmetry across page layouts, and a warm tonal hierarchy that guides the eye without shouting.",
+    "keyCharacteristics": [
+      "Warm tonal layering over heavy shadows",
+      "Generous, deliberate spacing \u2014 no clutter",
+      "Rounded corners on cards gently curved (12\u201316px)",
+      "Orange brand accent used with restraint (\u226410% of any given screen)",
+      "Responsive micro-interactions that feel tactile, not gratuitous",
+      "Dark mode with warm undertones, not pure gray"
+    ],
+    "rules": [
+      { "name": "The Burnt Orange Rule", "body": "The primary accent may not exceed 10% of any screen. Its rarity gives it power. CTAs, active nav indicators, and one decorative element per view \u2014 nothing more.", "section": "colors" },
+      { "name": "The Warmth Rule", "body": "No pure white, no pure black, no cool grays. Every neutral is tinted warm.", "section": "colors" },
+      { "name": "The Heading Rule", "body": "Space Grotesk is reserved for hierarchy. Never use it for paragraph body text. Geist handles all reading.", "section": "typography" },
+      { "name": "The No-Heavy-Shadow Rule", "body": "Tonal layering carries hierarchy. Shadows are for hover feedback and modal separation only.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use Burnt Orange (#ff7000) sparingly \u2014 one CTA, one active indicator, one decorative element per screen. Its rarity is its power.",
+      "Do lean on tonal layering for depth: card surfaces sit a tone above the page; raised elements sit a tone above cards.",
+      "Do vary card styles across a page \u2014 mix default, interactive, and inset variants so no two sections look templated.",
+      "Do use the warm, cream-based palette in light mode and the espresso-based palette in dark mode.",
+      "Do use Space Grotesk for headings only. Body text is always Geist.",
+      "Do provide hover and focus-visible feedback on every interactive element."
+    ],
+    "donts": [
+      "Don't use generic corporate edtech aesthetics \u2014 no sterile blues, rigid card grids, or dense table UIs.",
+      "Don't create the \"AI-generated\" look \u2014 no identical cards in a row, no templated gradients.",
+      "Don't use heavy box-shadows as the primary depth cue. Tonal layering carries hierarchy.",
+      "Don't use cool or neutral grays. Every neutral must be warm-toned.",
+      "Don't exceed the 10% Burnt Orange rule.",
+      "Don't use pure black (#000) or pure white (#fff) anywhere in the interface.",
+      "Don't animate gratuitously \u2014 motion should confirm interaction, not decorate."
+    ]
+  }
+}

@@ -6,72 +6,77 @@ import StatusBadge from "@/components/ui/status-badge";
 import { INSTRUCTOR_STATS, COURSE_PERFORMANCE, RECENT_REVIEWS, PENDING_TASKS } from "@/constants/dashboard";
 import { Star } from "lucide-react";
 
+const accentMap = ["brand", "green", "blue", "amber"] as const;
+
 export default function InstructorDashboardPage() {
   return (
-    <div className="">
+    <div>
       <PageHeader
         title="Instructor Dashboard"
         description="Your teaching overview and performance"
         actions={
-          <span className="cursor-pointer rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-400">Active</span>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-accent-green/10 px-3 py-1 text-xs font-medium text-accent-green ring-1 ring-accent-green/20">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent-green" />
+            Active
+          </span>
         }
       />
 
       <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {INSTRUCTOR_STATS.map((stat) => (
-          <StatCard key={stat.label} {...stat} />
+        {INSTRUCTOR_STATS.map((stat, i) => (
+          <StatCard key={stat.label} {...stat} accent={accentMap[i]} />
         ))}
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2">
-          <h2 className="mb-4 text-lg font-semibold text-white">Course Performance</h2>
-          <GlassCard>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm">
-                <thead>
-                  <tr className="border-b border-border-glass text-xs text-text-secondary">
-                    <th className="pb-3 font-medium">Course</th>
-                    <th className="pb-3 font-medium">Students</th>
-                    <th className="pb-3 font-medium">Trend</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {COURSE_PERFORMANCE.map((c) => (
-                    <tr key={c.id} className="border-b border-border-glass last:border-0">
-                      <td className="py-3 font-medium text-white">{c.title}</td>
-                      <td className="py-3 text-text-secondary">{c.students.toLocaleString()}</td>
-                      <td className="py-3">
-                        <span className={`text-sm ${c.trendUp ? "text-green-400" : "text-red-400"}`}>
-                          {c.trendUp ? "+" : ""}{c.trend}%
-                        </span>
-                      </td>
+        <div className="lg:col-span-2 space-y-6">
+          <div>
+            <h2 className="mb-4 text-lg font-semibold text-text-primary">Course Performance</h2>
+            <GlassCard className="p-0">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm">
+                  <thead>
+                    <tr className="border-b border-border-default text-xs text-text-tertiary">
+                      <th className="px-6 pb-3 pt-4 font-medium">Course</th>
+                      <th className="px-6 pb-3 pt-4 font-medium">Students</th>
+                      <th className="px-6 pb-3 pt-4 font-medium">Trend</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </GlassCard>
-
-          <div className="mt-6">
-            <ChartPlaceholder title="Student Enrollment Over Time" height={220} type="line" />
+                  </thead>
+                  <tbody>
+                    {COURSE_PERFORMANCE.map((c) => (
+                      <tr key={c.id} className="border-b border-border-default transition-colors hover:bg-surface-card-hover last:border-0">
+                        <td className="px-6 py-3.5 font-medium text-text-primary">{c.title}</td>
+                        <td className="px-6 py-3.5 text-text-secondary">{c.students.toLocaleString()}</td>
+                        <td className="px-6 py-3.5">
+                          <span className={`text-sm font-medium ${c.trendUp ? "text-accent-green" : "text-accent-red"}`}>
+                            {c.trendUp ? "+" : ""}{c.trend}%
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </GlassCard>
           </div>
+
+          <ChartPlaceholder title="Student Enrollment Over Time" subtitle="Last 30 days" height={220} type="line" />
         </div>
 
         <div className="space-y-6">
           <section>
-            <h2 className="mb-4 text-lg font-semibold text-white">Recent Reviews</h2>
+            <h2 className="mb-4 text-lg font-semibold text-text-primary">Recent Reviews</h2>
             <GlassCard>
               <div className="space-y-4">
                 {RECENT_REVIEWS.slice(0, 2).map((r) => (
-                  <div key={r.id} className="border-b border-border-glass pb-4 last:border-0 last:pb-0">
-                    <div className="mb-1 flex items-center gap-1">
+                  <div key={r.id} className="border-b border-border-default pb-4 last:border-0 last:pb-0">
+                    <div className="mb-1 flex items-center gap-0.5">
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} className={`h-3.5 w-3.5 ${i < r.rating ? "fill-yellow-500 text-yellow-500" : "text-gray-600"}`} />
+                        <Star key={i} className={`h-3.5 w-3.5 ${i < r.rating ? "fill-accent-amber text-accent-amber" : "text-border-default"}`} />
                       ))}
                     </div>
                     <p className="text-sm text-text-secondary">&ldquo;{r.excerpt}&rdquo;</p>
-                    <p className="mt-1 text-xs text-text-secondary">{r.author} &middot; {r.date}</p>
+                    <p className="mt-1 text-xs text-text-tertiary">{r.author} &middot; {r.date}</p>
                   </div>
                 ))}
               </div>
@@ -79,13 +84,13 @@ export default function InstructorDashboardPage() {
           </section>
 
           <section>
-            <h2 className="mb-4 text-lg font-semibold text-white">Pending Tasks</h2>
+            <h2 className="mb-4 text-lg font-semibold text-text-primary">Pending Tasks</h2>
             <GlassCard>
               <div className="space-y-3">
                 {PENDING_TASKS.map((t) => (
-                  <div key={t.id} className="flex items-center justify-between">
+                  <div key={t.id} className="flex items-center justify-between rounded-lg px-3 py-2 transition-colors hover:bg-surface-card-hover">
                     <span className="text-sm text-text-secondary">{t.title}</span>
-                    <span className="rounded-full bg-brand-orange/10 px-2 py-0.5 text-xs font-medium text-brand-orange">{t.count}</span>
+                    <span className="rounded-full bg-brand-500/10 px-2 py-0.5 text-xs font-medium text-brand-500">{t.count}</span>
                   </div>
                 ))}
               </div>

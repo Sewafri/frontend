@@ -37,10 +37,10 @@ export default function ForumThreadListPage() {
       />
 
       <div className="mb-6 flex items-center justify-between">
-        <Link href="/my-learning" className="flex items-center gap-1 text-sm text-text-secondary hover:text-white">
+        <Link href="/my-learning" className="flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary">
           <ArrowLeft className="h-4 w-4" /> Back to courses
         </Link>
-        <button className="cursor-pointer flex items-center gap-2 rounded-xl bg-brand-orange px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-orange/90">
+        <button className="cursor-pointer flex items-center gap-2 rounded-xl bg-brand-orange px-4 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-brand-orange/90">
           <Plus className="h-4 w-4" /> New Thread
         </button>
       </div>
@@ -50,13 +50,13 @@ export default function ForumThreadListPage() {
           <button
             key={thread.id}
             onClick={() => router.push(`/forum/c/${courseId}/t/${thread.id}`)}
-            className="flex w-full cursor-pointer items-center justify-between border-b border-border-glass px-5 py-4 text-left last:border-0 hover:bg-white/5"
+            className="flex w-full cursor-pointer items-center justify-between border-b border-border-glass px-5 py-4 text-left last:border-0 hover:bg-surface-card-hover/50"
           >
             <div className="flex items-start gap-3">
               <MessageSquare className={`mt-0.5 h-5 w-5 ${thread.pinned ? "text-brand-orange" : "text-text-secondary"}`} />
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-white">{thread.title}</span>
+                  <span className="font-medium text-text-primary">{thread.title}</span>
                   {thread.pinned && <span className="rounded bg-brand-orange/10 px-1.5 py-0.5 text-[10px] text-brand-orange">Pinned</span>}
                 </div>
                 <p className="mt-0.5 text-xs text-text-secondary">

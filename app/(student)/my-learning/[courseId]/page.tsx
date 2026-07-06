@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { BookOpen, Check, Lock, Play, ArrowLeft, FileText } from "lucide-react";
+import { BookOpen, Check, Lock, Play, ArrowLeft } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
 import GlassCard from "@/components/ui/glass-card";
 import ProgressBar from "@/components/ui/progress-bar";
@@ -26,7 +26,7 @@ export default function CurriculumPage() {
     return (
       <div className="flex flex-col items-center justify-center py-20">
         <BookOpen className="mb-3 h-12 w-12 text-text-secondary" />
-        <h2 className="text-xl font-semibold text-white">Course not found</h2>
+        <h2 className="text-xl font-semibold text-text-primary">Course not found</h2>
         <p className="mt-1 text-sm text-text-secondary">This course may have been removed.</p>
         <Link href="/my-learning" className="mt-4 text-sm text-brand-orange hover:underline">Back to My Learning</Link>
       </div>
@@ -39,7 +39,7 @@ export default function CurriculumPage() {
   return (
     <div className="">
       <div className="mb-6 flex items-center gap-3">
-        <Link href="/my-learning" className="flex items-center gap-1 text-sm text-text-secondary hover:text-white">
+        <Link href="/my-learning" className="flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary">
           <ArrowLeft className="h-4 w-4" /> My Learning
         </Link>
       </div>
@@ -59,7 +59,7 @@ export default function CurriculumPage() {
             <ProgressBar value={progress} label="Course Progress" className="max-w-md" />
           </div>
           <div className="text-right">
-            <span className="text-2xl font-bold text-white">{completedCount}</span>
+            <span className="text-2xl font-bold text-text-primary">{completedCount}</span>
             <span className="text-xs text-text-secondary"> / {LESSONS.length} lessons</span>
           </div>
         </div>
@@ -72,7 +72,7 @@ export default function CurriculumPage() {
             key={lesson.id}
             className={`flex items-center gap-4 rounded-xl border px-5 py-4 transition-colors ${
               lesson.completed
-                ? "border-green-500/20 bg-green-500/5"
+                ? "border-accent-green/20 bg-accent-green/5"
                 : i === completedCount
                   ? "border-brand-orange/30 bg-brand-orange/5"
                   : "border-border-glass bg-surface-dark"
@@ -81,13 +81,13 @@ export default function CurriculumPage() {
             {/* Icon */}
             <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${
               lesson.completed
-                ? "bg-green-500/10"
+                ? "bg-accent-green/10"
                 : i === completedCount
                   ? "bg-brand-orange/10"
                   : "bg-surface-card"
             }`}>
               {lesson.completed ? (
-                <Check className="h-4 w-4 text-green-400" />
+                <Check className="h-4 w-4 text-accent-green" />
               ) : i === completedCount ? (
                 <Play className="h-4 w-4 text-brand-orange" />
               ) : (
@@ -98,7 +98,7 @@ export default function CurriculumPage() {
             {/* Info */}
             <div className="flex-1">
               <span className={`text-sm font-medium ${
-                lesson.completed ? "text-green-400" : "text-white"
+                lesson.completed ? "text-accent-green" : "text-text-primary"
               }`}>
                 {lesson.title}
               </span>
@@ -112,7 +112,7 @@ export default function CurriculumPage() {
 
             {/* CTA */}
             {i === completedCount && (
-              <button className="cursor-pointer rounded-lg bg-brand-orange px-4 py-1.5 text-xs font-medium text-white transition-colors hover:bg-brand-orange/90">
+              <button className="cursor-pointer rounded-lg bg-brand-orange px-4 py-1.5 text-xs font-medium text-text-primary transition-colors hover:bg-brand-orange/90">
                 Continue
               </button>
             )}

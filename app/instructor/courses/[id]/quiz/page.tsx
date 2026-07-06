@@ -18,7 +18,7 @@ export default function QuizListPage() {
   return (
     <div className="">
       <div className="mb-6 flex items-center gap-3">
-        <Link href={`/instructor/courses/${params.id}/edit`} className="flex items-center gap-1 text-sm text-text-secondary hover:text-white">
+        <Link href={`/instructor/courses/${params.id}/edit`} className="flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary">
           <ArrowLeft className="h-4 w-4" /> Back to Course
         </Link>
       </div>
@@ -27,7 +27,7 @@ export default function QuizListPage() {
         title="Quizzes"
         description="Manage course assessments"
         actions={
-          <button className="cursor-pointer flex items-center gap-2 rounded-lg bg-brand-orange px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-orange/90">
+          <button className="cursor-pointer flex items-center gap-2 rounded-lg bg-brand-orange px-4 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-brand-orange/90">
             <Plus className="h-4 w-4" /> New Quiz
           </button>
         }
@@ -41,12 +41,12 @@ export default function QuizListPage() {
                 <FileQuestion className="h-5 w-5 text-brand-orange" />
               </div>
               <div className="flex-1">
-                <h3 className="text-sm font-semibold text-white">{quiz.title}</h3>
+                <h3 className="text-sm font-semibold text-text-primary">{quiz.title}</h3>
                 <p className="text-xs text-text-secondary">{quiz.questions} questions &middot; {quiz.timeLimit} &middot; {quiz.passingScore}% to pass</p>
               </div>
               <div className="flex items-center gap-2">
-                <Link href={`/instructor/courses/${params.id}/quiz/${quiz.id}`} className="rounded-lg border border-border-glass px-3 py-1.5 text-xs font-medium text-text-secondary transition-colors hover:text-white"><Edit3 className="h-3.5 w-3.5 inline mr-1" />Edit</Link>
-                <button className="cursor-pointer rounded-lg border border-border-glass px-3 py-1.5 text-xs font-medium text-red-400 transition-colors hover:bg-red-500/10"><Trash2 className="h-3.5 w-3.5 inline mr-1" />Delete</button>
+                <Link href={`/instructor/courses/${params.id}/quiz/${quiz.id}`} className="rounded-lg border border-border-glass px-3 py-1.5 text-xs font-medium text-text-secondary transition-colors hover:text-text-primary"><Edit3 className="h-3.5 w-3.5 inline mr-1" />Edit</Link>
+                <button className="cursor-pointer rounded-lg border border-border-glass px-3 py-1.5 text-xs font-medium text-accent-red transition-colors hover:bg-accent-red/10"><Trash2 className="h-3.5 w-3.5 inline mr-1" />Delete</button>
               </div>
             </div>
           </GlassCard>

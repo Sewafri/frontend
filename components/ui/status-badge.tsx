@@ -11,14 +11,14 @@
 type StatusVariant = "active" | "pending" | "approved" | "rejected" | "completed" | "draft" | "published" | "inactive";
 
 const statusStyles: Record<StatusVariant, { bg: string; text: string; dot: string }> = {
-  active: { bg: "bg-green-500/10", text: "text-green-400", dot: "bg-green-400" },
-  published: { bg: "bg-green-500/10", text: "text-green-400", dot: "bg-green-400" },
-  completed: { bg: "bg-green-500/10", text: "text-green-400", dot: "bg-green-400" },
-  pending: { bg: "bg-yellow-500/10", text: "text-yellow-400", dot: "bg-yellow-400" },
-  draft: { bg: "bg-gray-500/10", text: "text-gray-400", dot: "bg-gray-400" },
-  inactive: { bg: "bg-gray-500/10", text: "text-gray-400", dot: "bg-gray-400" },
-  rejected: { bg: "bg-red-500/10", text: "text-red-400", dot: "bg-red-400" },
-  approved: { bg: "bg-blue-500/10", text: "text-blue-400", dot: "bg-blue-400" },
+  active: { bg: "bg-accent-green/10", text: "text-accent-green", dot: "bg-accent-green" },
+  published: { bg: "bg-accent-green/10", text: "text-accent-green", dot: "bg-accent-green" },
+  completed: { bg: "bg-accent-green/10", text: "text-accent-green", dot: "bg-accent-green" },
+  pending: { bg: "bg-accent-amber/10", text: "text-accent-amber", dot: "bg-accent-amber" },
+  draft: { bg: "bg-neutral-500/10", text: "text-neutral-400", dot: "bg-neutral-400" },
+  inactive: { bg: "bg-neutral-500/10", text: "text-neutral-400", dot: "bg-neutral-400" },
+  rejected: { bg: "bg-accent-red/10", text: "text-accent-red", dot: "bg-accent-red" },
+  approved: { bg: "bg-accent-blue/10", text: "text-accent-blue", dot: "bg-accent-blue" },
 };
 
 export default function StatusBadge({ status }: { status: string }) {

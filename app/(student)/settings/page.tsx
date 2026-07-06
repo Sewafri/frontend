@@ -26,22 +26,22 @@ export default function SettingsPage() {
       <div className="space-y-8">
         {/* Profile */}
         <section>
-          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
+          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-text-primary">
             <User className="h-5 w-5 text-brand-orange" /> Profile
           </h2>
           <GlassCard>
             <div className="grid gap-6 sm:grid-cols-2">
               <div>
                 <label className="mb-1.5 block text-xs font-medium text-text-secondary">Full Name</label>
-                <input type="text" defaultValue="John Doe" readOnly className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2 text-sm text-white outline-none" />
+                <input type="text" defaultValue="John Doe" readOnly className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2 text-sm text-text-primary outline-none" />
               </div>
               <div>
                 <label className="mb-1.5 block text-xs font-medium text-text-secondary">Email</label>
-                <input type="email" defaultValue="john@example.com" readOnly className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2 text-sm text-white outline-none" />
+                <input type="email" defaultValue="john@example.com" readOnly className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2 text-sm text-text-primary outline-none" />
               </div>
               <div>
                 <label className="mb-1.5 block text-xs font-medium text-text-secondary">Bio</label>
-                <textarea rows={3} defaultValue="Passionate learner exploring web development." readOnly className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2 text-sm text-white outline-none" />
+                <textarea rows={3} defaultValue="Passionate learner exploring web development." readOnly className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2 text-sm text-text-primary outline-none" />
               </div>
             </div>
           </GlassCard>
@@ -49,18 +49,18 @@ export default function SettingsPage() {
 
         {/* Password */}
         <section>
-          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
+          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-text-primary">
             <Lock className="h-5 w-5 text-brand-orange" /> Password
           </h2>
           <GlassCard>
             <div className="grid gap-6 sm:grid-cols-2">
               <div>
                 <label className="mb-1.5 block text-xs font-medium text-text-secondary">Current Password</label>
-                <input type="password" placeholder="••••••••" className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2 text-sm text-white placeholder-text-secondary outline-none" />
+                <input type="password" placeholder="••••••••" className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2 text-sm text-text-primary placeholder-text-secondary outline-none" />
               </div>
               <div>
                 <label className="mb-1.5 block text-xs font-medium text-text-secondary">New Password</label>
-                <input type="password" placeholder="Enter new password" className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2 text-sm text-white placeholder-text-secondary outline-none" />
+                <input type="password" placeholder="Enter new password" className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2 text-sm text-text-primary placeholder-text-secondary outline-none" />
               </div>
             </div>
           </GlassCard>
@@ -68,7 +68,7 @@ export default function SettingsPage() {
 
         {/* Notifications */}
         <section>
-          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
+          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-text-primary">
             <Bell className="h-5 w-5 text-brand-orange" /> Notifications
           </h2>
           <GlassCard>
@@ -76,12 +76,12 @@ export default function SettingsPage() {
               {NOTIFICATION_SETTINGS.map((n) => (
                 <div key={n.label} className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-white">{n.label}</p>
+                    <p className="text-sm font-medium text-text-primary">{n.label}</p>
                     <p className="text-xs text-text-secondary">{n.description}</p>
                   </div>
                   <label className="relative inline-flex cursor-pointer items-center">
                     <input type="checkbox" defaultChecked className="peer sr-only" />
-                    <div className="h-5 w-9 rounded-full bg-gray-700 after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-white after:transition-all peer-checked:bg-brand-orange peer-checked:after:translate-x-full" />
+                    <div className="h-5 w-9 rounded-full bg-neutral-700 after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-white after:transition-all peer-checked:bg-brand-orange peer-checked:after:translate-x-full" />
                   </label>
                 </div>
               ))}
@@ -91,7 +91,7 @@ export default function SettingsPage() {
 
         {/* Payment History */}
         <section>
-          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
+          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-text-primary">
             <CreditCard className="h-5 w-5 text-brand-orange" /> Payment History
           </h2>
           <GlassCard>
@@ -108,11 +108,11 @@ export default function SettingsPage() {
                 <tbody>
                   {PAYMENT_HISTORY.map((p) => (
                     <tr key={p.id} className="border-b border-border-glass last:border-0">
-                      <td className="py-3 text-white">{p.course}</td>
+                      <td className="py-3 text-text-primary">{p.course}</td>
                       <td className="py-3 text-text-secondary">{p.amount}</td>
                       <td className="py-3 text-text-secondary">{p.date}</td>
                       <td className="py-3">
-                        <span className="rounded-full bg-green-500/10 px-2 py-0.5 text-xs font-medium text-green-400">{p.status}</span>
+                        <span className="rounded-full bg-accent-green/10 px-2 py-0.5 text-xs font-medium text-accent-green">{p.status}</span>
                       </td>
                     </tr>
                   ))}

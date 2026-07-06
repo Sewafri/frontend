@@ -1,10 +1,12 @@
-// ProgressBar: A horizontal progress bar with optional label and percentage
-// Props:
-//   value: number (0-100)
-//   label?: string (optional label above the bar)
-//   showPercentage?: boolean (default true, shows 42% text)
-//   size?: "sm" | "md" (default "md")
-//   className?: string
+import { cn } from "@/lib/utils";
+
+interface ProgressBarProps {
+  value: number;
+  label?: string;
+  showPercentage?: boolean;
+  size?: "sm" | "md";
+  className?: string;
+}
 
 export default function ProgressBar({
   value,
@@ -12,28 +14,31 @@ export default function ProgressBar({
   showPercentage = true,
   size = "md",
   className = "",
-}: {
-  value: number;
-  label?: string;
-  showPercentage?: boolean;
-  size?: "sm" | "md";
-  className?: string;
-}) {
+}: ProgressBarProps) {
   const clamped = Math.min(100, Math.max(0, value));
-  const heights = { sm: "h-1.5", md: "h-2.5" };
-  const textSizes = { sm: "text-xs", md: "text-sm" };
+  const heights = { sm: "h-1.5", md: "h-2" };
 
   return (
-    <div className={className}>
+    <div className={cn("", className)}>
       {(label || showPercentage) && (
-        <div className="mb-1 flex items-center justify-between">
-          {label && <span className={`${textSizes[size]} font-medium text-text-secondary`}>{label}</span>}
-          {showPercentage && <span className={`${textSizes[size]} font-medium text-text-primary`}>{clamped}%</span>}
+        <div className="mb-1.5 flex items-center justify-between">
+          {label && (
+            <span className="text-xs font-medium text-text-secondary">{label}</span>
+          )}
+          {showPercentage && (
+            <span className="text-xs font-semibold text-brand-500">{clamped}%</span>
+          )}
         </div>
       )}
-      <div className={`w-full overflow-hidden rounded-full bg-gray-800 ${heights[size]}`}>
+      <div className={cn(
+        "w-full overflow-hidden rounded-full bg-surface-sunken",
+        heights[size],
+      )}>
         <div
-          className={`${heights[size]} rounded-full bg-gradient-to-r from-brand-orange to-orange-500 transition-all duration-500`}
+          className={cn(
+            "rounded-full bg-brand-500 transition-all duration-500 ease-out",
+            heights[size],
+          )}
           style={{ width: `${clamped}%` }}
         />
       </div>

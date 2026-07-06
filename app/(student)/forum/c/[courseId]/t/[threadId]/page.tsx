@@ -55,11 +55,11 @@ export default function ForumThreadDetailPage() {
       <div className="mb-6">
         <Link
           href={`/forum/c/${courseId}`}
-          className="mb-4 flex items-center gap-1 text-sm text-text-secondary hover:text-white"
+          className="mb-4 flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary"
         >
           <ArrowLeft className="h-4 w-4" /> Back to threads
         </Link>
-        <h1 className="text-2xl font-bold text-white">{thread.title}</h1>
+        <h1 className="text-2xl font-bold text-text-primary">{thread.title}</h1>
         <p className="mt-1 text-sm text-text-secondary">Started by {thread.author}</p>
       </div>
 
@@ -73,7 +73,7 @@ export default function ForumThreadDetailPage() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-white">{post.author}</span>
+                    <span className="text-sm font-medium text-text-primary">{post.author}</span>
                     <span className="rounded bg-surface-card px-1.5 py-0.5 text-[10px] text-text-secondary">
                       {post.role}
                     </span>
@@ -96,12 +96,12 @@ export default function ForumThreadDetailPage() {
       </div>
 
       <div className="mt-6 rounded-xl border border-border-glass bg-surface-dark p-5">
-        <h3 className="mb-3 text-sm font-medium text-white">Post a Reply</h3>
+        <h3 className="mb-3 text-sm font-medium text-text-primary">Post a Reply</h3>
         <textarea
           placeholder="Write your reply..."
-          className="min-h-[100px] w-full rounded-lg border border-border-glass bg-surface-card p-3 text-sm text-white placeholder-text-secondary outline-none focus:border-brand-orange/50 focus:ring-1 focus:ring-brand-orange/20"
+          className="min-h-[100px] w-full rounded-lg border border-border-glass bg-surface-card p-3 text-sm text-text-primary placeholder-text-secondary outline-none focus:border-brand-orange/50 focus:ring-1 focus:ring-brand-orange/20"
         />
-        <button className="mt-3 cursor-pointer rounded-xl bg-brand-orange px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-orange/90">
+        <button className="mt-3 cursor-pointer rounded-xl bg-brand-orange px-6 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-brand-orange/90">
           Post Reply
         </button>
       </div>

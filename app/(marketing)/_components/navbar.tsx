@@ -18,61 +18,71 @@ const NAV_LINKS = [
 export function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
+    function handleScroll() {
+      setScrolled(window.scrollY > 20);
+    }
     function handleClickOutside(event: MouseEvent) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsDropdownOpen(false);
       }
     }
-
+    window.addEventListener("scroll", handleScroll);
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   return (
-    <header className="fixed inset-x-4 top-4 z-50 rounded-2xl border border-border-subtle bg-surface-card shadow-lg shadow-black/20">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+    <header
+      className={`fixed inset-x-4 top-4 z-50 rounded-xl transition-all duration-300 ${
+        scrolled
+          ? "bg-surface-card/90 shadow-lg shadow-black/5 backdrop-blur-xl ring-1 ring-border-default"
+          : "bg-surface-card shadow-lg shadow-black/5 ring-1 ring-border-default"
+      }`}
+    >
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-3.5">
         {/* Logo */}
-        <Link href="/" className="flex cursor-pointer items-center gap-1.5">
-          <span className="font-space-grotesk text-xl font-bold text-white">
+        <Link href="/" className="flex items-center gap-1.5">
+          <span className="font-display text-lg font-bold text-text-primary">
             {BRAND.name}
           </span>
-          <span className="h-2 w-2 rounded-full bg-brand-orange" />
+          <span className="h-2 w-2 rounded-full bg-brand-500" />
         </Link>
 
         {/* Desktop Nav */}
-        <ul className="hidden items-center gap-8 md:flex">
+        <ul className="hidden items-center gap-1 md:flex">
           {NAV_LINKS.map((link) => (
             <li key={link.label} className="relative">
               {link.hasDropdown ? (
                 <div ref={dropdownRef}>
                   <button
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    className="group relative flex cursor-pointer items-center gap-1 text-sm font-medium text-text-secondary transition-colors hover:text-white"
+                    className="flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-card-hover hover:text-text-primary"
                     aria-expanded={isDropdownOpen}
                     aria-haspopup="true"
                   >
                     {link.label}
                     <ChevronDown
                       size={14}
-                      className="transition-transform group-hover:rotate-180"
+                      className="transition-transform duration-200"
+                      style={{ transform: isDropdownOpen ? "rotate(180deg)" : undefined }}
                     />
-                    <span className="absolute -bottom-1 left-0 h-0.5 w-0 rounded-full bg-brand-orange transition-all duration-300 group-hover:w-full" />
                   </button>
                   {isDropdownOpen && (
-                    <div className="absolute left-0 top-full mt-2 w-56 rounded-xl border border-border-subtle bg-surface-card p-2 shadow-lg shadow-black/20">
+                    <div className="absolute left-0 top-full mt-1 w-52 rounded-xl bg-surface-card p-1.5 shadow-xl ring-1 ring-border-default">
                       {CATEGORIES.filter((c) => c.value !== "all").map(
                         (cat) => (
                           <Link
                             key={cat.value}
                             href={`/courses?category=${cat.value}`}
-                            className="block cursor-pointer rounded-lg px-3 py-2.5 text-sm text-text-secondary transition-colors hover:bg-surface-card hover:text-white"
+                            className="block rounded-lg px-3 py-2.5 text-sm text-text-secondary transition-colors hover:bg-surface-card-hover hover:text-text-primary"
+                            onClick={() => setIsDropdownOpen(false)}
                           >
                             {cat.label}
                           </Link>
@@ -84,10 +94,9 @@ export function Navbar() {
               ) : (
                 <Link
                   href={link.href}
-                  className="group relative cursor-pointer text-sm font-medium text-text-secondary transition-colors hover:text-white"
+                  className="block rounded-lg px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-card-hover hover:text-text-primary"
                 >
                   {link.label}
-                  <span className="absolute -bottom-1 left-0 h-0.5 w-0 rounded-full bg-brand-orange transition-all duration-300 group-hover:w-full" />
                 </Link>
               )}
             </li>
@@ -95,18 +104,18 @@ export function Navbar() {
         </ul>
 
         {/* Desktop Actions */}
-        <div className="hidden items-center gap-4 md:flex">
+        <div className="hidden items-center gap-2 md:flex">
           <ThemeToggle />
           <Link
             href="/sign-in"
-            className="cursor-pointer text-sm font-medium text-text-secondary transition-colors hover:text-white"
+            className="rounded-lg px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:text-text-primary"
           >
             Sign In
           </Link>
           <Button
             render={<Link href="/sign-up" />}
             nativeButton={false}
-            className="bg-brand-orange text-white transition-colors hover:bg-brand-orange/90"
+            className="bg-brand-500 text-text-primary dark:text-white transition-all hover:bg-brand-600 active:scale-[0.97]"
           >
             Get Started
           </Button>
@@ -117,36 +126,36 @@ export function Navbar() {
           <SheetTrigger
             render={
               <button
-                className="cursor-pointer text-white md:hidden"
+                className="flex text-text-primary md:hidden"
                 aria-label="Toggle menu"
               >
-                <Menu size={24} />
+                {isSheetOpen ? <X size={22} /> : <Menu size={22} />}
               </button>
             }
           />
           <SheetContent
             side="right"
-            className="w-72 border-l border-border-subtle bg-surface-card pt-10 transition-all duration-300"
+            className="w-72 border-l border-border-default bg-surface-card pt-14"
           >
-            <ul className="space-y-1 px-4">
+            <ul className="space-y-1 px-3">
               {NAV_LINKS.map((link) => (
                 <li key={link.label}>
                   {link.hasDropdown ? (
                     <details className="group">
-                      <summary className="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-card hover:text-white">
+                      <summary className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-card-hover hover:text-text-primary">
                         {link.label}
                         <ChevronDown
                           size={14}
                           className="transition-transform group-open:rotate-180"
                         />
                       </summary>
-                      <ul className="ml-4 mt-1 space-y-1">
+                      <ul className="ml-3 mt-1 space-y-1">
                         {CATEGORIES.filter((c) => c.value !== "all").map(
                           (cat) => (
                             <li key={cat.value}>
                               <Link
                                 href={`/courses?category=${cat.value}`}
-                                className="block cursor-pointer rounded-lg px-3 py-2 text-sm text-text-secondary hover:text-white"
+                                className="block rounded-lg px-3 py-2 text-sm text-text-secondary hover:text-text-primary"
                                 onClick={() => setIsSheetOpen(false)}
                               >
                                 {cat.label}
@@ -159,7 +168,7 @@ export function Navbar() {
                   ) : (
                     <Link
                       href={link.href}
-                      className="block cursor-pointer rounded-lg px-3 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-card hover:text-white"
+                      className="block rounded-lg px-3 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-card-hover hover:text-text-primary"
                       onClick={() => setIsSheetOpen(false)}
                     >
                       {link.label}
@@ -167,16 +176,16 @@ export function Navbar() {
                   )}
                 </li>
               ))}
-              <li className="pt-2">
+              <li className="border-t border-border-default pt-2">
                 <Link
                   href="/sign-in"
-                  className="block cursor-pointer rounded-lg px-3 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-card hover:text-white"
+                  className="block rounded-lg px-3 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-card-hover hover:text-text-primary"
                   onClick={() => setIsSheetOpen(false)}
                 >
                   Sign In
                 </Link>
               </li>
-              <li className="pt-2">
+              <li className="pt-1">
                 <Button
                   render={
                     <Link
@@ -185,7 +194,7 @@ export function Navbar() {
                     />
                   }
                   nativeButton={false}
-                  className="w-full bg-brand-orange text-white transition-colors hover:bg-brand-orange/90"
+                  className="w-full bg-brand-500 text-text-primary dark:text-white transition-all hover:bg-brand-600"
                 >
                   Get Started
                 </Button>

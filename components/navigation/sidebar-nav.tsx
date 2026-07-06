@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LogOut, type LucideIcon } from "lucide-react";
+import { ChevronLeft, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BRAND } from "@/constants/brand";
 
@@ -17,28 +17,82 @@ interface SidebarNavProps {
   links: SidebarLink[];
   user: { initials: string; name: string; role: string };
   accentClass?: string;
+  mobileOpen?: boolean;
+  onMobileClose?: () => void;
 }
 
-export function SidebarNav({ links, user, accentClass = "text-brand-orange" }: SidebarNavProps) {
-  const pathname = usePathname();
-  const [isHovered, setIsHovered] = useState(false);
+const accentMap: Record<string, { active: string; hover: string; indicator: string }> = {
+  brand: {
+    active: "bg-brand-500/10 text-brand-500",
+    hover: "hover:bg-surface-card-hover hover:text-text-primary",
+    indicator: "bg-brand-500",
+  },
+  admin: {
+    active: "bg-accent-red/10 text-accent-red",
+    hover: "hover:bg-surface-card-hover hover:text-text-primary",
+    indicator: "bg-accent-red",
+  },
+  instructor: {
+    active: "bg-accent-green/10 text-accent-green",
+    hover: "hover:bg-surface-card-hover hover:text-text-primary",
+    indicator: "bg-accent-green",
+  },
+};
 
-  return (
+export function SidebarNav({ links, user, accentClass = "brand", mobileOpen, onMobileClose }: SidebarNavProps) {
+  const pathname = usePathname();
+  const [collapsed, setCollapsed] = useState(false);
+  const key = accentClass === "text-brand-orange" || accentClass === "brand" ? "brand"
+    : accentClass.includes("red") ? "admin"
+    : accentClass.includes("green") ? "instructor"
+    : "brand";
+  const colors = accentMap[key];
+
+  const sidebar = (
     <nav
       className={cn(
-        "fixed left-0 top-0 z-40 flex h-screen flex-col border-r border-border-subtle bg-surface-card transition-all duration-150",
-        isHovered ? "w-40" : "w-12",
+        "flex h-screen flex-col border-r border-border-default bg-surface-card transition-all duration-200",
+        collapsed ? "w-14" : "w-56",
       )}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Brand mark */}
-      <div className="flex items-center justify-center border-b border-border-subtle py-4">
-        <span className="font-space-grotesk text-base font-bold text-white">{BRAND.name.slice(0, 1)}</span>
+      {/* Brand */}
+      <div className={cn(
+        "flex items-center border-b border-border-default px-3",
+        collapsed ? "justify-center py-4" : "justify-between py-3",
+      )}>
+        {!collapsed && (
+          <Link href="/" onClick={onMobileClose} className="flex items-center gap-1.5">
+            <span className="font-display text-lg font-bold text-text-primary">
+              {BRAND.name}
+            </span>
+            <span className="h-2 w-2 rounded-full bg-brand-500" />
+          </Link>
+        )}
+        {collapsed && (
+          <Link href="/" onClick={onMobileClose} className="font-display text-lg font-bold text-text-primary">
+            {BRAND.name.slice(0, 1)}
+          </Link>
+        )}
+        <button
+          onClick={() => {
+            if (mobileOpen !== undefined && onMobileClose) {
+              onMobileClose();
+            } else {
+              setCollapsed(!collapsed);
+            }
+          }}
+          className={cn(
+            "flex items-center justify-center rounded-lg p-1.5 text-text-tertiary transition-all hover:bg-surface-card-hover hover:text-text-primary",
+            collapsed && "rotate-180",
+          )}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          <ChevronLeft size={16} />
+        </button>
       </div>
 
       {/* Navigation links */}
-      <div className="flex flex-1 flex-col items-center gap-1 px-1 pt-2">
+      <div className="flex-1 space-y-0.5 overflow-y-auto px-2 py-3 no-scrollbar">
         {links.map((link) => {
           const isActive = pathname === link.href || pathname.startsWith(link.href + "/");
           const Icon = link.icon;
@@ -46,34 +100,72 @@ export function SidebarNav({ links, user, accentClass = "text-brand-orange" }: S
             <Link
               key={link.href}
               href={link.href}
+              onClick={onMobileClose}
               className={cn(
-                "flex w-full items-center gap-3 rounded-md px-2 py-2 text-sm transition-colors duration-150 cursor-pointer",
+                "group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
                 isActive
-                  ? accentClass
-                  : "text-text-secondary hover:bg-surface-card-hover hover:text-white",
+                  ? colors.active
+                  : `text-text-secondary ${colors.hover}`,
               )}
-              style={isActive ? { borderLeft: "2px solid #ff7000" } : undefined}
             >
+              {isActive && (
+                <span className={cn(
+                  "absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full",
+                  colors.indicator,
+                )} />
+              )}
               <Icon className="h-5 w-5 shrink-0" />
-              <span
-                className={cn(
-                  "overflow-hidden whitespace-nowrap text-sm transition-opacity duration-150",
-                  isHovered ? "opacity-100" : "opacity-0",
-                )}
-              >
-                {link.label}
-              </span>
+              {!collapsed && (
+                <span className="truncate">{link.label}</span>
+              )}
             </Link>
           );
         })}
       </div>
 
-      {/* User avatar */}
-      <div className="flex justify-center border-t border-border-subtle py-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-surface-card-hover text-xs font-medium text-text-secondary">
-          {user.initials}
-        </div>
+      {/* User area */}
+      <div className={cn(
+        "border-t border-border-default py-3",
+        collapsed ? "flex justify-center px-2" : "space-y-2 px-3",
+      )}>
+        {!collapsed && (
+          <div className="flex items-center gap-3 px-2">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface-card-hover text-xs font-semibold text-text-secondary">
+              {user.initials}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-medium text-text-primary">{user.name}</p>
+              <p className="truncate text-xs text-text-tertiary">{user.role}</p>
+            </div>
+          </div>
+        )}
+        {collapsed && (
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-surface-card-hover text-xs font-semibold text-text-secondary">
+            {user.initials}
+          </div>
+        )}
       </div>
     </nav>
   );
+
+  if (mobileOpen !== undefined) {
+    return (
+      <>
+        {/* Desktop — persistent sidebar, hidden on mobile */}
+        <div className="hidden md:flex">{sidebar}</div>
+        {/* Mobile — overlay sidebar with backdrop */}
+        {mobileOpen && (
+          <div className="fixed inset-0 z-50 md:hidden">
+            <div
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm"
+              onClick={onMobileClose}
+            />
+            <div className="fixed left-0 top-0 h-full">{sidebar}</div>
+          </div>
+        )}
+      </>
+    );
+  }
+
+  return sidebar;
 }

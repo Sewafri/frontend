@@ -42,6 +42,7 @@ export function DataTable<T>({
           <input
             type="text"
             placeholder={placeholder}
+            aria-label={placeholder}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="w-full rounded-lg border border-border-glass bg-surface-card py-2.5 pl-10 pr-4 text-sm text-text-primary placeholder:text-text-tertiary focus:border-brand-orange/50 focus:outline-none"

@@ -13,7 +13,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
   if (totalPages <= 1) return null;
 
   const navBtnClass =
-    "flex h-9 w-9 items-center justify-center rounded-lg border border-[#DCE3F1] text-[#858EAD] transition-colors hover:border-[#FF7000] hover:text-[#FF7000] disabled:cursor-not-allowed disabled:opacity-40 dark:border-[#212734]";
+    "flex h-9 w-9 items-center justify-center rounded-lg border border-border-default text-text-tertiary transition-colors hover:border-brand-500 hover:text-brand-500 disabled:cursor-not-allowed disabled:opacity-40";
 
   return (
     <nav aria-label="Pagination" className="flex items-center justify-center gap-2">
@@ -34,8 +34,8 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
           className={cn(
             "flex h-9 w-9 items-center justify-center rounded-lg text-sm font-medium transition-colors",
             page === currentPage
-              ? "bg-[#FF7000] text-white"
-              : "border border-[#DCE3F1] text-[#858EAD] hover:border-[#FF7000] hover:text-[#FF7000] dark:border-[#212734]"
+              ? "bg-brand-500 text-text-primary"
+              : "border border-border-default text-text-tertiary hover:border-brand-500 hover:text-brand-500"
           )}
         >
           {page}

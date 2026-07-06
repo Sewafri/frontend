@@ -17,26 +17,26 @@ export default function VerifyResultPage() {
 
   return (
     <div className="w-full max-w-lg">
-      <Link href="/verify" className="mb-6 flex items-center gap-1 text-sm text-text-secondary hover:text-white">
+      <Link href="/verify" className="mb-6 flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary">
         <ArrowLeft className="h-4 w-4" /> Verify another certificate
       </Link>
 
       <div className="rounded-xl border border-border-glass bg-surface-dark p-8 text-center">
         {isValid ? (
           <>
-            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-green-500/10">
-              <ShieldCheck className="h-10 w-10 text-green-400" />
+            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-accent-green/10">
+              <ShieldCheck className="h-10 w-10 text-accent-green" />
             </div>
-            <h2 className="mb-1 text-xl font-bold text-white">Certificate Verified</h2>
-            <p className="mb-6 text-sm text-green-400">This certificate is authentic and valid</p>
+            <h2 className="mb-1 text-xl font-bold text-text-primary">Certificate Verified</h2>
+            <p className="mb-6 text-sm text-accent-green">This certificate is authentic and valid</p>
 
             <div className="mb-6 rounded-lg bg-surface-card p-4 text-left">
               <div className="mb-3 flex items-center gap-2">
                 <Award className="h-5 w-5 text-brand-orange" />
-                <span className="font-semibold text-white">{certificate!.course}</span>
+                <span className="font-semibold text-text-primary">{certificate!.course}</span>
               </div>
               <div className="space-y-1 text-sm text-text-secondary">
-                <p>Issued to: <span className="font-medium text-white">{certificate!.student}</span></p>
+                <p>Issued to: <span className="font-medium text-text-primary">{certificate!.student}</span></p>
                 <p>Date: {certificate!.date}</p>
                 <p>ID: {certId}</p>
                 <p>Issuer: {certificate!.issuer}</p>
@@ -49,11 +49,11 @@ export default function VerifyResultPage() {
           </>
         ) : (
           <>
-            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-red-500/10">
-              <ShieldX className="h-10 w-10 text-red-400" />
+            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-accent-red/10">
+              <ShieldX className="h-10 w-10 text-accent-red" />
             </div>
-            <h2 className="mb-1 text-xl font-bold text-white">Verification Failed</h2>
-            <p className="mb-2 text-sm text-red-400">No valid certificate found</p>
+            <h2 className="mb-1 text-xl font-bold text-text-primary">Verification Failed</h2>
+            <p className="mb-2 text-sm text-accent-red">No valid certificate found</p>
             <p className="text-xs text-text-secondary">
               The certificate ID &ldquo;{certId}&rdquo; could not be verified. Please check the ID and try again.
             </p>

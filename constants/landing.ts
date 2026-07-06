@@ -1,4 +1,4 @@
-import type { Feature, Course, Category, Stat, Testimonial, TrustedBy } from "@/types/landing";
+import type { Feature, Course, Category, Stat, Testimonial, TrustedBy, Track, Update } from "@/types/landing";
 
 export const FEATURES: Feature[] = [
   {
@@ -217,6 +217,80 @@ export const STATS: Stat[] = [
   { value: "500+", label: "Expert-Led Courses" },
   { value: "95%", label: "Career Advancement Rate" },
   { value: "4.8", label: "Average Course Rating" },
+];
+
+export const TRACKS: Track[] = [
+  {
+    id: "track-1",
+    title: "Web Development",
+    description: "Build modern web apps with React, Next.js, Node.js, and databases. From zero to full-stack.",
+    icon: "globe",
+    color: "brand",
+    courses: [
+      { id: "1", title: "Web Development Bootcamp", slug: "web-dev-bootcamp", duration: "24h", studentsCount: 12400 },
+      { id: "4", title: "Advanced React Patterns", slug: "advanced-react-patterns", duration: "8h", studentsCount: 5600 },
+      { id: "7", title: "DevOps & Cloud", slug: "devops-cloud", duration: "20h", studentsCount: 7200 },
+    ],
+  },
+  {
+    id: "track-2",
+    title: "Data & AI",
+    description: "Master data science, machine learning, and AI. Work with real datasets and deploy models.",
+    icon: "brain",
+    color: "indigo",
+    courses: [
+      { id: "2", title: "Data Science Fundamentals", slug: "data-science-fundamentals", duration: "18h", studentsCount: 8900 },
+      { id: "5", title: "Machine Learning A-Z", slug: "machine-learning-a-z", duration: "30h", studentsCount: 10200 },
+      { id: "8", title: "Python for Everybody", slug: "python-for-everybody", duration: "14h", studentsCount: 28000 },
+    ],
+  },
+  {
+    id: "track-3",
+    title: "Design & Creative",
+    description: "Design beautiful, user-centered products. Learn Figma, design systems, research, and prototyping.",
+    icon: "palette",
+    color: "purple",
+    courses: [
+      { id: "3", title: "UI/UX Design Masterclass", slug: "ui-ux-design-masterclass", duration: "12h", studentsCount: 15600 },
+      { id: "6", title: "Figma for Developers", slug: "figma-for-developers", duration: "6h", studentsCount: 4300 },
+      { id: "9", title: "Mobile App Design", slug: "mobile-app-design", duration: "10h", studentsCount: 3900 },
+    ],
+  },
+];
+
+export const UPDATES: Update[] = [
+  {
+    id: "u1",
+    title: "New partnership with African tech hubs",
+    excerpt: "We're partnering with 12 innovation hubs across the continent to bring offline-capable learning to underserved communities.",
+    category: "Impact",
+    date: "Jul 2, 2026",
+    href: "/blog/african-tech-hubs",
+  },
+  {
+    id: "u2",
+    title: "Introducing coding playgrounds",
+    excerpt: "Write, run, and test code directly in your browser with our new interactive coding environment. No setup required.",
+    category: "Product",
+    date: "Jun 28, 2026",
+    href: "/blog/coding-playgrounds",
+  },
+  {
+    id: "u3",
+    title: "Meet our 2026 scholarship recipients",
+    excerpt: "50 students from 18 countries awarded full scholarships to pursue tech careers. Read their stories.",
+    category: "Community",
+    date: "Jun 20, 2026",
+    href: "/blog/scholarship-2026",
+  },
+  {
+    id: "u4",
+    title: "Curriculum update: AI & Ethics",
+    excerpt: "New module covering responsible AI development, bias detection, and ethical considerations for African tech builders.",
+    category: "Curriculum",
+    date: "Jun 15, 2026",
+    href: "/blog/ai-ethics-curriculum",
+  },
 ];
 
 export const CATEGORIES: Category[] = [

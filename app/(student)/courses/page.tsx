@@ -24,7 +24,7 @@ export default function CoursesCatalogPage() {
   }, [search, activeCategory]);
 
   return (
-    <div className="">
+    <div>
       <PageHeader
         title="Course Catalog"
         description="Browse our full catalog of courses"
@@ -33,23 +33,24 @@ export default function CoursesCatalogPage() {
       {/* Search + Filters */}
       <div className="mb-6 space-y-4">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-secondary" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-tertiary" />
           <input
             type="text"
             placeholder="Search courses..."
+            aria-label="Search courses"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full cursor-pointer rounded-lg border border-border-glass bg-surface-dark py-2.5 pl-10 pr-4 text-sm text-white placeholder-text-secondary outline-none focus:border-brand-orange/50 focus:ring-1 focus:ring-brand-orange/20"
+            className="w-full rounded-lg border border-border-default bg-surface-card py-2.5 pl-10 pr-4 text-sm text-text-primary placeholder-text-tertiary outline-none transition-colors focus:border-brand-500/50 focus:ring-2 focus:ring-brand-500/10"
           />
         </div>
 
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setActiveCategory(null)}
-            className={`cursor-pointer rounded-full px-4 py-1.5 text-xs font-medium transition-colors ${
+            className={`cursor-pointer rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
               !activeCategory
-                ? "bg-brand-orange text-white"
-                : "bg-surface-card text-text-secondary hover:text-white"
+                ? "bg-brand-500 text-text-primary shadow-sm"
+                : "bg-surface-card text-text-secondary ring-1 ring-border-default hover:text-text-primary"
             }`}
           >
             All
@@ -58,10 +59,10 @@ export default function CoursesCatalogPage() {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`cursor-pointer rounded-full px-4 py-1.5 text-xs font-medium transition-colors ${
+              className={`cursor-pointer rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
                 activeCategory === cat
-                  ? "bg-brand-orange text-white"
-                  : "bg-surface-card text-text-secondary hover:text-white"
+                  ? "bg-brand-500 text-text-primary shadow-sm"
+                  : "bg-surface-card text-text-secondary ring-1 ring-border-default hover:text-text-primary"
               }`}
             >
               {cat}
@@ -78,9 +79,9 @@ export default function CoursesCatalogPage() {
           ))}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-border-glass bg-surface-dark py-20">
-          <Search className="mb-3 h-10 w-10 text-text-secondary" />
-          <p className="text-lg font-medium text-white">No courses found</p>
+        <div className="flex flex-col items-center justify-center rounded-xl border border-border-default bg-surface-card py-20">
+          <Search className="mb-3 h-10 w-10 text-text-tertiary" />
+          <p className="text-lg font-medium text-text-primary">No courses found</p>
           <p className="mt-1 text-sm text-text-secondary">
             Try adjusting your search or filter
           </p>
