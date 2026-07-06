@@ -1,8 +1,0 @@
-export default function CoursesPage() {
-  return (
-    <div>
-      <h1 className="text-2xl font-bold">Courses</h1>
-      <p className="mt-2 text-muted-foreground">Courses page placeholder.</p>
-    </div>
-  )
-}

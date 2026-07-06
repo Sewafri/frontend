@@ -1,8 +1,15 @@
+import HeroSection from "./_components/hero-section";
+import FeaturesSection from "./_components/catalog-section";
+import CoursesSection from "./_components/courses-section";
+import Footer from "./_components/footer";
+
 export default function LandingPage() {
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12">
-      <h1 className="text-4xl font-bold">Welcome to Edify LMS</h1>
-      <p className="mt-4 text-lg">Your learning management platform.</p>
+    <div className="mx-auto max-w-6xl px-6">
+      <HeroSection />
+      <FeaturesSection />
+      <CoursesSection />
+      <Footer />
     </div>
-  )
+  );
 }

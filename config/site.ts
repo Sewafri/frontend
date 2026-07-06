@@ -1,10 +1,12 @@
+import { BRAND } from "@/constants/brand";
+
 export const siteConfig = {
-  name: "Edify LMS",
-  description: "A modern learning management system",
-  url: "https://edify-lms.com",
+  name: BRAND.name,
+  description: BRAND.description,
+  url: BRAND.url,
   navLinks: [
-    { label: "Courses", href: "/(dashboard)/courses" },
-    { label: "Students", href: "/(dashboard)/students" },
-    { label: "Instructors", href: "/(dashboard)/instructors" },
+    { label: "Courses", href: "/courses" },
+    { label: "Students", href: "/my-learning" },
+    { label: "Instructors", href: "/instructor" },
   ],
 }

@@ -1,0 +1,5 @@
+<svg width="400" height="225" viewBox="0 0 400 225" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Web Development course thumbnail">
+  <rect width="400" height="225" fill="url(#g-web-dev)"/>
+  <defs><linearGradient id="g-web-dev" x1="0" y1="0" x2="400" y2="225"><stop offset="0%" stop-color="#FF7000"/><stop offset="100%" stop-color="#FF9A3C"/></linearGradient></defs>
+  <text x="200" y="120" text-anchor="middle" fill="white" font-size="48" font-family="system-ui, sans-serif" font-weight="bold">&lt;/&gt;</text>
+</svg>
