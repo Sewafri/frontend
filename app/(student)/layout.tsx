@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { SidebarNav, type SidebarLink } from "@/components/navigation/sidebar-nav";
 import { DashboardHeader } from "@/components/layouts/header";
 import { BookOpen, GraduationCap, Award, Wallet, MessagesSquare, Settings } from "lucide-react";
+import { useAuth } from "@/lib/auth/auth-context";
 
 const STUDENT_LINKS: SidebarLink[] = [
   { label: "Courses", href: "/courses", icon: BookOpen },
@@ -14,14 +16,47 @@ const STUDENT_LINKS: SidebarLink[] = [
   { label: "Settings", href: "/settings", icon: Settings },
 ];
 
+function getInitials(name: string): string {
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+}
+
+function capitalizeRole(role: string): string {
+  return role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
+}
+
 export default function StudentLayout({ children }: { children: React.ReactNode }) {
+  const { user, isLoading, isAuthenticated } = useAuth();
+  const router = useRouter();
   const [mobileSidebar, setMobileSidebar] = useState(false);
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push("/sign-in");
+    }
+  }, [isLoading, isAuthenticated, router]);
+
+  if (isLoading || !user) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-surface-dark">
+        <div className="text-sm text-text-secondary">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen bg-surface-dark">
       <SidebarNav
         links={STUDENT_LINKS}
-        user={{ initials: "JD", name: "John Doe", role: "Student" }}
+        user={{
+          initials: getInitials(user.fullName),
+          name: user.fullName,
+          role: capitalizeRole(user.role),
+        }}
         mobileOpen={mobileSidebar}
         onMobileClose={() => setMobileSidebar(false)}
       />
@@ -29,7 +64,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
         <DashboardHeader
           breadcrumb="Student"
           currentPage="Learning"
-          initials="JD"
+          initials={getInitials(user.fullName)}
           onMenuToggle={() => setMobileSidebar(true)}
         />
         <main className="flex-1 overflow-y-auto bg-surface-dark p-4 lg:p-8">

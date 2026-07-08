@@ -32,7 +32,7 @@ export default function Footer() {
             <span className="font-display text-xl font-bold text-text-primary">
               {BRAND.name}
             </span>
-            <span className="h-2 w-2 rounded-full bg-brand-500" />
+            <span className="h-2 w-2 rounded-full bg-accent-500" />
           </Link>
           <p className="mt-3 max-w-xs text-sm leading-relaxed text-text-secondary">
             {BRAND.description}

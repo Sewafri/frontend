@@ -50,20 +50,20 @@ function createLightTheme() {
       border: "none",
     },
     ".cm-activeLineGutter": {
-      backgroundColor: "var(--brand-500-10, rgba(255, 112, 0, 0.08))",
+      backgroundColor: "rgba(37, 99, 235, 0.08)",
     },
     ".cm-activeLine": {
-      backgroundColor: "var(--brand-500-5, rgba(255, 112, 0, 0.04))",
+      backgroundColor: "rgba(37, 99, 235, 0.04)",
     },
     ".cm-cursor": {
-      borderLeftColor: "var(--color-brand-500, #ff7000)",
+      borderLeftColor: "var(--color-accent-500, #2563eb)",
     },
     ".cm-selectionBackground, .cm-focused .cm-selectionBackground": {
-      backgroundColor: "var(--brand-500-15, rgba(255, 112, 0, 0.15))",
+      backgroundColor: "rgba(37, 99, 235, 0.15)",
     },
     ".cm-matchingBracket": {
-      backgroundColor: "rgba(255, 112, 0, 0.12)",
-      outline: "1px solid rgba(255, 112, 0, 0.3)",
+      backgroundColor: "rgba(37, 99, 235, 0.12)",
+      outline: "1px solid rgba(37, 99, 235, 0.3)",
     },
     "&.cm-focused": {
       outline: "none",
@@ -92,7 +92,6 @@ export default function CodeBlock({
   const isDark = resolvedTheme === "dark";
 
   // Create editor — intentionally runs once; external system pattern
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!editorRef.current) return;
     if (viewRef.current) return;
@@ -145,6 +144,7 @@ export default function CodeBlock({
       view.destroy();
       viewRef.current = null;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Update theme when dark/light changes
@@ -211,7 +211,7 @@ export default function CodeBlock({
           {onRun && (
             <button
               onClick={handleRun}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-brand-500 px-3 py-1.5 text-xs font-semibold text-text-primary dark:text-white transition-all hover:bg-brand-600 active:scale-[0.97]"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-accent-500 px-3 py-1.5 text-xs font-semibold text-text-on-accent transition-all hover:bg-accent-600 active:scale-[0.97]"
               aria-label="Run code"
             >
               {ran ? (

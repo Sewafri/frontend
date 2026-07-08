@@ -18,9 +18,9 @@ SewAfri makes African education accessible, trackable, and administrable — one
 
 ## Brand Personality
 
-**Warm. Bold. Trustworthy.**
+**Clear. Capable. Trustworthy.**
 
-Voice is friendly but serious — approachable like a great teacher, not a corporate LMS. The brand radiates confidence without arrogance, warmth without saccharine. Emotional goals: pride in progress, trust in the platform, excitement about learning.
+Voice is direct and helpful — confident without hype, friendly without warmth-for-warmth's-sake. The platform earns trust through precision: clean hierarchy, deliberate whitespace, reliable interactions. Emotional goals: clarity about next steps, confidence in the platform, focus on the learning.
 
 ## Anti-references
 
@@ -29,13 +29,13 @@ Voice is friendly but serious — approachable like a great teacher, not a corpo
 
 ## Design Principles
 
-1. **Warm authority** — Friendly but serious. Approachable like a great teacher, not a robot. The UI earns trust through polish: intentional spacing, deliberate color, clear hierarchy.
+1. **Clear authority** — The interface earns trust through precision: clean hierarchy, deliberate spacing, reliable interactions. Every element has a reason.
 
 2. **African-first** — Designed for African learners' context. Mobile-conscious, connectivity-aware, culturally relevant. Not a western platform with African content bolted on.
 
 3. **Show, don't tell** — Progress indicators, data visualization, visual feedback over walls of text. A student should feel their progress, not read about it.
 
-4. **Practice what you preach** — The product teaches; the UI itself should be well-crafted and instructive. Well-organized information, clear affordances, thoughtful micro-interactions demonstrate craft by example.
+4. **Practice what you preach** — The product teaches; the UI itself should be well-crafted and instructive. Well-organized information, clear affordances, thoughtful interactions demonstrate craft by example.
 
 ## Accessibility & Inclusion
 

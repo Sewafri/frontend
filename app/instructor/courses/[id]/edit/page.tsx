@@ -1,15 +1,35 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { PageHeader } from "@/components/ui/page-header";
 import GlassCard from "@/components/ui/glass-card";
 import { Save, ArrowLeft } from "lucide-react";
-import { ALL_COURSES } from "@/constants/dashboard";
+import { getCourseById } from "@/lib/data/courses";
+import type { Course } from "@/types/db";
 
 export default function EditCoursePage() {
   const params = useParams();
-  const course = ALL_COURSES.find((c) => c.id === params.id);
+  const [course, setCourse] = useState<Course | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (params.id) {
+      getCourseById(params.id as string)
+        .then(setCourse)
+        .catch(() => setCourse(null))
+        .finally(() => setLoading(false));
+    }
+  }, [params.id]);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20">
+        <p className="text-lg font-medium text-text-primary">Loading course...</p>
+      </div>
+    );
+  }
 
   if (!course) {
     return (
@@ -39,7 +59,7 @@ export default function EditCoursePage() {
             </div>
             <div className="sm:col-span-2">
               <label className="mb-1.5 block text-xs font-medium text-text-secondary">Description</label>
-              <textarea rows={4} defaultValue="A comprehensive course covering all the essential topics..." className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2.5 text-sm text-text-primary outline-none focus:border-brand-orange/50" />
+              <textarea rows={4} defaultValue={course.description ?? "A comprehensive course covering all the essential topics..."} className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2.5 text-sm text-text-primary outline-none focus:border-brand-orange/50" />
             </div>
             <div>
               <label className="mb-1.5 block text-xs font-medium text-text-secondary">Category</label>
@@ -53,7 +73,7 @@ export default function EditCoursePage() {
             </div>
             <div>
               <label className="mb-1.5 block text-xs font-medium text-text-secondary">Price ($)</label>
-              <input type="number" defaultValue={course.price} className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2.5 text-sm text-text-primary outline-none focus:border-brand-orange/50" />
+              <input type="number" defaultValue={course.price ?? 0} className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2.5 text-sm text-text-primary outline-none focus:border-brand-orange/50" />
             </div>
             <div>
               <label className="mb-1.5 block text-xs font-medium text-text-secondary">Status</label>

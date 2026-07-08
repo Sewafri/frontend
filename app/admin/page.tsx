@@ -1,12 +1,22 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import GlassCard from "@/components/ui/glass-card";
 import { StatCard } from "@/components/ui/stat-card";
 import ChartPlaceholder from "@/components/ui/chart-placeholder";
 import { PageHeader } from "@/components/ui/page-header";
 import { ADMIN_STATS, RECENT_ACTIVITY } from "@/constants/dashboard";
+import { getAdminDashboard } from "@/lib/data/admin";
 import { Activity } from "lucide-react";
 
 export default function AdminOverviewPage() {
-  const accentMap = ["brand", "blue", "green", "purple"] as const;
+  const [_stats, setStats] = useState<Record<string, number> | null>(null);
+
+  useEffect(() => {
+    getAdminDashboard()
+      .then((data) => setStats(data.stats ?? null))
+      .catch(() => {});
+  }, []);
 
   return (
     <div>
@@ -16,8 +26,8 @@ export default function AdminOverviewPage() {
       />
 
       <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {ADMIN_STATS.map((stat, i) => (
-          <StatCard key={stat.label} {...stat} accent={accentMap[i]} />
+        {ADMIN_STATS.map((stat) => (
+          <StatCard key={stat.label} {...stat} />
         ))}
       </div>
 

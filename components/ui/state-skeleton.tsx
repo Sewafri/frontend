@@ -22,7 +22,7 @@ export function StateSkeleton({ title, message, button }: StateSkeletonProps) {
         <Button
           render={<Link href={button.href} />}
           nativeButton={false}
-          className="mt-2 bg-brand-orange text-text-primary dark:text-white hover:bg-brand-orange/90"
+          className="mt-2 bg-brand-orange text-text-on-accent hover:bg-brand-orange/90"
         >
           {button.text}
         </Button>

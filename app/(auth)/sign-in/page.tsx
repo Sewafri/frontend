@@ -1,11 +1,42 @@
+"use client";
+
+import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { BRAND } from "@/constants/brand";
+import { useAuth } from "@/lib/auth/auth-context";
+import { ApiError } from "@/lib/api/client";
 
 export default function SignInPage() {
+  const router = useRouter();
+  const { login } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+    try {
+      await login({ email, password });
+      router.push("/courses");
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setError(err.message);
+      } else {
+        setError("An unexpected error occurred");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div className="w-full max-w-sm">
       <div className="rounded-xl bg-surface-card p-8 shadow-sm ring-1 ring-border-default">
@@ -23,6 +54,7 @@ export default function SignInPage() {
           <div className="grid grid-cols-2 gap-3">
             <Button
               variant="outline"
+              disabled
               className="text-text-secondary transition-colors hover:text-text-primary"
             >
               <svg className="mr-2 size-4" viewBox="0 0 24 24" fill="currentColor">
@@ -35,6 +67,7 @@ export default function SignInPage() {
             </Button>
             <Button
               variant="outline"
+              disabled
               className="text-text-secondary transition-colors hover:text-text-primary"
             >
               <svg className="mr-2 size-4" viewBox="0 0 24 24" fill="currentColor">
@@ -51,7 +84,7 @@ export default function SignInPage() {
           </div>
 
           {/* Email/Password form */}
-          <form className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
               <Label htmlFor="email" className="text-sm text-text-secondary">
                 Email
@@ -60,6 +93,9 @@ export default function SignInPage() {
                 id="email"
                 type="email"
                 placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
             <div className="space-y-1.5">
@@ -69,7 +105,7 @@ export default function SignInPage() {
                 </Label>
                 <Link
                   href="/forgot-password"
-                  className="text-xs text-brand-500 transition-colors hover:text-brand-600"
+                  className="text-xs text-accent-500 transition-colors hover:text-accent-600"
                 >
                   Forgot password?
                 </Link>
@@ -78,13 +114,22 @@ export default function SignInPage() {
                 id="password"
                 type="password"
                 placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
               />
             </div>
+
+            {error && (
+              <p className="text-sm text-accent-red">{error}</p>
+            )}
+
             <Button
               type="submit"
-              className="w-full bg-brand-500 py-2.5 text-base font-semibold text-text-primary dark:text-white transition-all hover:bg-brand-600 active:scale-[0.98]"
+              disabled={loading}
+              className="w-full bg-accent-500 py-2.5 text-base font-semibold text-text-on-accent transition-all hover:bg-accent-600 active:scale-[0.98]"
             >
-              Sign In
+              {loading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
         </div>
@@ -94,7 +139,7 @@ export default function SignInPage() {
         Don&apos;t have an account?{" "}
         <Link
           href="/sign-up"
-          className="font-semibold text-brand-500 transition-colors hover:text-brand-600"
+          className="font-semibold text-accent-500 transition-colors hover:text-accent-600"
         >
           Create one
         </Link>

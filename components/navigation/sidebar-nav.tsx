@@ -21,32 +21,9 @@ interface SidebarNavProps {
   onMobileClose?: () => void;
 }
 
-const accentMap: Record<string, { active: string; hover: string; indicator: string }> = {
-  brand: {
-    active: "bg-brand-500/10 text-brand-500",
-    hover: "hover:bg-surface-card-hover hover:text-text-primary",
-    indicator: "bg-brand-500",
-  },
-  admin: {
-    active: "bg-accent-red/10 text-accent-red",
-    hover: "hover:bg-surface-card-hover hover:text-text-primary",
-    indicator: "bg-accent-red",
-  },
-  instructor: {
-    active: "bg-accent-green/10 text-accent-green",
-    hover: "hover:bg-surface-card-hover hover:text-text-primary",
-    indicator: "bg-accent-green",
-  },
-};
-
 export function SidebarNav({ links, user, accentClass = "brand", mobileOpen, onMobileClose }: SidebarNavProps) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
-  const key = accentClass === "text-brand-orange" || accentClass === "brand" ? "brand"
-    : accentClass.includes("red") ? "admin"
-    : accentClass.includes("green") ? "instructor"
-    : "brand";
-  const colors = accentMap[key];
 
   const sidebar = (
     <nav
@@ -65,7 +42,7 @@ export function SidebarNav({ links, user, accentClass = "brand", mobileOpen, onM
             <span className="font-display text-lg font-bold text-text-primary">
               {BRAND.name}
             </span>
-            <span className="h-2 w-2 rounded-full bg-brand-500" />
+            <span className="h-2 w-2 rounded-full bg-accent-500" />
           </Link>
         )}
         {collapsed && (
@@ -104,15 +81,12 @@ export function SidebarNav({ links, user, accentClass = "brand", mobileOpen, onM
               className={cn(
                 "group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
                 isActive
-                  ? colors.active
-                  : `text-text-secondary ${colors.hover}`,
+                  ? "bg-accent-50 text-accent-500"
+                  : "text-text-secondary hover:bg-surface-card-hover hover:text-text-primary",
               )}
             >
               {isActive && (
-                <span className={cn(
-                  "absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full",
-                  colors.indicator,
-                )} />
+                <span className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-accent-500" />
               )}
               <Icon className="h-5 w-5 shrink-0" />
               {!collapsed && (

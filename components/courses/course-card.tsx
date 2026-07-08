@@ -1,29 +1,28 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Star, Users, Clock } from "lucide-react";
-import type { Course } from "@/types/landing";
+import { Star, Users, Clock, BookOpen } from "lucide-react";
+import type { Course as LandingCourse } from "@/types/landing";
+import type { Course as BackendCourse } from "@/types/db";
 
-export function CourseCard({ course }: { course: Course }) {
+export function CourseCard({ course }: { course: LandingCourse }) {
   return (
     <Link href={`/courses/${course.slug}`} className="group block">
-      <div className="overflow-hidden rounded-xl bg-surface-card shadow-sm ring-1 ring-border-subtle transition-all duration-200 hover:shadow-lg hover:-translate-y-1">
-        {/* Thumbnail */}
+      <div className="overflow-hidden rounded-xl border border-border-default bg-surface-card transition-colors hover:border-border-strong">
         <div className="relative flex h-40 items-center justify-center bg-surface-sunken">
           <Image
             src={course.thumbnail}
             alt={course.title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-contain p-6 transition-transform duration-300 group-hover:scale-105"
+            className="object-contain p-6 transition-transform duration-200 group-hover:scale-105"
           />
-          <span className="absolute right-3 top-3 rounded-full bg-brand-500/90 px-2.5 py-0.5 text-[11px] font-semibold text-text-primary dark:text-white backdrop-blur-sm">
+          <span className="absolute right-3 top-3 rounded-full bg-accent-500 px-2.5 py-0.5 text-xs font-semibold text-text-on-accent">
             {course.category}
           </span>
         </div>
 
-        {/* Content */}
         <div className="space-y-3 p-4">
-          <h3 className="text-sm font-semibold leading-snug text-text-primary group-hover:text-brand-500 transition-colors">
+          <h3 className="text-sm font-semibold leading-snug text-text-primary transition-colors group-hover:text-accent-500">
             {course.title}
           </h3>
 
@@ -46,14 +45,71 @@ export function CourseCard({ course }: { course: Course }) {
             </span>
           </div>
 
-          <div className="flex items-center justify-between border-t border-border-subtle pt-3">
+          <div className="flex items-center justify-between border-t border-border-default pt-3">
             <span className="text-xs text-text-tertiary">
               {course.instructor.name}
             </span>
-            <span className="text-base font-bold text-brand-500">
+            <span className="text-base font-bold text-accent-500">
               {course.currency === "XAF"
                 ? `${course.price.toLocaleString()} FCFA`
                 : `$${course.price}`}
+            </span>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+export function BackendCourseCard({ course }: { course: BackendCourse }) {
+  const displayPrice = course.pricingModel === "FREE" ? 0 : Number(course.price)
+  const instructorName = course.instructor?.fullName ?? "Instructor"
+
+  return (
+    <Link href={`/courses/${course.id}`} className="group block">
+      <div className="overflow-hidden rounded-xl border border-border-default bg-surface-card transition-colors hover:border-border-strong">
+        <div className="relative flex h-40 items-center justify-center bg-surface-sunken">
+          {course.coverImageUrl ? (
+            <Image
+              src={course.coverImageUrl}
+              alt={course.title}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-contain p-6 transition-transform duration-200 group-hover:scale-105"
+            />
+          ) : (
+            <BookOpen className="h-12 w-12 text-text-tertiary" />
+          )}
+          <span className="absolute right-3 top-3 rounded-full bg-accent-500 px-2.5 py-0.5 text-xs font-semibold text-text-on-accent">
+            {course.category}
+          </span>
+        </div>
+
+        <div className="space-y-3 p-4">
+          <h3 className="text-sm font-semibold leading-snug text-text-primary transition-colors group-hover:text-accent-500">
+            {course.title}
+          </h3>
+
+          <p className="line-clamp-2 text-xs leading-relaxed text-text-secondary">
+            {course.description}
+          </p>
+
+          <div className="flex items-center gap-3 text-xs text-text-tertiary">
+            {course.skillTags.length > 0 && (
+              <span className="truncate">{course.skillTags.slice(0, 3).join(", ")}</span>
+            )}
+          </div>
+
+          <div className="flex items-center justify-between border-t border-border-default pt-3">
+            <span className="text-xs text-text-tertiary">
+              {instructorName}
+            </span>
+            <span className="text-base font-bold text-accent-500">
+              {course.pricingModel === "FREE"
+                ? "Free"
+                : course.currency === "XAF"
+                  ? `${displayPrice.toLocaleString()} FCFA`
+                  : `$${displayPrice}`}
             </span>
           </div>
         </div>

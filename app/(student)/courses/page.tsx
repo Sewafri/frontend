@@ -1,19 +1,32 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Search } from "lucide-react";
-import { CourseCard } from "@/components/courses/course-card";
+import { BackendCourseCard } from "@/components/courses/course-card";
 import { PageHeader } from "@/components/ui/page-header";
-import { COURSES } from "@/constants/landing";
-
-const ALL_CATEGORIES = [...new Set(COURSES.map((c) => c.category))];
+import { getCourses } from "@/lib/data/courses";
+import type { Course } from "@/types/db";
 
 export default function CoursesCatalogPage() {
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
+  useEffect(() => {
+    setLoading(true);
+    getCourses()
+      .then(setCourses)
+      .catch(() => setCourses([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const categories = useMemo(() => {
+    return [...new Set(courses.map((c) => c.category))];
+  }, [courses]);
+
   const filtered = useMemo(() => {
-    return COURSES.filter((course) => {
+    return courses.filter((course) => {
       const matchesSearch =
         !search ||
         course.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -21,7 +34,7 @@ export default function CoursesCatalogPage() {
       const matchesCategory = !activeCategory || course.category === activeCategory;
       return matchesSearch && matchesCategory;
     });
-  }, [search, activeCategory]);
+  }, [search, activeCategory, courses]);
 
   return (
     <div>
@@ -55,7 +68,7 @@ export default function CoursesCatalogPage() {
           >
             All
           </button>
-          {ALL_CATEGORIES.map((cat) => (
+          {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
@@ -71,14 +84,23 @@ export default function CoursesCatalogPage() {
         </div>
       </div>
 
+      {/* Loading state */}
+      {loading && (
+        <div className="flex items-center justify-center py-20">
+          <p className="text-sm text-text-secondary">Loading courses...</p>
+        </div>
+      )}
+
       {/* Course Grid */}
-      {filtered.length > 0 ? (
+      {!loading && filtered.length > 0 && (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((course) => (
-            <CourseCard key={course.id} course={course} />
+            <BackendCourseCard key={course.id} course={course} />
           ))}
         </div>
-      ) : (
+      )}
+
+      {!loading && filtered.length === 0 && (
         <div className="flex flex-col items-center justify-center rounded-xl border border-border-default bg-surface-card py-20">
           <Search className="mb-3 h-10 w-10 text-text-tertiary" />
           <p className="text-lg font-medium text-text-primary">No courses found</p>

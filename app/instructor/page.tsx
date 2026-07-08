@@ -6,8 +6,6 @@ import StatusBadge from "@/components/ui/status-badge";
 import { INSTRUCTOR_STATS, COURSE_PERFORMANCE, RECENT_REVIEWS, PENDING_TASKS } from "@/constants/dashboard";
 import { Star } from "lucide-react";
 
-const accentMap = ["brand", "green", "blue", "amber"] as const;
-
 export default function InstructorDashboardPage() {
   return (
     <div>
@@ -23,8 +21,8 @@ export default function InstructorDashboardPage() {
       />
 
       <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {INSTRUCTOR_STATS.map((stat, i) => (
-          <StatCard key={stat.label} {...stat} accent={accentMap[i]} />
+        {INSTRUCTOR_STATS.map((stat) => (
+          <StatCard key={stat.label} {...stat} />
         ))}
       </div>
 
