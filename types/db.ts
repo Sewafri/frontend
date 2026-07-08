@@ -5,6 +5,7 @@ export type PricingModel = "FREE" | "ONE_TIME_PURCHASE" | "SUBSCRIPTION_ONLY"
 export type ContentType = "TEXT" | "VIDEO" | "MIXED"
 export type EnrollmentStatus = "ACTIVE" | "COMPLETED" | "DROPPED"
 export type CertificateStatus = "ISSUED" | "REVOKED"
+export type AnchorStatus = "PENDING_ANCHOR" | "ANCHORED" | "FAILED"
 export type PaymentMethod = "CARD" | "CRYPTO"
 export type PaymentStatus = "PENDING" | "AWAITING_CONFIRMATIONS" | "CONFIRMED" | "FAILED" | "EXPIRED" | "UNDERPAID" | "REFUNDED"
 export type BillingInterval = "MONTHLY" | "ANNUAL"
@@ -62,6 +63,8 @@ export interface Quiz {
   passingScore: number
   isFinalAssessment: boolean
   maxAttempts: number
+  durationMinutes: number | null
+  requireFullscreen: boolean
   courseId: string
   lessonId?: string | null
   questions?: QuizQuestion[]
@@ -79,6 +82,33 @@ export interface QuizQuestion {
   answerOptions: AnswerOption[]
 }
 
+// Shape returned by GET /quizzes/:id (no isCorrect on options, includes settings)
+export interface QuizSession {
+  id: string
+  title: string
+  passingScore: number
+  isFinalAssessment: boolean
+  maxAttempts: number
+  durationMinutes: number | null
+  requireFullscreen: boolean
+  attemptsUsed: number
+  questions: QuizSessionQuestion[]
+}
+
+export interface QuizSessionQuestion {
+  id: string
+  text: string
+  type: QuestionType
+  points: number
+  orderIndex: number
+  answerOptions: QuizSessionOption[]
+}
+
+export interface QuizSessionOption {
+  id: string
+  text: string
+}
+
 export interface AnswerOption {
   id: string
   text: string
@@ -92,9 +122,32 @@ export interface QuizAttempt {
   passed: boolean
   attemptNumber: number
   answers: Record<string, string>
+  integrityReport?: IntegrityReport | null
   userId: string
   quizId: string
   submittedAt: string
+}
+
+export interface StartAttemptResult {
+  attemptId: string
+  attemptNumber: number
+  startedAt: string
+}
+
+export interface IntegrityReport {
+  tabSwitches: IntegrityEvent[]
+  fullscreenExits: IntegrityEvent[]
+  copyAttempts: IntegrityEvent[]
+  pasteAttempts: IntegrityEvent[]
+  navigationAttempts: IntegrityEvent[]
+  totalTabSwitches: number
+  totalFullscreenExits: number
+}
+
+export interface IntegrityEvent {
+  type: string
+  timestamp: string
+  detail?: string
 }
 
 export interface Enrollment {
@@ -106,6 +159,18 @@ export interface Enrollment {
   userId: string
   courseId: string
   course?: Course
+  createdAt: string
+  updatedAt: string
+}
+
+export interface BlockchainRecord {
+  id: string
+  network: string
+  txHash: string | null
+  tokenId: string | null
+  contractAddress: string
+  anchorStatus: AnchorStatus
+  anchoredAt: string | null
   createdAt: string
   updatedAt: string
 }
@@ -123,7 +188,13 @@ export interface Certificate {
   enrollmentId: string
   createdAt: string
   updatedAt: string
+  blockchainRecord?: BlockchainRecord | null
 }
+
+export type VerifyResult =
+  | { result: "VALID"; studentName: string; courseTitle: string; issuerName: string; issueDate: string; anchorStatus: AnchorStatus | null; txHash: string | null; tokenId: string | null; network: string | null }
+  | { result: "INVALID"; reason?: string }
+  | { result: "REVOKED" }
 
 export interface Payment {
   id: string
