@@ -1,12 +1,15 @@
 import Link from "next/link";
-import { UPDATES } from "@/constants/landing";
 import { ArrowUpRight, ArrowRight } from "lucide-react";
+import { UPDATES } from "@/constants/landing";
 
 export default function UpdatesList() {
   return (
     <section className="py-20">
       <div className="mb-12 flex items-end justify-between">
         <div>
+          <div className="inline-flex items-center gap-2 rounded-full border border-accent-500/10 bg-accent-50/50 px-3 py-1 text-xs font-medium text-accent-500 mb-3">
+            Blog
+          </div>
           <h2 className="text-3xl font-bold tracking-tight text-text-primary text-balance">
             Latest updates
           </h2>
@@ -25,8 +28,10 @@ export default function UpdatesList() {
           <Link
             key={update.id}
             href={update.href}
-            className={`group grid items-start gap-4 rounded-2xl border border-border-default bg-surface-card p-6 transition-colors hover:border-border-strong sm:grid-cols-[1fr_auto] sm:items-center ${
-              i === 0 ? "border-accent-500" : ""
+            className={`group grid items-start gap-4 rounded-2xl border p-6 transition-all sm:grid-cols-[1fr_auto] sm:items-center hover:shadow-sm ${
+              i === 0
+                ? "border-accent-500 bg-accent-50/30 hover:border-accent-500"
+                : "border-border-default bg-surface-card hover:border-accent-500/30"
             }`}
           >
             <div className="space-y-2">
@@ -36,7 +41,7 @@ export default function UpdatesList() {
                 </span>
                 <span className="text-xs text-text-tertiary">{update.date}</span>
               </div>
-              <h3 className="text-base font-semibold text-text-primary group-hover:text-accent-500 transition-colors">
+              <h3 className="text-base font-semibold text-text-primary transition-colors group-hover:text-accent-500">
                 {update.title}
               </h3>
               <p className="text-sm leading-relaxed text-text-secondary line-clamp-2">

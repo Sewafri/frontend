@@ -1,9 +1,11 @@
 # API Migration Status
 
+> **Last merge update (2026-07-08):** Backend `main` now includes Google OAuth (`feat/google-oauth`) and smart-contract certificate anchoring (`features/smart-contract`). Messaging and subscription modules removed from backend. API response shape (`{ success: true, data: T }`) confirmed compatible — no breaking changes to existing wired endpoints.
+
 ## Wired (API Connected)
 | Page/Module | Endpoint | Notes |
 |---|---|---|
-| Auth (sign-in, sign-up) | `POST /auth/login`, `POST /auth/register`, `POST /auth/refresh` | Full auth flow with JWT, persisted refresh |
+| Auth (sign-in, sign-up) | `POST /auth/login`, `POST /auth/register`, `POST /auth/refresh`, `POST /auth/google` | Full auth flow with JWT, persisted refresh. Google OAuth available but no frontend button yet. |
 | Course catalog (`/courses`) | `GET /courses` | `BackendCourseCard` renders backend schema |
 | Course detail (`/courses/[slug]`) | `GET /courses/:id`, `GET /courses/:id/lessons` | Enroll button calls `POST /courses/:id/enroll` |
 | My Learning curriculum (`/my-learning/[courseId]`) | `GET /courses/:id/lessons`, `POST /lessons/:id/complete` | Lesson completion wired; quiz data still mock |
@@ -36,6 +38,6 @@
 | Admin analytics | Analytics endpoints | Chart placeholders + mock |
 | Instructor application review system | `GET /admin/applications` flow | Static page |
 | Notifications | `GET /notifications` | Data module exists, no page wired |
-| Subscriptions | `GET /subscriptions` | Data module exists, no page wired |
 | Forum | Forum endpoints | Static pages |
-| Messages | Messaging endpoints | Static pages |
+| Messages | Messaging endpoints | **Backend module removed** — `/messages` page will 404 on fetch |
+| Subscriptions | `GET /subscriptions` | **Backend module removed** — data module still exists but no endpoint |

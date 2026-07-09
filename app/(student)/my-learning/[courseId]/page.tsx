@@ -125,8 +125,9 @@ export default function CurriculumPage() {
       {/* Lesson list */}
       <div className="space-y-2">
         {displayLessons.map((lesson, i) => (
-          <div
+          <Link
             key={lesson.id}
+            href={`/my-learning/${courseId}/lessons/${lesson.id}`}
             className={`flex items-center gap-4 rounded-xl border px-5 py-4 transition-colors ${
               lesson.completed
                 ? "border-accent-green/20 bg-accent-green/5"
@@ -165,14 +166,17 @@ export default function CurriculumPage() {
 
             {i === completedCount && !lesson.completed && (
               <button
-                onClick={() => handleComplete(lesson.id)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleComplete(lesson.id);
+                }}
                 disabled={completingId === lesson.id}
                 className="cursor-pointer rounded-lg bg-accent-500 px-4 py-1.5 text-xs font-medium text-text-on-accent transition-colors hover:bg-accent-500/90 disabled:opacity-50"
               >
                 {completingId === lesson.id ? "..." : "Complete"}
               </button>
             )}
-          </div>
+          </Link>
         ))}
       </div>
     </div>
