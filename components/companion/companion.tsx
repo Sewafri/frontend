@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback, useId } from "react";
 import { motion } from "motion/react";
 import SproutSvg from "./sprout-svg";
-import type { SproutVariant } from "./sprout-svg";
+import type { SproutVariant, Tone } from "./sprout-svg";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { useCursorTracking } from "@/hooks/use-cursor-tracking";
 import { cn } from "@/lib/utils";
@@ -21,6 +21,7 @@ interface CompanionProps {
   intensity?: AnimationIntensity;
   interactive?: boolean;
   onBubbleClick?: () => void;
+  tone?: Tone;
 }
 
 const GAP: Record<string, string> = {
@@ -58,6 +59,11 @@ function squashKeyframes(variant: SproutVariant, int: AnimationIntensity): Keyfr
         scaleX: [1, 1 + 0.14 * f, 1 - 0.14 * f, 1 + 0.08 * f, 1 - 0.04 * f, 1],
         scaleY: [1, 1 - 0.14 * f, 1 + 0.16 * f, 1 - 0.06 * f, 1 + 0.04 * f, 1],
       };
+    case "playing":
+      return {
+        scaleX: [1, 1 + 0.1 * f, 1 - 0.08 * f, 1 + 0.05 * f, 1 - 0.03 * f, 1],
+        scaleY: [1, 1 - 0.1 * f, 1 + 0.1 * f, 1 - 0.04 * f, 1 + 0.02 * f, 1],
+      };
     case "happy":
     case "waving":
     case "laughing":
@@ -85,6 +91,11 @@ function squashKeyframes(variant: SproutVariant, int: AnimationIntensity): Keyfr
         scaleX: [1, 1 + 0.06 * f, 1, 1 + 0.03 * f, 1],
         scaleY: [1, 1 - 0.06 * f, 1, 1 - 0.03 * f, 1],
       };
+    case "scrolling":
+      return {
+        scaleX: [1, 1 + 0.01 * f, 1 - 0.01 * f, 1],
+        scaleY: [1, 1 - 0.015 * f, 1 + 0.015 * f, 1],
+      };
     case "confused":
       return {
         scaleX: [1, 1 + 0.03 * f, 1 - 0.03 * f, 1 + 0.02 * f, 1],
@@ -103,6 +114,7 @@ function squashDuration(variant: SproutVariant, int: AnimationIntensity): number
     celebrating: 1.2, happy: 1.8, waving: 1.8, sympathetic: 3.5,
     idle: 3, thinking: 3, eating: 2, laughing: 1.5, sleepy: 4,
     surprised: 2.5, excited: 1.2, confused: 3,
+    playing: 1.3, scrolling: 3.5,
   };
   const speed = int === "high" ? 0.75 : int === "low" ? 1.5 : 1;
   return base[variant] * speed;
@@ -166,7 +178,9 @@ export default function Companion({
   intensity = "normal",
   interactive = false,
   onBubbleClick,
+  tone,
 }: CompanionProps) {
+  const gradientId = useId();
   const reduced = useReducedMotion();
   const shouldAnimate = animate && !reduced;
   const isCelebrating = variant === "celebrating";
@@ -304,6 +318,8 @@ export default function Companion({
             glow={glow}
             blinking={blinking}
             eyeOffsetX={eyeOffsetX}
+            tone={tone}
+            gradientId={gradientId}
           />
         </motion.div>
       </motion.div>

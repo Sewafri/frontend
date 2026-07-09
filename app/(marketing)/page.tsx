@@ -6,7 +6,12 @@ import TracksGrid from "./_components/tracks-grid";
 import UpdatesList from "./_components/updates-list";
 import CTASection from "./_components/cta-section";
 import Footer from "./_components/footer";
-import SproutScene from "./_components/sprout-scene";
+import PlayScene from "./_components/scenes/play-scene";
+import EatScene from "./_components/scenes/eat-scene";
+import LaughScene from "./_components/scenes/laugh-scene";
+import ThinkScene from "./_components/scenes/think-scene";
+import ScrollScene from "./_components/scenes/scroll-scene";
+import WaveScene from "./_components/scenes/wave-scene";
 
 export default function LandingPage() {
   return (
@@ -14,62 +19,17 @@ export default function LandingPage() {
       <HeroGeometric />
       <div className="mx-auto max-w-6xl px-6">
         <FocusCards />
-
-        <SproutScene
-          sproots={[
-            { variant: "celebrating", size: "sm" },
-            { variant: "laughing", size: "default" },
-            { variant: "happy", size: "sm" },
-          ]}
-          message="Play is the highest form of learning!"
-        />
-
+        <PlayScene />
         <StatBlock />
-
-        <SproutScene
-          sproots={[
-            { variant: "eating", size: "lg" },
-          ]}
-          message="Sweet skills to grow on!"
-        />
-
+        <EatScene />
         <CoursesSection />
-
-        <SproutScene
-          sproots={[
-            { variant: "sympathetic", size: "lg" },
-            { variant: "happy", size: "sm" },
-          ]}
-          message="Growing together, every step of the way!"
-        />
-
+        <LaughScene />
         <TracksGrid />
-
-        <SproutScene
-          sproots={[
-            { variant: "thinking", size: "default" },
-          ]}
-          message="Curious minds are always learning!"
-        />
-
+        <ThinkScene />
         <UpdatesList />
-
-        <SproutScene
-          sproots={[
-            { variant: "excited", size: "lg" },
-          ]}
-          message="Big things are coming!"
-        />
-
+        <ScrollScene />
         <CTASection />
-
-        <SproutScene
-          sproots={[
-            { variant: "waving", size: "lg" },
-          ]}
-          message="Ready to start your adventure?"
-        />
-
+        <WaveScene />
         <Footer />
       </div>
     </>

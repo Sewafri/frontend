@@ -1,12 +1,13 @@
 "use client";
 
 import Companion from "@/components/companion/companion";
-import type { SproutVariant } from "@/components/companion/sprout-svg";
+import type { SproutVariant, Tone } from "@/components/companion/sprout-svg";
 import { cn } from "@/lib/utils";
 
 interface SproutConfig {
   variant: SproutVariant;
   size?: "sm" | "md" | "default" | "lg" | "xl" | "xxl" | "xxxl";
+  tone?: Tone;
 }
 
 interface SproutSceneProps {
@@ -32,6 +33,7 @@ export default function SproutScene({ sproots, message, className }: SproutScene
             size={s.size ?? "sm"}
             animate
             intensity="high"
+            tone={s.tone}
           />
         ))}
       </div>
