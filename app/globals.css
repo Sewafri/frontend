@@ -128,7 +128,7 @@
 }
 
 :root {
-  --background: #f9fafb;
+  --background: #f4f9ec;
   --foreground: #111827;
   --card: #ffffff;
   --card-foreground: #111827;
@@ -164,16 +164,16 @@
 
   /* Surface hierarchy — light */
   --surface-raised: #ffffff;
-  --surface: #f9fafb;
-  --surface-sunken: #f3f4f6;
-  --surface-overlay: rgba(0, 0, 0, 0.04);
+  --surface: #f4f9ec;
+  --surface-sunken: #edf5e2;
+  --surface-overlay: rgba(79, 127, 31, 0.04);
   --surface-card: #ffffff;
-  --surface-card-hover: #f9fafb;
+  --surface-card-hover: #f4f9ec;
   --surface-card-elevated: #ffffff;
 
-  --border-default: #e5e7eb;
-  --border-subtle: #f3f4f6;
-  --border-strong: #d1d5db;
+  --border-default: #dce8d0;
+  --border-subtle: #edf5e2;
+  --border-strong: #c4d4b5;
 
   --text-primary: #111827;
   --text-secondary: #6b7280;

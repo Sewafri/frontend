@@ -22,7 +22,7 @@ function TrackCard({ track, index }: { track: typeof TRACKS[number]; index: numb
   if (reduced) {
     return (
       <div className="group rounded-2xl border border-border-default bg-surface-card p-7 transition-all hover:border-accent-500/30 hover:shadow-sm">
-        <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl border border-border-default text-text-secondary transition-colors group-hover:border-accent-500/30 group-hover:text-accent-500">
+        <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl border border-border-default text-accent-500 transition-colors group-hover:border-accent-500/30 group-hover:text-accent-500">
           <Icon size={22} />
         </div>
         <h3 className="text-lg font-bold text-text-primary">{track.title}</h3>
@@ -54,7 +54,7 @@ function TrackCard({ track, index }: { track: typeof TRACKS[number]; index: numb
       whileHover={{ y: -4, scale: 1.01, transition: { type: "spring", stiffness: 300, damping: 15 } }}
       className="group rounded-2xl border border-border-default bg-surface-card p-7 transition-all hover:border-accent-500/30 hover:shadow-sm"
     >
-      <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl border border-border-default text-text-secondary transition-colors group-hover:border-accent-500/30 group-hover:text-accent-500">
+      <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl border border-border-default text-accent-500 transition-colors group-hover:border-accent-500/30 group-hover:text-accent-500">
         <Icon size={22} />
       </div>
       <h3 className="text-lg font-bold text-text-primary">{track.title}</h3>

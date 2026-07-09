@@ -50,7 +50,7 @@ export default function UpdatesList() {
             </div>
             <ArrowUpRight
               size={18}
-              className="text-text-tertiary transition-all group-hover:text-accent-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              className="text-accent-500 transition-all group-hover:text-accent-600 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
             />
           </Link>
         ))}

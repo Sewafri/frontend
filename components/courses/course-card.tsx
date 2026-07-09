@@ -44,11 +44,11 @@ export function CourseCard({ course }: { course: LandingCourse }) {
                 {course.rating}
               </span>
               <span className="flex items-center gap-1">
-                <Users className="h-3.5 w-3.5" />
+                <Users className="h-3.5 w-3.5 text-accent-500" />
                 {course.studentsCount.toLocaleString()}
               </span>
               <span className="flex items-center gap-1">
-                <Clock className="h-3.5 w-3.5" />
+                <Clock className="h-3.5 w-3.5 text-accent-500" />
                 {course.duration}
               </span>
             </div>
@@ -89,7 +89,7 @@ export function BackendCourseCard({ course }: { course: BackendCourse }) {
                 className="object-contain p-6 transition-transform duration-200 group-hover:scale-105"
               />
             ) : (
-              <BookOpen className="h-12 w-12 text-text-tertiary" />
+              <BookOpen className="h-12 w-12 text-accent-500" />
             )}
             <span className="absolute right-3 top-3 rounded-full bg-accent-500 px-2.5 py-0.5 text-xs font-semibold text-text-on-accent">
               {course.category}

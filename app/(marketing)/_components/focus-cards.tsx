@@ -47,7 +47,7 @@ function FocusCard({ item, index }: { item: typeof FOCUS_ITEMS[number]; index: n
     const Icon = item.icon;
     return (
       <article className="group rounded-xl border border-border-default bg-surface-card p-6 transition-colors hover:border-accent-500/30 hover:shadow-sm sm:p-7">
-        <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg border border-border-default text-text-secondary transition-colors group-hover:border-accent-500/30 group-hover:text-accent-500">
+        <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg border border-border-default text-accent-500 transition-colors group-hover:border-accent-500/30 group-hover:text-accent-500">
           <Icon size={18} />
         </div>
         <h3 className="text-sm font-semibold text-text-primary">{item.title}</h3>
@@ -68,7 +68,7 @@ function FocusCard({ item, index }: { item: typeof FOCUS_ITEMS[number]; index: n
       whileHover={{ y: -4, scale: 1.01, transition: { type: "spring", stiffness: 300, damping: 15 } }}
       className="group rounded-xl border border-border-default bg-surface-card p-6 transition-colors hover:border-accent-500/30 hover:shadow-sm sm:p-7"
     >
-      <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg border border-border-default text-text-secondary transition-colors group-hover:border-accent-500/30 group-hover:text-accent-500">
+      <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg border border-border-default text-accent-500 transition-colors group-hover:border-accent-500/30 group-hover:text-accent-500">
         <Icon size={18} />
       </div>
       <h3 className="text-sm font-semibold text-text-primary">{item.title}</h3>
