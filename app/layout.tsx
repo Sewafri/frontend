@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Figtree,
+  Montserrat,
+  Poppins,
+  Syne,
+} from "next/font/google";
 import { META } from "@/constants/brand";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { AuthProvider } from "@/lib/auth/auth-context";
@@ -15,6 +22,30 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const figtree = Figtree({
+  variable: "--font-figtree-family",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+});
+
+const montserrat = Montserrat({
+  variable: "--font-montserrat-family",
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
+
+const poppins = Poppins({
+  variable: "--font-poppins-family",
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
+
+const syne = Syne({
+  variable: "--font-syne-family",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+});
+
 export const metadata: Metadata = {
   title: META.title,
   description: META.description,
@@ -28,7 +59,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${figtree.variable} ${montserrat.variable} ${poppins.variable} ${syne.variable} h-full antialiased`}
     >
       <body className="min-h-full font-sans">
         <ThemeProvider>

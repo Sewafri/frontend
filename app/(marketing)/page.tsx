@@ -3,33 +3,25 @@ import FocusCards from "./_components/focus-cards";
 import StatBlock from "./_components/stat-block";
 import CoursesSection from "./_components/courses-section";
 import TracksGrid from "./_components/tracks-grid";
-import UpdatesList from "./_components/updates-list";
 import CTASection from "./_components/cta-section";
 import Footer from "./_components/footer";
-import PlayScene from "./_components/scenes/play-scene";
-import EatScene from "./_components/scenes/eat-scene";
-import LaughScene from "./_components/scenes/laugh-scene";
-import ThinkScene from "./_components/scenes/think-scene";
-import ScrollScene from "./_components/scenes/scroll-scene";
-import WaveScene from "./_components/scenes/wave-scene";
+import TrustedEmployers from "./_components/trusted-employers";
+import WhatIsSewafri from "./_components/what-is-sewafri";
+import HowItWorks from "./_components/how-it-works";
 
 export default function LandingPage() {
   return (
     <>
       <HeroGeometric />
-      <div className="mx-auto max-w-6xl px-6">
-        <FocusCards />
-        <PlayScene />
+      <div className="mx-auto max-w-6xl px-6 pb-20">
         <StatBlock />
-        <EatScene />
+        <TrustedEmployers />
+        <WhatIsSewafri />
+        <HowItWorks />
         <CoursesSection />
-        <LaughScene />
+        <FocusCards />
         <TracksGrid />
-        <ThinkScene />
-        <UpdatesList />
-        <ScrollScene />
         <CTASection />
-        <WaveScene />
         <Footer />
       </div>
     </>
