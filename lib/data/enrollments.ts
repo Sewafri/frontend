@@ -1,6 +1,15 @@
 import { api } from "@/lib/api/client"
 import type { Enrollment } from "@/types/db"
 
+export async function getCourseEnrollments(
+  courseId: string,
+): Promise<Enrollment[]> {
+  const data = await api<{ enrollments: Enrollment[] }>(
+    `/courses/${courseId}/enrollments`,
+  )
+  return data.enrollments
+}
+
 export async function getMyEnrollments(): Promise<Enrollment[]> {
   // MOCK: backend GET /enrollments is a stub — see MIGRATION.md
   // Falls back to mock data if NEXT_PUBLIC_USE_MOCK_DATA=true

@@ -53,7 +53,7 @@ export default function CoursesCatalogPage() {
             aria-label="Search courses"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-lg border border-border-default bg-surface-card py-2.5 pl-10 pr-4 text-sm text-text-primary placeholder-text-tertiary outline-none transition-colors focus:border-brand-500/50 focus:ring-2 focus:ring-brand-500/10"
+            className="w-full rounded-lg border border-border-default bg-surface-card py-2.5 pl-10 pr-4 text-sm text-text-primary placeholder-text-tertiary outline-none transition-colors focus:border-accent-500/50 focus:ring-2 focus:ring-accent-500/10"
           />
         </div>
 
@@ -62,7 +62,7 @@ export default function CoursesCatalogPage() {
             onClick={() => setActiveCategory(null)}
             className={`cursor-pointer rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
               !activeCategory
-                ? "bg-brand-500 text-text-primary shadow-sm"
+                ? "bg-accent-500 text-text-primary shadow-sm"
                 : "bg-surface-card text-text-secondary ring-1 ring-border-default hover:text-text-primary"
             }`}
           >
@@ -74,7 +74,7 @@ export default function CoursesCatalogPage() {
               onClick={() => setActiveCategory(cat)}
               className={`cursor-pointer rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
                 activeCategory === cat
-                  ? "bg-brand-500 text-text-primary shadow-sm"
+                  ? "bg-accent-500 text-text-primary shadow-sm"
                   : "bg-surface-card text-text-secondary ring-1 ring-border-default hover:text-text-primary"
               }`}
             >

@@ -1,5 +1,10 @@
+"use client";
+
+import { useState } from "react";
 import { PageHeader } from "@/components/ui/page-header";
 import GlassCard from "@/components/ui/glass-card";
+import { useAuth } from "@/lib/auth/auth-context";
+import { updateProfile } from "@/lib/data/users";
 import { User, Lock, Bell, CreditCard } from "lucide-react";
 
 const NOTIFICATION_SETTINGS = [
@@ -9,13 +14,28 @@ const NOTIFICATION_SETTINGS = [
   { label: "Achievements", description: "Get notified when you earn new achievements" },
 ];
 
-const PAYMENT_HISTORY = [
-  { id: "p1", course: "Web Development Bootcamp", amount: "$89", date: "2026-06-15", status: "Completed" },
-  { id: "p2", course: "Data Science Fundamentals", amount: "$79", date: "2026-06-10", status: "Completed" },
-  { id: "p3", course: "UI/UX Design Masterclass", amount: "$69", date: "2026-05-28", status: "Completed" },
-];
-
 export default function SettingsPage() {
+  const { user } = useAuth();
+  const [fullName, setFullName] = useState(user?.fullName ?? "");
+  const [bio, setBio] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  async function handleSave() {
+    setSaving(true);
+    setSaved(false);
+    try {
+      await updateProfile({
+        fullName: fullName.trim() || undefined,
+        bio: bio.trim() || undefined,
+      });
+      setSaved(true);
+    } catch {
+    } finally {
+      setSaving(false);
+    }
+  }
+
   return (
     <div className="">
       <PageHeader
@@ -24,52 +44,73 @@ export default function SettingsPage() {
       />
 
       <div className="space-y-8">
-        {/* Profile */}
         <section>
           <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-text-primary">
-            <User className="h-5 w-5 text-brand-orange" /> Profile
+            <User className="h-5 w-5 text-accent-500" /> Profile
           </h2>
           <GlassCard>
             <div className="grid gap-6 sm:grid-cols-2">
               <div>
                 <label className="mb-1.5 block text-xs font-medium text-text-secondary">Full Name</label>
-                <input type="text" defaultValue="John Doe" readOnly className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2 text-sm text-text-primary outline-none" />
+                <input
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2 text-sm text-text-primary outline-none"
+                />
               </div>
               <div>
                 <label className="mb-1.5 block text-xs font-medium text-text-secondary">Email</label>
-                <input type="email" defaultValue="john@example.com" readOnly className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2 text-sm text-text-primary outline-none" />
+                <input
+                  type="email"
+                  value={user?.email ?? ""}
+                  readOnly
+                  className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2 text-sm text-text-secondary outline-none"
+                />
               </div>
-              <div>
+              <div className="sm:col-span-2">
                 <label className="mb-1.5 block text-xs font-medium text-text-secondary">Bio</label>
-                <textarea rows={3} defaultValue="Passionate learner exploring web development." readOnly className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2 text-sm text-text-primary outline-none" />
+                <textarea
+                  rows={3}
+                  value={bio}
+                  onChange={(e) => setBio(e.target.value)}
+                  className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2 text-sm text-text-primary outline-none"
+                />
               </div>
+            </div>
+            <div className="mt-4 flex justify-end">
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="cursor-pointer rounded-lg bg-accent-500 px-5 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-accent-500/90 disabled:opacity-50"
+              >
+                {saving ? "Saving..." : saved ? "Saved!" : "Save Profile"}
+              </button>
             </div>
           </GlassCard>
         </section>
 
-        {/* Password */}
         <section>
           <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-text-primary">
-            <Lock className="h-5 w-5 text-brand-orange" /> Password
+            <Lock className="h-5 w-5 text-accent-500" /> Password
           </h2>
           <GlassCard>
             <div className="grid gap-6 sm:grid-cols-2">
               <div>
                 <label className="mb-1.5 block text-xs font-medium text-text-secondary">Current Password</label>
-                <input type="password" placeholder="••••••••" className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2 text-sm text-text-primary placeholder-text-secondary outline-none" />
+                <input type="password" placeholder="••••••••" className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2 text-sm text-text-primary placeholder-text-secondary outline-none" />
               </div>
               <div>
                 <label className="mb-1.5 block text-xs font-medium text-text-secondary">New Password</label>
-                <input type="password" placeholder="Enter new password" className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2 text-sm text-text-primary placeholder-text-secondary outline-none" />
+                <input type="password" placeholder="Enter new password" className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2 text-sm text-text-primary placeholder-text-secondary outline-none" />
               </div>
             </div>
           </GlassCard>
         </section>
 
-        {/* Notifications */}
         <section>
           <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-text-primary">
-            <Bell className="h-5 w-5 text-brand-orange" /> Notifications
+            <Bell className="h-5 w-5 text-accent-500" /> Notifications
           </h2>
           <GlassCard>
             <div className="space-y-4">
@@ -81,7 +122,7 @@ export default function SettingsPage() {
                   </div>
                   <label className="relative inline-flex cursor-pointer items-center">
                     <input type="checkbox" defaultChecked className="peer sr-only" />
-                    <div className="h-5 w-9 rounded-full bg-neutral-700 after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-white after:transition-all peer-checked:bg-brand-orange peer-checked:after:translate-x-full" />
+                    <div className="h-5 w-9 rounded-full bg-neutral-700 after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-white after:transition-all peer-checked:bg-accent-500 peer-checked:after:translate-x-full" />
                   </label>
                 </div>
               ))}
@@ -89,36 +130,14 @@ export default function SettingsPage() {
           </GlassCard>
         </section>
 
-        {/* Payment History */}
         <section>
           <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-text-primary">
-            <CreditCard className="h-5 w-5 text-brand-orange" /> Payment History
+            <CreditCard className="h-5 w-5 text-accent-500" /> Payment History
           </h2>
           <GlassCard>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm">
-                <thead>
-                  <tr className="border-b border-border-glass text-xs text-text-secondary">
-                    <th className="pb-3 font-medium">Course</th>
-                    <th className="pb-3 font-medium">Amount</th>
-                    <th className="pb-3 font-medium">Date</th>
-                    <th className="pb-3 font-medium">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {PAYMENT_HISTORY.map((p) => (
-                    <tr key={p.id} className="border-b border-border-glass last:border-0">
-                      <td className="py-3 text-text-primary">{p.course}</td>
-                      <td className="py-3 text-text-secondary">{p.amount}</td>
-                      <td className="py-3 text-text-secondary">{p.date}</td>
-                      <td className="py-3">
-                        <span className="rounded-full bg-accent-green/10 px-2 py-0.5 text-xs font-medium text-accent-green">{p.status}</span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <p className="py-4 text-center text-sm text-text-secondary">
+              Payment history will appear here once available.
+            </p>
           </GlassCard>
         </section>
       </div>

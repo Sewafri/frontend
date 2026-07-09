@@ -1,92 +1,199 @@
 "use client";
 
-import { useState } from "react";
-import { useParams } from "next/navigation";
+import { useEffect, useState, useCallback } from "react";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { PageHeader } from "@/components/ui/page-header";
 import GlassCard from "@/components/ui/glass-card";
 import { ArrowLeft, Save, Plus, Trash2 } from "lucide-react";
-
-interface Question {
-  id: string;
-  text: string;
-  options: string[];
-  correct: number;
-}
-
-const INITIAL_QUESTIONS: Question[] = [
-  { id: "q1", text: "What is the primary benefit of using TypeScript?", options: ["Faster runtime", "Static type checking", "Smaller bundles", "Better compat"], correct: 1 },
-  { id: "q2", text: "Which React hook handles side effects?", options: ["useState", "useEffect", "useContext", "useReducer"], correct: 1 },
-];
+import {
+  getQuizManage,
+  addQuizQuestion,
+  updateQuizQuestion,
+  deleteQuizQuestion,
+  type QuizManageQuestion,
+} from "@/lib/data/quiz";
 
 export default function QuizEditorPage() {
   const params = useParams();
-  const [questions, setQuestions] = useState<Question[]>(INITIAL_QUESTIONS);
+  const router = useRouter();
+  const courseId = params.id as string;
+  const quizId = params.quizId as string;
+  const [questions, setQuestions] = useState<QuizManageQuestion[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState<string | null>(null);
 
-  const addQuestion = () => {
-    const newId = `q${questions.length + 1}`;
-    setQuestions([...questions, { id: newId, text: "", options: ["", "", "", ""], correct: 0 }]);
-  };
+  useEffect(() => {
+    if (!quizId) return;
+    getQuizManage(quizId)
+      .then((data) => setQuestions(data.questions ?? []))
+      .catch(() => setQuestions([]))
+      .finally(() => setLoading(false));
+  }, [quizId]);
 
-  const updateQuestion = (id: string, text: string) => {
-    setQuestions(questions.map((q) => (q.id === id ? { ...q, text } : q)));
-  };
+  const handleAddQuestion = useCallback(async () => {
+    try {
+      const q = await addQuizQuestion(quizId, {
+        text: "",
+        options: [
+          { text: "", isCorrect: false },
+          { text: "", isCorrect: false },
+        ],
+        orderIndex: questions.length,
+      });
+      setQuestions((prev) => [...prev, q]);
+    } catch {}
+  }, [quizId, questions.length]);
 
-  const updateOption = (qId: string, optIdx: number, value: string) => {
-    setQuestions(questions.map((q) => q.id === qId ? { ...q, options: q.options.map((o, i) => i === optIdx ? value : o) } : q));
-  };
+  const handleSaveQuestion = useCallback(
+    async (q: QuizManageQuestion) => {
+      setSaving(q.id);
+      try {
+        const updated = await updateQuizQuestion(quizId, q.id, {
+          text: q.text,
+          options: q.answerOptions.map((o) => ({
+            id: o.id,
+            text: o.text,
+            isCorrect: o.isCorrect,
+          })),
+        });
+        setQuestions((prev) =>
+          prev.map((item) => (item.id === q.id ? updated : item)),
+        );
+      } finally {
+        setSaving(null);
+      }
+    },
+    [quizId],
+  );
 
-  const setCorrect = (qId: string, optIdx: number) => {
-    setQuestions(questions.map((q) => q.id === qId ? { ...q, correct: optIdx } : q));
-  };
+  const handleDeleteQuestion = useCallback(
+    async (questionId: string) => {
+      try {
+        await deleteQuizQuestion(quizId, questionId);
+        setQuestions((prev) => prev.filter((q) => q.id !== questionId));
+      } catch {}
+    },
+    [quizId],
+  );
 
-  const removeQuestion = (id: string) => {
-    setQuestions(questions.filter((q) => q.id !== id));
-  };
+  const updateField = useCallback(
+    (qId: string, field: string, value: unknown) => {
+      setQuestions((prev) =>
+        prev.map((q) => (q.id === qId ? { ...q, [field]: value } : q)),
+      );
+    },
+    [],
+  );
+
+  const updateOption = useCallback(
+    (qId: string, optIdx: number, field: string, value: unknown) => {
+      setQuestions((prev) =>
+        prev.map((q) =>
+          q.id === qId
+            ? {
+                ...q,
+                answerOptions: q.answerOptions.map((o, i) =>
+                  i === optIdx ? { ...o, [field]: value } : o,
+                ),
+              }
+            : q,
+        ),
+      );
+    },
+    [],
+  );
+
+  if (loading) {
+    return <div className="flex flex-col items-center justify-center py-20"><p className="text-sm text-text-secondary">Loading quiz...</p></div>;
+  }
 
   return (
     <div className="">
       <div className="mb-6 flex items-center gap-3">
-        <Link href={`/instructor/courses/${params.id}/quiz`} className="flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary">
+        <Link href={`/instructor/courses/${courseId}/quiz`} className="flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary">
           <ArrowLeft className="h-4 w-4" /> Back to Quizzes
         </Link>
       </div>
 
       <PageHeader
         title="Edit Quiz"
-        description={`Quiz: ${params.quizId}`}
+        description={`Quiz: ${quizId}`}
         actions={
-          <button onClick={addQuestion} className="cursor-pointer flex items-center gap-2 rounded-lg bg-surface-card px-4 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-surface-card-hover">
+          <button onClick={handleAddQuestion} className="cursor-pointer flex items-center gap-2 rounded-lg bg-surface-card px-4 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-surface-card-hover">
             <Plus className="h-4 w-4" /> Add Question
           </button>
         }
       />
 
-      <div className="space-y-4">
-        {questions.map((q, idx) => (
-          <GlassCard key={q.id}>
-            <div className="flex items-start justify-between mb-3">
-              <span className="text-sm font-medium text-text-primary">Question {idx + 1}</span>
-              <button onClick={() => removeQuestion(q.id)} aria-label="Remove question" className="cursor-pointer text-accent-red hover:text-accent-red/80"><Trash2 className="h-4 w-4" /></button>
-            </div>
-            <input type="text" value={q.text} onChange={(e) => updateQuestion(q.id, e.target.value)} placeholder="Enter question..." aria-label="Question text" className="mb-3 w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2 text-sm text-text-primary placeholder-text-secondary outline-none focus:border-brand-orange/50" />
-            <div className="space-y-2">
-              {q.options.map((opt, optIdx) => (
-                <div key={optIdx} className="flex items-center gap-2">
-                  <input type="radio" name={`correct-${q.id}`} checked={q.correct === optIdx} onChange={() => setCorrect(q.id, optIdx)} aria-label={`Mark option ${optIdx + 1} as correct`} className="accent-brand-orange" />
-                  <input type="text" value={opt} onChange={(e) => updateOption(q.id, optIdx, e.target.value)} placeholder={`Option ${optIdx + 1}`} aria-label={`Option ${optIdx + 1}`} className="flex-1 rounded-lg border border-border-glass bg-surface-card px-3 py-2 text-sm text-text-primary placeholder-text-secondary outline-none focus:border-brand-orange/50" />
-                </div>
-              ))}
-            </div>
-          </GlassCard>
-        ))}
-      </div>
-
-      <div className="mt-6 flex justify-end">
-        <button className="cursor-pointer flex items-center gap-2 rounded-lg bg-brand-orange px-6 py-2.5 text-sm font-medium text-text-primary transition-colors hover:bg-brand-orange/90">
-          <Save className="h-4 w-4" /> Save Quiz
-        </button>
-      </div>
+      {questions.length === 0 ? (
+        <p className="py-8 text-center text-sm text-text-secondary">No questions yet. Add your first question.</p>
+      ) : (
+        <div className="space-y-4">
+          {questions.map((q, idx) => (
+            <GlassCard key={q.id}>
+              <div className="flex items-start justify-between mb-3">
+                <span className="text-sm font-medium text-text-primary">Question {idx + 1}</span>
+                <button onClick={() => handleDeleteQuestion(q.id)} aria-label="Remove question" className="cursor-pointer text-accent-red hover:text-accent-red/80"><Trash2 className="h-4 w-4" /></button>
+              </div>
+              <input
+                type="text"
+                value={q.text}
+                onChange={(e) => updateField(q.id, "text", e.target.value)}
+                placeholder="Enter question..."
+                aria-label="Question text"
+                className="mb-3 w-full rounded-lg border border-border-default bg-surface-card px-3 py-2 text-sm text-text-primary placeholder-text-secondary outline-none focus:border-accent-500/50"
+              />
+              <div className="space-y-2">
+                {q.answerOptions.map((opt, optIdx) => (
+                  <div key={opt.id ?? optIdx} className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name={`correct-${q.id}`}
+                      checked={opt.isCorrect}
+                      onChange={() => {
+                        setQuestions((prev) =>
+                          prev.map((pq) =>
+                            pq.id === q.id
+                              ? {
+                                  ...pq,
+                                  answerOptions: pq.answerOptions.map((o, i) =>
+                                    i === optIdx
+                                      ? { ...o, isCorrect: true }
+                                      : { ...o, isCorrect: false },
+                                  ),
+                                }
+                              : pq,
+                          ),
+                        );
+                      }}
+                      aria-label={`Mark option ${optIdx + 1} as correct`}
+                      className="accent-accent-500"
+                    />
+                    <input
+                      type="text"
+                      value={opt.text}
+                      onChange={(e) => updateOption(q.id, optIdx, "text", e.target.value)}
+                      placeholder={`Option ${optIdx + 1}`}
+                      aria-label={`Option ${optIdx + 1}`}
+                      className="flex-1 rounded-lg border border-border-default bg-surface-card px-3 py-2 text-sm text-text-primary placeholder-text-secondary outline-none focus:border-accent-500/50"
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="mt-3 flex justify-end">
+                <button
+                  onClick={() => handleSaveQuestion(q)}
+                  disabled={saving === q.id}
+                  className="cursor-pointer rounded-lg bg-accent-500 px-4 py-1.5 text-xs font-medium text-text-primary transition-colors hover:bg-accent-500/90 disabled:opacity-50"
+                >
+                  {saving === q.id ? "Saving..." : "Save Question"}
+                </button>
+              </div>
+            </GlassCard>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

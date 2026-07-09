@@ -33,12 +33,14 @@ export default function SignUpPage() {
 
     setLoading(true);
     try {
-      await register({
+      const user = await register({
         fullName: `${firstName} ${lastName}`.trim(),
         email,
         password,
       });
-      router.push("/courses");
+      if (user.role === "ADMIN") router.push("/admin");
+      else if (user.role === "INSTRUCTOR") router.push("/instructor");
+      else router.push("/my-learning");
     } catch (err) {
       if (err instanceof ApiError) {
         setError(err.message);

@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function VerifyLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col bg-surface-dark">
-      <header className="flex items-center justify-between border-b border-border-glass px-6 py-4">
+      <header className="flex items-center justify-between border-b border-border-default px-6 py-4">
         <Link href="/" className="flex items-center gap-1.5">
           <span className="font-space-grotesk text-lg font-bold text-text-primary">{BRAND.name}</span>
           <span className="h-2 w-2 rounded-full bg-accent-500" />

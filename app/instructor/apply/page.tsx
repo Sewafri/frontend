@@ -10,8 +10,8 @@ export default function InstructorApplyPage() {
 
   if (submitted) {
     return (
-      <div className="">
-        <PageHeader title="Application Submitted" description="We&apos;ll review your application and get back to you soon" />
+      <div>
+        <PageHeader title="Application Submitted" description="We'll review your application and get back to you soon" />
         <GlassCard>
           <div className="flex flex-col items-center py-10 text-center">
             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent-green/10">
@@ -28,7 +28,7 @@ export default function InstructorApplyPage() {
   }
 
   return (
-    <div className="">
+    <div>
       <PageHeader title="Become an Instructor" description="Share your knowledge with thousands of students" />
 
       <GlassCard>
@@ -38,21 +38,21 @@ export default function InstructorApplyPage() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label className="mb-1.5 block text-xs font-medium text-text-secondary">Full Name</label>
-                <input type="text" placeholder="Dr. Sarah Wilson" className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2.5 text-sm text-text-primary placeholder-text-secondary outline-none focus:border-brand-orange/50" />
+                <input type="text" placeholder="Dr. Sarah Wilson" className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary placeholder-text-tertiary outline-none transition-colors focus:border-accent-500/50 focus:ring-2 focus:ring-accent-500/10" />
               </div>
               <div>
                 <label className="mb-1.5 block text-xs font-medium text-text-secondary">Email</label>
-                <input type="email" placeholder="sarah@example.com" className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2.5 text-sm text-text-primary placeholder-text-secondary outline-none focus:border-brand-orange/50" />
+                <input type="email" placeholder="sarah@example.com" className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary placeholder-text-tertiary outline-none transition-colors focus:border-accent-500/50 focus:ring-2 focus:ring-accent-500/10" />
               </div>
             </div>
           </div>
 
-          <div className="border-t border-border-glass pt-6">
-            <h3 className="mb-4 text-sm font-semibold text-text-primary">Expertise &amp; Experience</h3>
+          <div className="border-t border-border-default pt-6">
+            <h3 className="mb-4 text-sm font-semibold text-text-primary">Expertise & Experience</h3>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label className="mb-1.5 block text-xs font-medium text-text-secondary">Area of Expertise</label>
-                <select className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2.5 text-sm text-text-primary outline-none focus:border-brand-orange/50">
+                <select className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary outline-none transition-colors focus:border-accent-500/50 focus:ring-2 focus:ring-accent-500/10">
                   <option>Web Development</option>
                   <option>Data Science</option>
                   <option>UI/UX Design</option>
@@ -63,7 +63,7 @@ export default function InstructorApplyPage() {
               </div>
               <div>
                 <label className="mb-1.5 block text-xs font-medium text-text-secondary">Years of Experience</label>
-                <select className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2.5 text-sm text-text-primary outline-none focus:border-brand-orange/50">
+                <select className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary outline-none transition-colors focus:border-accent-500/50 focus:ring-2 focus:ring-accent-500/10">
                   <option>1-2 years</option>
                   <option>3-5 years</option>
                   <option>5-10 years</option>
@@ -73,12 +73,12 @@ export default function InstructorApplyPage() {
             </div>
             <div className="mt-4">
               <label className="mb-1.5 block text-xs font-medium text-text-secondary">Bio / Teaching Philosophy</label>
-              <textarea rows={5} placeholder="Tell us about your teaching experience and philosophy..." className="w-full rounded-lg border border-border-glass bg-surface-card px-3 py-2.5 text-sm text-text-primary placeholder-text-secondary outline-none focus:border-brand-orange/50" />
+              <textarea rows={5} placeholder="Tell us about your teaching experience and philosophy..." className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary placeholder-text-tertiary outline-none transition-colors focus:border-accent-500/50 focus:ring-2 focus:ring-accent-500/10" />
             </div>
           </div>
 
-          <div className="flex justify-end border-t border-border-glass pt-6">
-            <button onClick={() => setSubmitted(true)} className="cursor-pointer flex items-center gap-2 rounded-lg bg-brand-orange px-6 py-2.5 text-sm font-medium text-text-primary transition-colors hover:bg-brand-orange/90">
+          <div className="flex justify-end border-t border-border-default pt-6">
+            <button onClick={() => setSubmitted(true)} className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-accent-500 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-accent-500/90">
               <Send className="h-4 w-4" /> Submit Application
             </button>
           </div>
