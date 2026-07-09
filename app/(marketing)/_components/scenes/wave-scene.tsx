@@ -19,7 +19,7 @@ function FloatingHeart({ delay, x, y }: { delay: number; x: number; y: number })
       transition={{ duration: 2.5, delay, repeat: Infinity, ease: "easeOut" }}
     >
       <svg width="12" height="12" viewBox="0 0 12 12">
-        <path d="M6 10.5 C2 7 0 5 0 3 C0 1.5 1 0.5 2.5 0.5 C4 0.5 5.5 2 6 3 C6.5 2 8 0.5 9.5 0.5 C11 0.5 12 1.5 12 3 C12 5 10 7 6 10.5 Z" fill="#f472b6" />
+        <path d="M6 10.5 C2 7 0 5 0 3 C0 1.5 1 0.5 2.5 0.5 C4 0.5 5.5 2 6 3 C6.5 2 8 0.5 9.5 0.5 C11 0.5 12 1.5 12 3 C12 5 10 7 6 10.5 Z" fill="#4F7F1F" stroke="#92400e" strokeWidth="0.6" />
       </svg>
     </motion.div>
   );
@@ -35,8 +35,9 @@ export default function WaveScene({ className }: WaveSceneProps) {
 
   return (
     <div className={cn("relative flex flex-col items-center py-10 select-none", className)}>
+      <style>{`.holo{filter:drop-shadow(0 0 3px rgba(79,127,31,.5)) drop-shadow(0 0 8px rgba(79,127,31,.25));opacity:.75}`}</style>
       {/* ── Floating hearts ── */}
-      <div className="absolute inset-0 pointer-events-none">
+      <div className="holo absolute inset-0 pointer-events-none">
         <FloatingHeart delay={0} x={20} y={35} />
         <FloatingHeart delay={0.6} x={75} y={30} />
         <FloatingHeart delay={1.2} x={45} y={20} />
@@ -82,7 +83,7 @@ export default function WaveScene({ className }: WaveSceneProps) {
               transition={{ duration: 0.6, delay: h.delay, ease: "easeOut" }}
             >
               <svg width="14" height="14" viewBox="0 0 14 14">
-                <path d="M7 12 C2.5 8 0 6 0 3.5 C0 2 1 1 2.5 1 C4 1 5.5 2.5 7 3.5 C8.5 2.5 10 1 11.5 1 C13 1 14 2 14 3.5 C14 6 11.5 8 7 12 Z" fill="#f472b6" />
+                <path d="M7 12 C2.5 8 0 6 0 3.5 C0 2 1 1 2.5 1 C4 1 5.5 2.5 7 3.5 C8.5 2.5 10 1 11.5 1 C13 1 14 2 14 3.5 C14 6 11.5 8 7 12 Z" fill="#4F7F1F" stroke="#92400e" strokeWidth="0.6" />
               </svg>
             </motion.div>
           ))}

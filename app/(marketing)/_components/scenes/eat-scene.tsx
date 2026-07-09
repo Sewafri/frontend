@@ -44,7 +44,7 @@ export default function EatScene({ className }: EatSceneProps) {
             transition={{ duration: 2.5, delay: d, repeat: Infinity, ease: "easeInOut" }}
           >
             <svg width="8" height="8" viewBox="0 0 8 8">
-              <path d="M4 0 L4.8 3.2 L8 4 L4.8 4.8 L4 8 L3.2 4.8 L0 4 L3.2 3.2 Z" fill="#fbbf24" opacity={0.7} />
+              <path d="M4 0 L4.8 3.2 L8 4 L4.8 4.8 L4 8 L3.2 4.8 L0 4 L3.2 3.2 Z" fill="#4F7F1F" stroke="#92400e" strokeWidth="0.4" opacity={0.7} />
             </svg>
           </motion.div>
         ))}
@@ -95,7 +95,7 @@ export default function EatScene({ className }: EatSceneProps) {
           {bite && (
             <motion.path
               d="M18 6 Q22 8 22 12 Q18 12 16 10 Z"
-              fill="#fca5a5"
+      fill="#4F7F1F" stroke="#92400e" strokeWidth="0.5"
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: [0, 1, 0], scale: [0.5, 1.2, 0.5], x: [0, 6], y: [0, -4] }}
               transition={{ duration: 0.4 }}
@@ -105,7 +105,7 @@ export default function EatScene({ className }: EatSceneProps) {
 
         {/* ── Bite particle burst ── */}
         {bite && (
-          <svg width="50" height="40" viewBox="0 0 50 40" className="absolute -left-2 -top-2">
+          <svg width="50" height="40" viewBox="0 0 50 40" className="holo absolute -left-2 -top-2">
             {[{
               x1: 18, y1: 18, x2: 8, y2: 8,
             }, {
@@ -122,7 +122,7 @@ export default function EatScene({ className }: EatSceneProps) {
               <line
                 key={i}
                 x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2}
-                stroke={["#fca5a5", "#fbbf24", "#fbcfe8", "#fca5a5", "#fb923c", "#fbbf24"][i]}
+                stroke="#4F7F1F"
                 strokeWidth="1.5"
                 strokeLinecap="round"
                 className="origin-center"
@@ -150,6 +150,7 @@ export default function EatScene({ className }: EatSceneProps) {
       </motion.div>
 
       <style>{`
+        .holo { filter: drop-shadow(0 0 3px rgba(79,127,31,.5)) drop-shadow(0 0 8px rgba(79,127,31,.25)); opacity: .75; }
         @keyframes eat-burst-0 { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; transform: translate(-4px, -4px); } }
         @keyframes eat-burst-1 { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; transform: translate(4px, -6px); } }
         @keyframes eat-burst-2 { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; transform: translate(-6px, 2px); } }
