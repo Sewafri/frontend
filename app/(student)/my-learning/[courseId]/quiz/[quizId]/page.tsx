@@ -406,7 +406,7 @@ export default function QuizPage() {
                     ? "Amazing work! Your certificate is ready below."
                     : "Great job passing the quiz!"
                 }
-                variant="celebrating"
+                variant="excited"
                 size="lg"
                 bubblePosition="top"
                 animate

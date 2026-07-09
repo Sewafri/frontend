@@ -93,7 +93,7 @@ export default function MyLearningPage() {
             <div className="flex flex-col items-center py-6">
               <Companion
                 message="Ready to start? Pick a course that excites you."
-                variant="idle"
+                variant="thinking"
                 size="lg"
                 bubblePosition="top"
                 animate

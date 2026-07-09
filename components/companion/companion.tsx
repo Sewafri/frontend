@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { motion } from "motion/react";
 import SproutSvg from "./sprout-svg";
 import type { SproutVariant } from "./sprout-svg";
@@ -38,7 +38,7 @@ const BUBBLE_SIZE: Record<string, string> = {
   xl: "text-base", xxl: "text-lg", xxxl: "text-xl",
 };
 
-/* ── Intensity multiplier ── */
+/* ── Intensity ── */
 function intensityFactor(intensity: AnimationIntensity): number {
   switch (intensity) {
     case "high": return 1.4;
@@ -47,30 +47,48 @@ function intensityFactor(intensity: AnimationIntensity): number {
   }
 }
 
-type Keyframes = {
-  scaleX: number[];
-  scaleY: number[];
-};
+type Keyframes = { scaleX: number[]; scaleY: number[] };
 
-/* ── Squash keyframes (scale-only; rotate handled by cursor tilt) ── */
 function squashKeyframes(variant: SproutVariant, int: AnimationIntensity): Keyframes {
   const f = intensityFactor(int);
   switch (variant) {
     case "celebrating":
+    case "excited":
       return {
         scaleX: [1, 1 + 0.14 * f, 1 - 0.14 * f, 1 + 0.08 * f, 1 - 0.04 * f, 1],
         scaleY: [1, 1 - 0.14 * f, 1 + 0.16 * f, 1 - 0.06 * f, 1 + 0.04 * f, 1],
       };
     case "happy":
     case "waving":
+    case "laughing":
       return {
         scaleX: [1, 1 - 0.04 * f, 1 + 0.04 * f, 1 - 0.03 * f, 1],
         scaleY: [1, 1 + 0.05 * f, 1 - 0.05 * f, 1 + 0.03 * f, 1],
+      };
+    case "eating":
+      return {
+        scaleX: [1, 1 - 0.02 * f, 1 + 0.03 * f, 1 - 0.01 * f, 1],
+        scaleY: [1, 1 + 0.02 * f, 1 - 0.03 * f, 1 + 0.01 * f, 1],
+      };
+    case "sleepy":
+      return {
+        scaleX: [1, 1 + 0.02 * f, 1 - 0.01 * f, 1],
+        scaleY: [1, 1 - 0.03 * f, 1 + 0.01 * f, 1],
       };
     case "sympathetic":
       return {
         scaleX: [1, 1 + 0.01 * f, 1 - 0.01 * f, 1],
         scaleY: [1, 1 - 0.01 * f, 1 + 0.01 * f, 1],
+      };
+    case "surprised":
+      return {
+        scaleX: [1, 1 + 0.06 * f, 1, 1 + 0.03 * f, 1],
+        scaleY: [1, 1 - 0.06 * f, 1, 1 - 0.03 * f, 1],
+      };
+    case "confused":
+      return {
+        scaleX: [1, 1 + 0.03 * f, 1 - 0.03 * f, 1 + 0.02 * f, 1],
+        scaleY: [1, 1 - 0.02 * f, 1 + 0.02 * f, 1 - 0.01 * f, 1],
       };
     default:
       return {
@@ -83,23 +101,33 @@ function squashKeyframes(variant: SproutVariant, int: AnimationIntensity): Keyfr
 function squashDuration(variant: SproutVariant, int: AnimationIntensity): number {
   const base: Record<SproutVariant, number> = {
     celebrating: 1.2, happy: 1.8, waving: 1.8, sympathetic: 3.5,
-    idle: 3, thinking: 3,
+    idle: 3, thinking: 3, eating: 2, laughing: 1.5, sleepy: 4,
+    surprised: 2.5, excited: 1.2, confused: 3,
   };
   const speed = int === "high" ? 0.75 : int === "low" ? 1.5 : 1;
   return base[variant] * speed;
 }
 
-/* ── Click easter-egg messages ── */
-const EASTER_EGGS = [
-  "You found me! 👋",
-  "Boop!",
-  "Hey hey!",
-  "*happy wiggle*",
-  "Let's learn something!",
+/* ── Click easter-egg actions ── */
+type ActionKey = "eat" | "laugh" | "yawn" | "boop" | "confuse";
+
+interface EggAction {
+  key: ActionKey;
+  variant: SproutVariant;
+  message: string;
+  duration: number;
+}
+
+const EGG_ACTIONS: EggAction[] = [
+  { key: "eat", variant: "eating", message: "Mmm! *nom nom*", duration: 2800 },
+  { key: "laugh", variant: "laughing", message: "BWAHAHA! *wheeze*", duration: 2200 },
+  { key: "yawn", variant: "sleepy", message: "*yaaaaawn* so sleepy...", duration: 2500 },
+  { key: "boop", variant: "surprised", message: "BLORP! You got me!", duration: 2000 },
+  { key: "confuse", variant: "confused", message: "Wait... wha?", duration: 2200 },
 ];
 
-function randomEgg(exclude?: string): string {
-  const pool = EASTER_EGGS.filter((m) => m !== exclude);
+function randomAction(exclude?: ActionKey): EggAction {
+  const pool = EGG_ACTIONS.filter((a) => a.key !== exclude);
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
@@ -122,6 +150,11 @@ function Tail({ position }: { position: "left" | "right" | "top" }) {
   );
 }
 
+/* ── Random integer helper ── */
+function randInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 export default function Companion({
   message,
   variant = "idle",
@@ -141,25 +174,87 @@ export default function Companion({
   /* ── Cursor tracking ── */
   const cursor = useCursorTracking({ enabled: interactive && shouldAnimate, maxTilt: 3 });
 
-  /* ── Hover / click state ── */
-  const [hovered, setHovered] = useState(false);
-  const [eggMessage, setEggMessage] = useState<string | null>(null);
-  const eggTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  /* ── Blinking (random interval) ── */
+  const [blinking, setBlinking] = useState(false);
+  const blinkTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
-  const displayVariant: SproutVariant = hovered ? "happy" : variant;
+  const scheduleBlink = useCallback(() => {
+    const next = randInt(2000, 5000);
+    blinkTimerRef.current = setTimeout(() => {
+      setBlinking(true);
+      setTimeout(() => {
+        setBlinking(false);
+        scheduleBlink();
+      }, 180);
+    }, next);
+  }, []);
+
+  useEffect(() => {
+    if (!shouldAnimate) return;
+    scheduleBlink();
+    return () => clearTimeout(blinkTimerRef.current);
+  }, [shouldAnimate, scheduleBlink]);
+
+  /* ── Eye darting (random offset, random interval) ── */
+  const [eyeOffsetX, setEyeOffsetX] = useState(0);
+  const eyeTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  const scheduleEyeDart = useCallback(() => {
+    const next = randInt(3000, 6000);
+    eyeTimerRef.current = setTimeout(() => {
+      setEyeOffsetX([-1.5, -1, 0, 0, 1, 1.5][randInt(0, 5)]);
+      setTimeout(scheduleEyeDart, 400);
+    }, next);
+  }, []);
+
+  useEffect(() => {
+    if (!shouldAnimate) return;
+    scheduleEyeDart();
+    return () => clearTimeout(eyeTimerRef.current);
+  }, [shouldAnimate, scheduleEyeDart]);
+
+  /* ── Hover / click action state ── */
+  const [hovered, setHovered] = useState(false);
+  const [action, setAction] = useState<EggAction | null>(null);
+  const actionTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  const displayVariant: SproutVariant = action ? action.variant : hovered ? "happy" : variant;
   const kf = squashKeyframes(displayVariant, intensity);
   const dur = squashDuration(displayVariant, intensity);
+
+  /* ── Eating chew animation ── */
+  const [chew, setChew] = useState(false);
+  const chewTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  useEffect(() => {
+    if (!action || action.key !== "eat") {
+      setChew(false);
+      clearTimeout(chewTimerRef.current);
+      return;
+    }
+    const cycle = () => {
+      setChew((c) => !c);
+      chewTimerRef.current = setTimeout(cycle, 350);
+    };
+    const start = setTimeout(cycle, 600);
+    return () => {
+      clearTimeout(start);
+      clearTimeout(chewTimerRef.current);
+    };
+  }, [action]);
+
+  const eatVariant: SproutVariant = action?.key === "eat" ? (chew ? "happy" : "eating") : displayVariant;
 
   function handleCharacterClick() {
     if (!interactive || !shouldAnimate) return;
     cursor.handleTap();
-    setEggMessage(randomEgg(eggMessage ?? undefined));
-    setHovered(true);
-    clearTimeout(eggTimeoutRef.current);
-    eggTimeoutRef.current = setTimeout(() => {
-      setEggMessage(null);
-      setHovered(false);
-    }, 2000);
+    const egg = randomAction(action?.key);
+    setAction(egg);
+    clearTimeout(actionTimeoutRef.current);
+    actionTimeoutRef.current = setTimeout(() => {
+      setAction(null);
+      setChew(false);
+    }, egg.duration);
   }
 
   function handleCharacterHoverStart() {
@@ -169,7 +264,7 @@ export default function Companion({
 
   function handleCharacterHoverEnd() {
     if (!interactive) return;
-    if (!eggMessage) setHovered(false);
+    if (!action) setHovered(false);
   }
 
   return (
@@ -184,13 +279,17 @@ export default function Companion({
       onMouseMove={interactive ? cursor.handleMouseMove : undefined}
       onMouseLeave={interactive ? cursor.handleMouseLeave : undefined}
     >
-      {/* ── Character (two layers: outer = entrance + tilt, inner = squash) ── */}
+      {/* ── Character ── */}
       <motion.div
         onClick={interactive ? handleCharacterClick : undefined}
         onMouseEnter={interactive ? handleCharacterHoverStart : undefined}
-        onMouseLeave={interactive && !eggMessage ? handleCharacterHoverEnd : undefined}
+        onMouseLeave={interactive && !action ? handleCharacterHoverEnd : undefined}
         initial={isCelebrating && shouldAnimate ? { scale: 0 } : false}
-        animate={{ scale: 1, rotate: cursor.tiltX, x: cursor.tiltY * 0.5 }}
+        animate={{
+          scale: 1,
+          rotate: cursor.tiltX,
+          x: cursor.tiltY * 0.5,
+        }}
         transition={{ type: "spring", stiffness: 150, damping: 20 }}
         whileTap={interactive && shouldAnimate ? { scale: 0.9, transition: { duration: 0.1 } } : undefined}
         className={cn("shrink-0", interactive && "cursor-pointer")}
@@ -199,7 +298,13 @@ export default function Companion({
           animate={shouldAnimate ? { scaleX: kf.scaleX, scaleY: kf.scaleY } : {}}
           transition={shouldAnimate ? { duration: dur, ease: "easeInOut", repeat: Infinity } : {}}
         >
-          <SproutSvg variant={displayVariant} size={size} glow={glow} />
+          <SproutSvg
+            variant={action?.key === "eat" ? eatVariant : displayVariant}
+            size={size}
+            glow={glow}
+            blinking={blinking}
+            eyeOffsetX={eyeOffsetX}
+          />
         </motion.div>
       </motion.div>
 
@@ -216,7 +321,7 @@ export default function Companion({
             (onBubbleClick || interactive) && "cursor-pointer transition-colors hover:bg-surface-hover",
           )}
         >
-          {eggMessage ?? message}
+          {action ? action.message : message}
         </div>
       </div>
     </div>

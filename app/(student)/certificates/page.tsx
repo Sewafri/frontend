@@ -114,7 +114,7 @@ export default function CertificatesPage() {
           <div className="flex flex-col items-center py-10">
             <Companion
               message="Complete a course to earn your first certificate."
-              variant="idle"
+              variant="happy"
               size="lg"
               bubblePosition="top"
               animate
