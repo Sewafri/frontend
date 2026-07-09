@@ -1,33 +1,46 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { MessageSquare, Plus, ArrowLeft } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
-
-const FORUM_THREADS: Record<string, { id: string; title: string; author: string; replies: number; lastActive: string; pinned: boolean }[]> = {
-  "web-dev-101": [
-    { id: "t1", title: "Welcome to Web Development 101!", author: "Dr. Sarah Wilson", replies: 24, lastActive: "2 hours ago", pinned: true },
-    { id: "t2", title: "HTML/CSS Assignment Help", author: "Alex J.", replies: 12, lastActive: "5 hours ago", pinned: false },
-    { id: "t3", title: "JavaScript Basics Question", author: "Maria G.", replies: 8, lastActive: "1 day ago", pinned: false },
-  ],
-  default: [
-    { id: "t1", title: "General Discussion", author: "Admin", replies: 5, lastActive: "3 days ago", pinned: true },
-    { id: "t2", title: "Assignment Queries", author: "Student", replies: 3, lastActive: "1 week ago", pinned: false },
-  ],
-};
-
-const COURSE_TITLES: Record<string, string> = {
-  "web-dev-101": "Web Development 101",
-  "data-science": "Data Science Fundamentals",
-};
+import { getForumThreads, createForumThread } from "@/lib/data/forum";
+import type { ForumThread } from "@/types/db";
+import { getCourseById } from "@/lib/data/courses";
 
 export default function ForumThreadListPage() {
   const params = useParams();
   const router = useRouter();
   const courseId = params.courseId as string;
-  const threads = FORUM_THREADS[courseId] ?? FORUM_THREADS.default;
-  const courseTitle = COURSE_TITLES[courseId] ?? "Course Forum";
+  const [threads, setThreads] = useState<ForumThread[]>([]);
+  const [courseTitle, setCourseTitle] = useState("Course Forum");
+  const [loading, setLoading] = useState(true);
+  const [showNew, setShowNew] = useState(false);
+  const [newTitle, setNewTitle] = useState("");
+  const [creating, setCreating] = useState(false);
+
+  useEffect(() => {
+    Promise.all([
+      getForumThreads(courseId).catch(() => []),
+      getCourseById(courseId)
+        .then((c) => setCourseTitle(c.title))
+        .catch(() => {}),
+    ])
+      .then(([t]) => setThreads(t))
+      .finally(() => setLoading(false));
+  }, [courseId]);
+
+  async function handleCreate() {
+    if (!newTitle.trim()) return;
+    setCreating(true);
+    try {
+      const thread = await createForumThread(courseId, newTitle.trim());
+      router.push(`/forum/c/${courseId}/t/${thread.id}`);
+    } catch {
+      setCreating(false);
+    }
+  }
 
   return (
     <div className="">
@@ -40,34 +53,66 @@ export default function ForumThreadListPage() {
         <Link href="/my-learning" className="flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary">
           <ArrowLeft className="h-4 w-4" /> Back to courses
         </Link>
-        <button className="cursor-pointer flex items-center gap-2 rounded-xl bg-brand-orange px-4 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-brand-orange/90">
+        <button
+          onClick={() => setShowNew(!showNew)}
+          className="cursor-pointer flex items-center gap-2 rounded-xl bg-accent-500 px-4 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-accent-500/90"
+        >
           <Plus className="h-4 w-4" /> New Thread
         </button>
       </div>
 
-      <div className="rounded-xl border border-border-glass">
-        {threads.map((thread) => (
+      {showNew && (
+        <div className="mb-4 flex items-center gap-2 rounded-xl border border-border-default bg-surface-dark p-4">
+          <input
+            value={newTitle}
+            onChange={(e) => setNewTitle(e.target.value)}
+            placeholder="Thread title..."
+            className="flex-1 rounded-lg border border-border-default bg-surface-card px-3 py-2 text-sm text-text-primary placeholder-text-secondary outline-none focus:border-accent-500/50"
+          />
           <button
-            key={thread.id}
-            onClick={() => router.push(`/forum/c/${courseId}/t/${thread.id}`)}
-            className="flex w-full cursor-pointer items-center justify-between border-b border-border-glass px-5 py-4 text-left last:border-0 hover:bg-surface-card-hover/50"
+            onClick={handleCreate}
+            disabled={creating || !newTitle.trim()}
+            className="cursor-pointer rounded-xl bg-accent-500 px-4 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-accent-500/90 disabled:opacity-50"
           >
-            <div className="flex items-start gap-3">
-              <MessageSquare className={`mt-0.5 h-5 w-5 ${thread.pinned ? "text-brand-orange" : "text-text-secondary"}`} />
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-medium text-text-primary">{thread.title}</span>
-                  {thread.pinned && <span className="rounded bg-brand-orange/10 px-1.5 py-0.5 text-[10px] text-brand-orange">Pinned</span>}
-                </div>
-                <p className="mt-0.5 text-xs text-text-secondary">
-                  {thread.author} &middot; {thread.replies} replies
-                </p>
-              </div>
-            </div>
-            <span className="shrink-0 text-xs text-text-secondary">{thread.lastActive}</span>
+            {creating ? "Creating..." : "Create"}
           </button>
-        ))}
-      </div>
+        </div>
+      )}
+
+      {loading ? (
+        <p className="text-sm text-text-secondary">Loading threads...</p>
+      ) : threads.length === 0 ? (
+        <div className="rounded-xl border border-border-default p-8 text-center">
+          <p className="text-sm text-text-secondary">No threads yet. Start a discussion!</p>
+        </div>
+      ) : (
+        <div className="rounded-xl border border-border-default">
+          {threads.map((thread) => (
+            <button
+              key={thread.id}
+              onClick={() => router.push(`/forum/c/${courseId}/t/${thread.id}`)}
+              className="flex w-full cursor-pointer items-center justify-between border-b border-border-default px-5 py-4 text-left last:border-0 hover:bg-surface-card-hover/50"
+            >
+              <div className="flex items-start gap-3">
+                <MessageSquare className={`mt-0.5 h-5 w-5 ${thread.isPinned ? "text-accent-500" : "text-text-secondary"}`} />
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-text-primary">{thread.title}</span>
+                    {thread.isPinned && <span className="rounded bg-accent-500/10 px-1.5 py-0.5 text-[10px] text-accent-500">Pinned</span>}
+                  </div>
+                  <p className="mt-0.5 text-xs text-text-secondary">
+                    {thread.author?.fullName ?? "Unknown"} &middot; {(thread as ForumThreadWithCount)._count?.posts ?? 0} replies
+                  </p>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
+}
+
+interface ForumThreadWithCount extends ForumThread {
+  _count: { posts: number }
 }

@@ -25,8 +25,10 @@ export default function SignInPage() {
     setError(null);
     setLoading(true);
     try {
-      await login({ email, password });
-      router.push("/courses");
+      const user = await login({ email, password });
+      if (user.role === "ADMIN") router.push("/admin");
+      else if (user.role === "INSTRUCTOR") router.push("/instructor");
+      else router.push("/my-learning");
     } catch (err) {
       if (err instanceof ApiError) {
         setError(err.message);

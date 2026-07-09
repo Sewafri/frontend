@@ -98,7 +98,7 @@ export default function CourseDetailPage() {
         description={course.description}
       />
 
-      <div className="mb-8 overflow-hidden rounded-xl border border-border-glass bg-gradient-to-br from-neutral-800 to-neutral-700">
+      <div className="mb-8 overflow-hidden rounded-xl border border-border-default bg-gradient-to-br from-neutral-800 to-neutral-700">
         <div className="flex flex-col gap-6 p-8 lg:flex-row lg:items-center">
           <div className="flex-1">
             <span className="mb-3 inline-block rounded-full bg-accent-500/10 px-3 py-1 text-xs font-medium text-accent-500">
@@ -142,11 +142,11 @@ export default function CourseDetailPage() {
           <h2 className="mb-4 text-lg font-semibold text-text-primary">Course Curriculum</h2>
           <div className="space-y-3">
             {lessons.length > 0 ? (
-              <div className="rounded-xl border border-border-glass bg-surface-dark">
+              <div className="rounded-xl border border-border-default bg-surface-dark">
                 {lessons.map((lesson, i) => (
                   <div
                     key={lesson.id}
-                    className="flex items-center gap-3 border-b border-border-glass px-5 py-3 last:border-b-0"
+                    className="flex items-center gap-3 border-b border-border-default px-5 py-3 last:border-b-0"
                   >
                     <Play className="h-3.5 w-3.5 shrink-0 text-accent-500" />
                     <span className="text-sm text-text-secondary">{lesson.title}</span>
@@ -154,7 +154,7 @@ export default function CourseDetailPage() {
                 ))}
               </div>
             ) : (
-              <details className="group rounded-xl border border-border-glass bg-surface-dark">
+              <details className="group rounded-xl border border-border-default bg-surface-dark">
                 <summary className="flex cursor-pointer items-center justify-between px-5 py-4">
                   <div>
                     <span className="text-sm font-medium text-text-primary">Course Content</span>
@@ -164,7 +164,7 @@ export default function CourseDetailPage() {
                   </div>
                   <ChevronDown className="h-4 w-4 text-text-secondary transition-transform group-open:rotate-180" />
                 </summary>
-                <div className="border-t border-border-glass px-5 py-3">
+                <div className="border-t border-border-default px-5 py-3">
                   <p className="text-sm text-text-secondary">No lessons available yet.</p>
                 </div>
               </details>
@@ -174,7 +174,7 @@ export default function CourseDetailPage() {
 
         {/* Sidebar */}
         <div>
-          <div className="rounded-xl border border-border-glass bg-surface-dark p-5">
+          <div className="rounded-xl border border-border-default bg-surface-dark p-5">
             <h3 className="mb-3 text-sm font-semibold text-text-primary">This Course Includes</h3>
             <ul className="space-y-2 text-sm text-text-secondary">
               <li className="flex items-center gap-2">

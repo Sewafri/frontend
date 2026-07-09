@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { PageHeader } from "@/components/ui/page-header";
 import ApprovalCard from "@/components/ui/approval-card";
+import { Info } from "lucide-react";
 
 const APPLICATIONS = [
   { id: "a1", name: "Dr. Sarah Wilson", email: "sarah@example.com", initials: "SW", appliedFor: "Instructor", date: "2026-07-01", status: "pending" },
@@ -28,6 +29,11 @@ export default function ApplicationsPage() {
         title="Applications"
         description="Review instructor applications"
       />
+
+      <div className="mb-6 flex items-center gap-2 rounded-lg border border-accent-amber/20 bg-accent-amber/5 px-4 py-3 text-xs text-accent-amber">
+        <Info className="h-4 w-4 shrink-0" />
+        Backend endpoint not yet available — showing preview data. Approve/reject actions are local only.
+      </div>
 
       <div className="space-y-4">
         {applications.map((app) => (

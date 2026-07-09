@@ -1,16 +1,31 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import { PageHeader } from "@/components/ui/page-header";
 import GlassCard from "@/components/ui/glass-card";
 import ProgressBar from "@/components/ui/progress-bar";
+import { getCourseEnrollments } from "@/lib/data/enrollments";
+import type { Enrollment } from "@/types/db";
 
-const ENROLLED_STUDENTS = [
-  { id: "s1", name: "Alex Johnson", email: "alex@example.com", progress: 65, lastActive: "2 hours ago", grade: "B+" },
-  { id: "s2", name: "Maria Garcia", email: "maria@example.com", progress: 82, lastActive: "1 day ago", grade: "A-" },
-  { id: "s3", name: "James Thompson", email: "james@example.com", progress: 34, lastActive: "3 days ago", grade: "C+" },
-  { id: "s4", name: "Priya Sharma", email: "priya@example.com", progress: 91, lastActive: "5 hours ago", grade: "A" },
-  { id: "s5", name: "Kevin Osei", email: "kevin@example.com", progress: 15, lastActive: "1 week ago", grade: "D" },
-];
+interface EnrollmentWithUser extends Enrollment {
+  user: { id: string; fullName: string; email: string }
+}
 
 export default function StudentProgressPage() {
+  const params = useParams();
+  const courseId = params.id as string;
+  const [enrollments, setEnrollments] = useState<EnrollmentWithUser[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!courseId) return;
+    getCourseEnrollments(courseId)
+      .then((data) => setEnrollments(data as unknown as EnrollmentWithUser[]))
+      .catch(() => setEnrollments([]))
+      .finally(() => setLoading(false));
+  }, [courseId]);
+
   return (
     <div className="">
       <PageHeader
@@ -18,41 +33,44 @@ export default function StudentProgressPage() {
         description="Track enrolled student performance"
       />
 
-      <GlassCard>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b border-border-glass text-xs text-text-secondary">
-                <th className="pb-3 font-medium">Name</th>
-                <th className="pb-3 font-medium">Email</th>
-                <th className="pb-3 font-medium">Progress</th>
-                <th className="pb-3 font-medium">Last Active</th>
-                <th className="pb-3 font-medium">Grade</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ENROLLED_STUDENTS.map((s) => (
-                <tr key={s.id} className="border-b border-border-glass last:border-0">
-                  <td className="py-3 font-medium text-text-primary">{s.name}</td>
-                  <td className="py-3 text-text-secondary">{s.email}</td>
-                  <td className="py-3">
-                    <ProgressBar value={s.progress} size="sm" className="max-w-[120px]" />
-                  </td>
-                  <td className="py-3 text-text-secondary">{s.lastActive}</td>
-                  <td className="py-3">
-                    <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                       s.grade.startsWith("A") ? "bg-accent-green/10 text-accent-green" :
-                       s.grade.startsWith("B") ? "bg-accent-blue/10 text-accent-blue" :
-                       s.grade.startsWith("C") ? "bg-accent-amber/10 text-accent-amber" :
-                       "bg-accent-red/10 text-accent-red"
-                    }`}>{s.grade}</span>
-                  </td>
+      {loading ? (
+        <p className="text-sm text-text-secondary">Loading students...</p>
+      ) : enrollments.length === 0 ? (
+        <p className="py-8 text-center text-sm text-text-secondary">No students enrolled yet.</p>
+      ) : (
+        <GlassCard>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b border-border-default text-xs text-text-secondary">
+                  <th className="pb-3 font-medium">Name</th>
+                  <th className="pb-3 font-medium">Email</th>
+                  <th className="pb-3 font-medium">Progress</th>
+                  <th className="pb-3 font-medium">Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </GlassCard>
+              </thead>
+              <tbody>
+                {enrollments.map((e) => (
+                  <tr key={e.id} className="border-b border-border-default last:border-0">
+                    <td className="py-3 font-medium text-text-primary">{e.user?.fullName ?? "Unknown"}</td>
+                    <td className="py-3 text-text-secondary">{e.user?.email ?? "—"}</td>
+                    <td className="py-3">
+                      <ProgressBar value={e.progressPercent ?? 0} size="sm" className="max-w-[120px]" />
+                    </td>
+                    <td className="py-3">
+                      <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                        e.status === "ACTIVE" ? "bg-accent-green/10 text-accent-green" :
+                        e.status === "COMPLETED" ? "bg-accent-blue/10 text-accent-blue" :
+                        "bg-accent-amber/10 text-accent-amber"
+                      }`}>{e.status}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </GlassCard>
+      )}
     </div>
   );
 }

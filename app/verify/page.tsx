@@ -50,7 +50,7 @@ export default function VerifyHomePage() {
 
       <div className="relative mb-6">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-border-glass" />
+          <div className="w-full border-t border-border-default" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-surface-dark px-2 text-text-secondary">or</span>

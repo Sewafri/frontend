@@ -14,7 +14,7 @@ export default function AuthLayout({
           <span className="font-display text-2xl font-bold text-text-primary">
             {BRAND.name}
           </span>
-          <span className="h-2.5 w-2.5 rounded-full bg-brand-500" />
+          <span className="h-2.5 w-2.5 rounded-full bg-accent-500" />
         </Link>
       </div>
 
