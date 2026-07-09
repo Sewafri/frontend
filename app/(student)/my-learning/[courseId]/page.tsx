@@ -3,14 +3,16 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { BookOpen, Check, Lock, Play, ArrowLeft } from "lucide-react";
+import { BookOpen, Check, Lock, Play, ArrowLeft, FileQuestion } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
 import GlassCard from "@/components/ui/glass-card";
 import ProgressBar from "@/components/ui/progress-bar";
 import { getCourseById } from "@/lib/data/courses";
 import { getLessons, completeLesson } from "@/lib/data/lessons";
+import { getCourseQuizzes } from "@/lib/data/quiz";
 import type { Course } from "@/types/db";
 import type { Lesson } from "@/types/db";
+import type { QuizSummary } from "@/lib/data/quiz";
 import { ApiError } from "@/lib/api/client";
 
 export default function CurriculumPage() {
@@ -18,6 +20,7 @@ export default function CurriculumPage() {
   const courseId = params.courseId as string;
   const [course, setCourse] = useState<Course | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
+  const [quizzes, setQuizzes] = useState<QuizSummary[]>([]);
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [completingId, setCompletingId] = useState<string | null>(null);
@@ -27,10 +30,12 @@ export default function CurriculumPage() {
     Promise.all([
       getCourseById(courseId).catch(() => null),
       getLessons(courseId).catch(() => [] as Lesson[]),
+      getCourseQuizzes(courseId).catch(() => [] as QuizSummary[]),
     ])
-      .then(([c, l]) => {
+      .then(([c, l, q]) => {
         setCourse(c);
         setLessons(l);
+        setQuizzes(q);
       })
       .finally(() => setLoading(false));
   }, [courseId]);
@@ -170,6 +175,38 @@ export default function CurriculumPage() {
               </Link>
             ))}
           </div>
+
+          {quizzes.length > 0 && (
+            <div className="mt-8">
+              <h2 className="mb-3 text-lg font-semibold text-text-primary">Quizzes</h2>
+              <div className="space-y-2">
+                {quizzes.map((quiz) => (
+                  <Link
+                    key={quiz.id}
+                    href={`/my-learning/${courseId}/quiz/${quiz.id}`}
+                    className="flex items-center gap-4 rounded-xl border border-border-default bg-surface-dark px-5 py-4 transition-colors hover:border-accent-500/30"
+                  >
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent-500/10">
+                      <FileQuestion className="h-4 w-4 text-accent-500" />
+                    </div>
+                    <div className="flex-1">
+                      <span className="text-sm font-medium text-text-primary">{quiz.title}</span>
+                      <p className="text-xs text-text-tertiary">
+                        {quiz._count.questions} questions · {quiz.passingScore}% to pass
+                        {quiz.isFinalAssessment && " · Final Assessment"}
+                      </p>
+                    </div>
+                    <span className="text-xs text-text-tertiary">
+                      {quiz.maxAttempts > 0 ? `Up to ${quiz.maxAttempts} attempts` : "Unlimited"}
+                    </span>
+                    <span className="rounded-full bg-surface-card px-2.5 py-0.5 text-[10px] font-medium uppercase text-text-secondary">
+                      Quiz
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>

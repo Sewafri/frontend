@@ -7,11 +7,13 @@ import { ArrowLeft, Download, Award, Loader2, ShieldX } from "lucide-react";
 import GlassCard from "@/components/ui/glass-card";
 import { BlockchainProof } from "@/components/blockchain/blockchain-proof";
 import { verifyCertificate } from "@/lib/data/verify";
+import { downloadCertificate } from "@/lib/data/wallet";
 import type { BlockchainRecord } from "@/types/db";
 
 export default function CertificateDetailPage() {
   const params = useParams();
   const certId = params.id as string;
+  const [downloading, setDownloading] = useState(false);
   const [data, setData] = useState<{
     studentName: string;
     courseTitle: string;
@@ -133,12 +135,14 @@ export default function CertificateDetailPage() {
         </div>
 
         <div className="flex gap-3">
-          <Link
-            href={`/verify/${certId}`}
-            className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-accent-500 px-4 py-2 text-sm font-medium text-text-on-accent transition-colors hover:bg-accent-600"
+          <button
+            onClick={() => { setDownloading(true); downloadCertificate(certId).finally(() => setDownloading(false)); }}
+            disabled={downloading}
+            className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-accent-500 px-4 py-2 text-sm font-medium text-text-on-accent transition-colors hover:bg-accent-600 disabled:opacity-50"
           >
-            <Download className="h-4 w-4" /> Download PDF
-          </Link>
+            {downloading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+            {downloading ? "Downloading..." : "Download PDF"}
+          </button>
         </div>
       </GlassCard>
 
