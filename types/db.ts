@@ -2,7 +2,7 @@ export type UserRole = "STUDENT" | "INSTRUCTOR" | "ADMIN"
 
 export type CourseStatus = "DRAFT" | "PUBLISHED" | "UNPUBLISHED"
 export type PricingModel = "FREE" | "ONE_TIME_PURCHASE" | "SUBSCRIPTION_ONLY"
-export type ContentType = "TEXT" | "VIDEO" | "MIXED"
+export type ContentType = "TEXT" | "VIDEO" | "MIXED" | "CODE"
 export type EnrollmentStatus = "ACTIVE" | "COMPLETED" | "DROPPED"
 export type CertificateStatus = "ISSUED" | "REVOKED"
 export type AnchorStatus = "PENDING_ANCHOR" | "ANCHORED" | "FAILED"

@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { ArrowRight, Clock, Users } from "lucide-react";
 import { TRACKS } from "@/constants/landing";
-import { Globe, Brain, Palette, ArrowRight, Clock, Users } from "lucide-react";
+import { Globe, Brain, Palette } from "lucide-react";
 
 const TRACK_ICONS: Record<string, typeof Globe> = {
   globe: Globe,
@@ -12,10 +13,13 @@ export default function TracksGrid() {
   return (
     <section className="py-24">
       <div className="mb-14">
+        <div className="inline-flex items-center gap-2 rounded-full border border-accent-500/10 bg-accent-50/50 px-3 py-1 text-xs font-medium text-accent-500 mb-3">
+          Learning paths
+        </div>
         <h2 className="text-3xl font-bold tracking-tight text-text-primary text-balance">
           Learning tracks
         </h2>
-        <p className="mt-3 text-base text-text-secondary">
+        <p className="mt-2 text-base text-text-secondary">
           Follow a path, from zero to job-ready
         </p>
       </div>
@@ -27,9 +31,9 @@ export default function TracksGrid() {
           return (
             <div
               key={track.id}
-              className="rounded-2xl border border-border-default bg-surface-card p-7 transition-colors hover:border-border-strong"
+              className="group rounded-2xl border border-border-default bg-surface-card p-7 transition-all hover:border-accent-500/30 hover:shadow-sm"
             >
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl border border-border-default text-text-secondary">
+              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl border border-border-default text-text-secondary transition-colors group-hover:border-accent-500/30 group-hover:text-accent-500">
                 <Icon size={22} />
               </div>
 
@@ -40,7 +44,7 @@ export default function TracksGrid() {
                 {track.description}
               </p>
 
-              <ul className="mt-6 space-y-3">
+              <ul className="mt-6 space-y-2">
                 {track.courses.map((course) => (
                   <li key={course.id}>
                     <Link

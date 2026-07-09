@@ -6,6 +6,7 @@ import { SidebarNav, type SidebarLink } from "@/components/navigation/sidebar-na
 import { DashboardHeader } from "@/components/layouts/header";
 import { BookOpen, GraduationCap, Award, Wallet, MessagesSquare, Settings } from "lucide-react";
 import { useAuth } from "@/lib/auth/auth-context";
+import { getInitials, capitalizeRole } from "@/lib/utils/user";
 
 const STUDENT_LINKS: SidebarLink[] = [
   { label: "Courses", href: "/courses", icon: BookOpen },
@@ -15,19 +16,6 @@ const STUDENT_LINKS: SidebarLink[] = [
   { label: "Messages", href: "/messages", icon: MessagesSquare },
   { label: "Settings", href: "/settings", icon: Settings },
 ];
-
-function getInitials(name: string): string {
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
-}
-
-function capitalizeRole(role: string): string {
-  return role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
-}
 
 export default function StudentLayout({ children }: { children: React.ReactNode }) {
   const { user, isLoading, isAuthenticated } = useAuth();
@@ -65,6 +53,8 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
           breadcrumb="Student"
           currentPage="Learning"
           initials={getInitials(user.fullName)}
+          userName={user.fullName}
+          userRole={capitalizeRole(user.role)}
           onMenuToggle={() => setMobileSidebar(true)}
         />
         <main className="flex-1 overflow-y-auto bg-surface-dark p-4 lg:p-8">

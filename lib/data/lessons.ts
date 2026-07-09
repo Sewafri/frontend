@@ -1,6 +1,11 @@
 import { api } from "@/lib/api/client"
 import type { Lesson } from "@/types/db"
 
+export async function getLesson(id: string): Promise<Lesson> {
+  const data = await api<{ lesson: Lesson }>(`/lessons/${id}`)
+  return data.lesson
+}
+
 export async function getLessons(
   courseId: string,
 ): Promise<Lesson[]> {
@@ -12,7 +17,7 @@ export async function createLesson(
   courseId: string,
   input: {
     title: string
-    contentType: "TEXT" | "VIDEO" | "MIXED"
+    contentType: "TEXT" | "VIDEO" | "MIXED" | "CODE"
     contentBody?: string
     videoUrl?: string
     isRequired?: boolean

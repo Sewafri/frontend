@@ -1,4 +1,4 @@
-import HeroVideo from "./_components/hero-video";
+import HeroGeometric from "./_components/hero-geometric";
 import FocusCards from "./_components/focus-cards";
 import StatBlock from "./_components/stat-block";
 import CoursesSection from "./_components/courses-section";
@@ -9,15 +9,17 @@ import Footer from "./_components/footer";
 
 export default function LandingPage() {
   return (
-    <div className="mx-auto max-w-6xl px-6">
-      <HeroVideo />
-      <FocusCards />
-      <StatBlock />
-      <CoursesSection />
-      <TracksGrid />
-      <UpdatesList />
-      <CTASection />
-      <Footer />
-    </div>
+    <>
+      <HeroGeometric />
+      <div className="mx-auto max-w-6xl px-6">
+        <FocusCards />
+        <StatBlock />
+        <CoursesSection />
+        <TracksGrid />
+        <UpdatesList />
+        <CTASection />
+        <Footer />
+      </div>
+    </>
   );
 }

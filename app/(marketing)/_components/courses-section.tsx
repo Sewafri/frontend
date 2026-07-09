@@ -1,13 +1,17 @@
+import { ArrowRight, Sparkles } from "lucide-react";
+import Link from "next/link";
 import { FEATURED_COURSES } from "@/constants/landing";
 import { CourseCard } from "@/components/courses/course-card";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 
 export default function CoursesSection() {
   return (
     <section className="py-20">
       <div className="mb-10 flex items-end justify-between">
         <div>
+          <div className="inline-flex items-center gap-2 rounded-full border border-accent-500/10 bg-accent-50/50 px-3 py-1 text-xs font-medium text-accent-500 mb-3">
+            <Sparkles size={12} />
+            Featured
+          </div>
           <h2 className="text-3xl font-bold tracking-tight text-text-primary text-balance">
             Featured courses
           </h2>
