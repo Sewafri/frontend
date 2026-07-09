@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight, Shield, CheckCircle } from "lucide-react";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from "motion/react";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import Companion from "@/components/companion/companion";
 
@@ -30,6 +30,66 @@ export default function HeroGeometric() {
   });
   const rightOpacity = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
   const rightY = useTransform(scrollYProgress, [0, 0.55], [0, -20]);
+
+  /* ── Cursor tracking: mini-Sproots follow mouse ── */
+  const cursorY = useMotionValue(0.5);
+  const smoothCursorY = useSpring(cursorY, { stiffness: 100, damping: 30 });
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      cursorY.set(e.clientY / window.innerHeight);
+    };
+    window.addEventListener("mousemove", handler);
+    return () => window.removeEventListener("mousemove", handler);
+  }, [cursorY]);
+
+  /* ── Full-page scroll for the walking pair (follows user everywhere) ── */
+  const { scrollY, scrollYProgress: docProgress } = useScroll();
+
+  const sproutletY = useMotionValue(0);
+  const sproutletX = useMotionValue(0);
+  const sproutletScaleX = useMotionValue(1);
+
+  useEffect(() => {
+    let lastY = scrollY.get();
+    const update = () => {
+      const sy = scrollY.get();
+      const p = docProgress.get();
+      const c = smoothCursorY.get();
+      const dir = sy > lastY ? 1 : -1;
+      lastY = sy;
+      sproutletY.set(p * 120 + (c - 0.5) * 50);
+      sproutletX.set((c - 0.5) * 20);
+      sproutletScaleX.set(dir);
+    };
+    const unsub1 = scrollY.on("change", update);
+    const unsub2 = smoothCursorY.on("change", update);
+    update();
+    return () => { unsub1(); unsub2(); };
+  }, [scrollY, docProgress, smoothCursorY, sproutletY, sproutletX, sproutletScaleX]);
+
+  /* ── Left-side walking group ── */
+  const leftY = useMotionValue(0);
+  const leftX = useMotionValue(0);
+  const leftScaleX = useMotionValue(1);
+
+  useEffect(() => {
+    let lastY = scrollY.get();
+    const update = () => {
+      const sy = scrollY.get();
+      const p = docProgress.get();
+      const c = smoothCursorY.get();
+      const dir = sy > lastY ? 1 : -1;
+      lastY = sy;
+      leftY.set(p * 100 + (c - 0.5) * -35);
+      leftX.set((c - 0.5) * -12);
+      leftScaleX.set(dir);
+    };
+    const unsub1 = scrollY.on("change", update);
+    const unsub2 = smoothCursorY.on("change", update);
+    update();
+    return () => { unsub1(); unsub2(); };
+  }, [scrollY, docProgress, smoothCursorY, leftY, leftX, leftScaleX]);
 
   if (reduced) {
     return (
@@ -128,6 +188,20 @@ export default function HeroGeometric() {
             </div>
           </div>
         </div>
+
+        {/* ── Walking pair (static, reduced motion) ── */}
+        <div className="fixed right-[6vw] top-[35vh] z-50 hidden lg:block pointer-events-none opacity-50">
+          <div className="flex items-center -space-x-4">
+            <Companion variant="laughing" size="lg" animate={false} />
+            <Companion variant="happy" size="default" animate={false} />
+          </div>
+        </div>
+        <div className="fixed left-[4vw] top-[42vh] z-50 hidden lg:block pointer-events-none opacity-50">
+          <div className="flex items-center -space-x-3">
+            <Companion variant="celebrating" size="sm" animate={false} />
+            <Companion variant="thinking" size="default" animate={false} />
+          </div>
+        </div>
       </section>
     );
   }
@@ -218,6 +292,7 @@ export default function HeroGeometric() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={springConfig({ delay: 0.2, stiffness: 80, damping: 14 })}
+            className="relative"
           >
             <Companion
               message="What would you like to learn?"
@@ -232,6 +307,7 @@ export default function HeroGeometric() {
                 document.getElementById("courses")?.scrollIntoView({ behavior: "smooth" });
               }}
             />
+
           </motion.div>
 
           {/* Certificate card — proof of what you earn */}
@@ -282,6 +358,32 @@ export default function HeroGeometric() {
           </motion.div>
         </motion.div>
       </div>
+
+      {/* ── Right walking pair: follows scroll everywhere + flips on direction change ── */}
+      {!reduced && (
+        <motion.div
+          style={{ y: sproutletY, x: sproutletX, scaleX: sproutletScaleX }}
+          className="fixed right-[6vw] top-[35vh] z-50 hidden lg:block pointer-events-none"
+        >
+          <div className="flex items-center -space-x-4">
+            <Companion variant="laughing" size="lg" animate intensity="high" />
+            <Companion variant="happy" size="default" animate intensity="high" />
+          </div>
+        </motion.div>
+      )}
+
+      {/* ── Left walking group: follows scroll, opposite cursor response ── */}
+      {!reduced && (
+        <motion.div
+          style={{ y: leftY, x: leftX, scaleX: leftScaleX }}
+          className="fixed left-[4vw] top-[42vh] z-50 hidden lg:block pointer-events-none"
+        >
+          <div className="flex items-center -space-x-3">
+            <Companion variant="celebrating" size="sm" animate intensity="high" />
+            <Companion variant="thinking" size="default" animate intensity="high" />
+          </div>
+        </motion.div>
+      )}
     </section>
   );
 }

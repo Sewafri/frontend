@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 type AnimationIntensity = "low" | "normal" | "high";
 
 interface CompanionProps {
-  message: string;
+  message?: string;
   variant?: SproutVariant;
   size?: "sm" | "md" | "default" | "lg" | "xl" | "xxl" | "xxxl";
   bubblePosition?: "left" | "right" | "top";
@@ -309,21 +309,23 @@ export default function Companion({
       </motion.div>
 
       {/* ── Speech bubble ── */}
-      <div className="relative">
-        <Tail position={bubblePosition} />
-        <div
-          onClick={onBubbleClick}
-          className={cn(
-            "relative rounded-xl border border-border-default bg-surface-card",
-            BUBBLE_PAD[size],
-            BUBBLE_SIZE[size],
-            "text-text-primary",
-            (onBubbleClick || interactive) && "cursor-pointer transition-colors hover:bg-surface-hover",
-          )}
-        >
-          {action ? action.message : message}
+      {(action?.message || message) && (
+        <div className="relative">
+          <Tail position={bubblePosition} />
+          <div
+            onClick={onBubbleClick}
+            className={cn(
+              "relative rounded-xl border border-border-default bg-surface-card",
+              BUBBLE_PAD[size],
+              BUBBLE_SIZE[size],
+              "text-text-primary",
+              (onBubbleClick || interactive) && "cursor-pointer transition-colors hover:bg-surface-hover",
+            )}
+          >
+            {action ? action.message : message}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
