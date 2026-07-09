@@ -7,6 +7,7 @@ import { BlockchainBadge } from "@/components/blockchain/blockchain-badge";
 import { getMyWallet, downloadCertificate } from "@/lib/data/wallet";
 import { Award, Download, ExternalLink, Loader2 } from "lucide-react";
 import Link from "next/link";
+import Companion from "@/components/companion/companion";
 import type { Certificate } from "@/types/db";
 
 export default function CertificatesPage() {
@@ -110,10 +111,21 @@ export default function CertificatesPage() {
         </div>
       ) : (
         <GlassCard>
-          <div className="flex flex-col items-center justify-center py-16">
-            <Award className="mb-3 h-12 w-12 text-text-tertiary" />
-            <p className="text-lg font-medium text-text-primary">No certificates yet</p>
-            <p className="mt-1 text-sm text-text-secondary">Complete courses to earn certificates</p>
+          <div className="flex flex-col items-center py-10">
+            <Companion
+              message="Complete a course to earn your first certificate."
+              variant="idle"
+              size="lg"
+              bubblePosition="top"
+              animate
+              className="mb-4"
+            />
+            <Link
+              href="/my-learning"
+              className="mt-2 rounded-lg bg-accent-500 px-5 py-2 text-sm font-medium text-text-on-accent transition-colors hover:bg-accent-500/90"
+            >
+              Go to My Learning
+            </Link>
           </div>
         </GlassCard>
       )}

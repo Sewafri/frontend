@@ -1,17 +1,21 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { motion } from "motion/react";
+import confetti from "canvas-confetti";
 import {
   ArrowLeft, XCircle, Award, AlertTriangle, Clock, ShieldAlert,
   FileQuestion, Loader2,
 } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
+import Companion from "@/components/companion/companion";
 import {
   submitQuiz, getQuizQuestions, startQuizAttempt,
 } from "@/lib/data/quiz";
 import { useQuizIntegrity } from "@/hooks/use-quiz-integrity";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { SessionIndicator } from "@/components/quiz/session-indicator";
 import { ApiError } from "@/lib/api/client";
 import type { QuizSession } from "@/types/db";
@@ -21,6 +25,8 @@ export default function QuizPage() {
   const router = useRouter();
   const quizId = params.quizId as string;
   const courseId = params.courseId as string;
+  const reduced = useReducedMotion();
+  const confettiFired = useRef(false);
 
   const [session, setSession] = useState<QuizSession | null>(null);
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -125,6 +131,32 @@ export default function QuizPage() {
       setSubmitting(false);
     }
   }, [session, quizId, answers, attemptId, integrity]);
+
+  useEffect(() => {
+    if (submitted && result?.passed && !reduced && !confettiFired.current) {
+      confettiFired.current = true;
+      const duration = 2000;
+      const end = Date.now() + duration;
+      const frame = () => {
+        confetti({
+          particleCount: 3,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0, y: 0.7 },
+          colors: ["#2563eb", "#3b82f6", "#60a5fa"],
+        });
+        confetti({
+          particleCount: 3,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1, y: 0.7 },
+          colors: ["#2563eb", "#3b82f6", "#60a5fa"],
+        });
+        if (Date.now() < end) requestAnimationFrame(frame);
+      };
+      frame();
+    }
+  }, [submitted, result, reduced]);
 
   const allAnswered = session
     ? Object.keys(answers).length >= session.questions.length
@@ -317,8 +349,16 @@ export default function QuizPage() {
           </div>
         </>
       ) : (
-        <div className="flex flex-col items-center py-10">
-          <div
+        <motion.div
+          initial={reduced ? {} : { opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={reduced ? {} : { type: "spring", stiffness: 120, damping: 20 }}
+          className="flex flex-col items-center py-10"
+        >
+          <motion.div
+            initial={reduced ? {} : { scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={reduced ? {} : { type: "spring", stiffness: 200, damping: 15, delay: 0.1 }}
             className={`mb-6 flex h-20 w-20 items-center justify-center rounded-full ${
               result?.passed
                 ? "bg-accent-500/10"
@@ -330,20 +370,79 @@ export default function QuizPage() {
             ) : (
               <XCircle className="h-10 w-10 text-accent-red" />
             )}
-          </div>
-          <h2 className="text-2xl font-bold text-text-primary">
+          </motion.div>
+
+          <motion.h2
+            initial={reduced ? {} : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={reduced ? {} : { type: "spring", stiffness: 120, damping: 22, delay: 0.2 }}
+            className="text-2xl font-bold text-text-primary"
+          >
             {result?.passed ? "Quiz Passed!" : "Keep Learning!"}
-          </h2>
-          <p className="mt-1 text-text-secondary">
+          </motion.h2>
+
+          <motion.p
+            initial={reduced ? {} : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={reduced ? {} : { delay: 0.3, duration: 0.4 }}
+            className="mt-1 text-text-secondary"
+          >
             You scored {result?.score} out of 100
             {session.passingScore > 0 &&
               ` · ${result?.passed ? "Above" : "Below"} ${session.passingScore}% passing threshold`}
-          </p>
+          </motion.p>
+
+          {/* Sproot guide */}
+          <motion.div
+            initial={reduced ? {} : { opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={reduced ? {} : { type: "spring", stiffness: 120, damping: 22, delay: 0.35 }}
+            className="mt-6"
+          >
+            {result?.passed ? (
+              <Companion
+                message={
+                  result.certificate
+                    ? "Amazing work! Your certificate is ready below."
+                    : "Great job passing the quiz!"
+                }
+                variant="celebrating"
+                size="lg"
+                bubblePosition="top"
+                animate
+                intensity="high"
+              />
+            ) : (
+              <Companion
+                message={
+                  (result?.attemptsRemaining ?? 0) > 0
+                    ? "Close one! You've got more attempts left — give it another shot."
+                    : "Don't give up! Review the material and try again."
+                }
+                variant="sympathetic"
+                size="lg"
+                bubblePosition="top"
+                animate
+                intensity="low"
+              />
+            )}
+          </motion.div>
 
           {/* Certificate issued */}
           {result?.passed && result.certificate && (
-            <div className="mt-6 w-full max-w-sm rounded-lg border border-accent-500/20 bg-accent-500/5 p-4 text-center">
-              <Award className="mx-auto mb-2 h-8 w-8 text-accent-500" />
+            <motion.div
+              initial={reduced ? {} : { opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={reduced ? {} : { type: "spring", stiffness: 100, damping: 18, delay: 0.4 }}
+              className="mt-6 w-full max-w-sm rounded-lg border border-accent-500/20 bg-accent-500/5 p-4 text-center"
+            >
+              <motion.div
+                initial={reduced ? {} : { scale: 0, rotate: -20 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={reduced ? {} : { type: "spring", stiffness: 250, damping: 15, delay: 0.6 }}
+              >
+                <Award className="mx-auto mb-2 h-8 w-8 text-accent-500" />
+              </motion.div>
               <p className="text-sm font-semibold text-text-primary">
                 {result.alreadyIssued
                   ? "Certificate Already Issued"
@@ -358,10 +457,15 @@ export default function QuizPage() {
               >
                 View Certificate
               </Link>
-            </div>
+            </motion.div>
           )}
 
-          <div className="mt-6 flex gap-4">
+          <motion.div
+            initial={reduced ? {} : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={reduced ? {} : { delay: 0.5, duration: 0.4 }}
+            className="mt-6 flex gap-4"
+          >
             {!result?.passed && (result?.attemptsRemaining ?? 0) > 0 && (
               <button
                 onClick={() => {
@@ -381,8 +485,8 @@ export default function QuizPage() {
             >
               Back to Course
             </Link>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
     </div>
   );

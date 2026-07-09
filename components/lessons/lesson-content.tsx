@@ -106,15 +106,41 @@ console.log(greet("SewAfri"));
       )}
 
       {onComplete && (
-        <div className="flex justify-end">
-          <button
+        <motion.div
+          initial={reduced ? {} : { opacity: 0, y: 12 }}
+          animate={reduced || inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ type: "spring", stiffness: 100, damping: 22, delay: 0.2 }}
+          className="flex justify-end"
+        >
+          <motion.button
             onClick={onComplete}
             disabled={completing}
-            className="cursor-pointer rounded-lg bg-accent-500 px-6 py-2.5 text-sm font-medium text-text-on-accent transition-colors hover:bg-accent-500/90 disabled:opacity-50"
+            whileHover={reduced ? {} : { scale: 1.02 }}
+            whileTap={reduced ? {} : { scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 400, damping: 15 }}
+            className="flex cursor-pointer items-center gap-2 rounded-lg bg-accent-500 px-6 py-2.5 text-sm font-medium text-text-on-accent transition-colors hover:bg-accent-500/90 disabled:opacity-50"
           >
-            {completing ? "Marking..." : "Mark as Complete"}
-          </button>
-        </div>
+            {completing ? (
+              "Marking..."
+            ) : (
+              <>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <motion.path
+                    d="M3 8.5L6.5 12L13 4"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    initial={reduced ? { pathLength: 1 } : { pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ type: "spring", stiffness: 150, damping: 18, delay: 0.3 }}
+                  />
+                </svg>
+                Mark as Complete
+              </>
+            )}
+          </motion.button>
+        </motion.div>
       )}
     </motion.div>
   );

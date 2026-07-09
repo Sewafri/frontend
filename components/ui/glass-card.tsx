@@ -1,3 +1,7 @@
+"use client";
+
+import { motion } from "motion/react";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { cn } from "@/lib/utils";
 
 type CardVariant = "default" | "bordered";
@@ -22,8 +26,12 @@ export default function Card({
   className = "",
   variant = "default",
 }: CardProps) {
+  const reduced = useReducedMotion();
+
   return (
-    <div
+    <motion.div
+      whileHover={reduced ? {} : { y: -2 }}
+      transition={{ type: "spring", stiffness: 300, damping: 18 }}
       className={cn(
         "rounded-xl p-6",
         variantClasses[variant],
@@ -31,6 +39,6 @@ export default function Card({
       )}
     >
       {children}
-    </div>
+    </motion.div>
   );
 }
