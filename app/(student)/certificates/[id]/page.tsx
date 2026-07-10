@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowLeft, Download, Award, Loader2, ShieldX } from "lucide-react";
 import GlassCard from "@/components/ui/glass-card";
 import { BlockchainProof } from "@/components/blockchain/blockchain-proof";
+import { CertificateMint } from "@/components/certificates/certificate-mint";
 import { verifyCertificate } from "@/lib/data/verify";
 import { downloadCertificate } from "@/lib/data/wallet";
 import type { BlockchainRecord } from "@/types/db";
@@ -145,6 +146,18 @@ export default function CertificateDetailPage() {
           </button>
         </div>
       </GlassCard>
+
+      <div className="mb-6">
+        <CertificateMint
+          certificateId={certId}
+          alreadyMinted={!!data.tokenId}
+          txHash={data.txHash}
+          network={data.network}
+          onMinted={(hash, net) => {
+            setData(prev => prev ? { ...prev, txHash: hash, network: net } : prev)
+          }}
+        />
+      </div>
 
       {blockchainRecord && (
         <BlockchainProof record={blockchainRecord} />

@@ -1,5 +1,5 @@
 import { api, apiMutate } from "@/lib/api/client"
-import type { QuizAttempt, QuizSession, StartAttemptResult } from "@/types/db"
+import type { QuizAttempt, QuizSession } from "@/types/db"
 
 export interface QuizManageSession {
   id: string
@@ -31,39 +31,32 @@ export async function getQuizQuestions(quizId: string): Promise<QuizSession> {
   return data
 }
 
-export async function startQuizAttempt(quizId: string): Promise<StartAttemptResult> {
-  const data = await apiMutate<StartAttemptResult>(
-    `/quizzes/${quizId}/start`,
-    { method: "POST" },
-  )
-  return data
-}
-
 export async function submitQuiz(
   quizId: string,
   answers: Record<string, string>,
-  options?: {
-    integrityReport?: Record<string, unknown>
-    attemptId?: string
-  },
 ): Promise<QuizAttempt> {
   const data = await apiMutate<QuizAttempt>(
     `/quizzes/${quizId}/submit`,
     {
       method: "POST",
-      body: JSON.stringify({
-        answers,
-        integrityReport: options?.integrityReport,
-        attemptId: options?.attemptId,
-      }),
+      body: JSON.stringify({ answers }),
     },
     "Quiz submitted",
   )
   return data
 }
 
+interface AttemptWithUser extends QuizAttempt {
+  user: { id: string; fullName: string; email: string }
+}
+
+export async function getQuizAttempts(quizId: string): Promise<AttemptWithUser[]> {
+  const data = await api<AttemptWithUser[]>(`/quizzes/${quizId}/attempts`, { silent: true })
+  return data
+}
+
 export async function getCourseQuizzes(courseId: string): Promise<QuizSummary[]> {
-  const data = await api<{ quizzes: QuizSummary[] }>(`/courses/${courseId}/quizzes`)
+  const data = await api<{ quizzes: QuizSummary[] }>(`/courses/${courseId}/quizzes`, { silent: true })
   return data.quizzes
 }
 
@@ -179,11 +172,4 @@ export interface QuizQuestion {
   answerOptions: { id: string; text: string; isCorrect: boolean }[]
 }
 
-interface AttemptWithUser extends QuizAttempt {
-  user: { id: string; fullName: string; email: string }
-}
 
-export async function getQuizAttempts(quizId: string): Promise<AttemptWithUser[]> {
-  const data = await api<AttemptWithUser[]>(`/quizzes/${quizId}/attempts`)
-  return data
-}

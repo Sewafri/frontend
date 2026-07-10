@@ -22,7 +22,7 @@ export default function EditLessonPage() {
 
   useEffect(() => {
     if (!lessonId) return;
-    getLesson(lessonId)
+    getLesson(lessonId, courseId)
       .then((l) => {
         setTitle(l.title);
         setContentBody(l.contentBody ?? "");

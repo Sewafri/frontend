@@ -22,6 +22,7 @@ export interface User {
   bio?: string | null
   photoUrl?: string | null
   expertise?: string | null
+  walletAddress?: string | null
   createdAt: string
   updatedAt: string
 }
@@ -126,12 +127,6 @@ export interface QuizAttempt {
   userId: string
   quizId: string
   submittedAt: string
-}
-
-export interface StartAttemptResult {
-  attemptId: string
-  attemptNumber: number
-  startedAt: string
 }
 
 export interface IntegrityReport {

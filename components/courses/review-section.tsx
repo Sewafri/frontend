@@ -5,7 +5,7 @@ import { Star, MessageSquare, Trash2, ChevronDown } from "lucide-react"
 import { RatingStars } from "@/components/ui/rating-stars"
 import { RatingInput } from "@/components/courses/rating-input"
 import { getReviewSummary, getReviews, submitReview, deleteMyReview } from "@/lib/data/reviews"
-import { getRatingSummary, submitRating, deleteMyRating } from "@/lib/data/ratings"
+import { getRatingSummary } from "@/lib/data/ratings"
 import { ApiError } from "@/lib/api/client"
 import { cn } from "@/lib/utils"
 

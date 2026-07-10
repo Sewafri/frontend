@@ -6,6 +6,7 @@ export async function getCourseEnrollments(
 ): Promise<Enrollment[]> {
   const data = await api<{ enrollments: Enrollment[] }>(
     `/courses/${courseId}/enrollments`,
+    { silent: true },
   )
   return data.enrollments
 }

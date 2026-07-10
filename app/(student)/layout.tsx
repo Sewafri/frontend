@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { SidebarNav, type SidebarLink } from "@/components/navigation/sidebar-nav";
 import { DashboardHeader } from "@/components/layouts/header";
-import { BookOpen, GraduationCap, Award, Wallet, MessagesSquare, Settings, Heart, Crown } from "lucide-react";
+import { BookOpen, GraduationCap, Award, Wallet, MessagesSquare, Settings, Heart, Crown, CreditCard } from "lucide-react";
 import { useAuth } from "@/lib/auth/auth-context";
 import { getInitials, capitalizeRole } from "@/lib/utils/user";
 
@@ -13,6 +13,7 @@ const STUDENT_LINKS: SidebarLink[] = [
   { label: "My Learning", href: "/my-learning", icon: GraduationCap },
   { label: "Certificates", href: "/certificates", icon: Award },
   { label: "Wallet", href: "/wallet", icon: Wallet },
+  { label: "Payments", href: "/payments", icon: CreditCard },
   { label: "Wishlist", href: "/wishlist", icon: Heart },
   { label: "Subscription", href: "/subscription", icon: Crown },
   { label: "Messages", href: "/messages", icon: MessagesSquare },

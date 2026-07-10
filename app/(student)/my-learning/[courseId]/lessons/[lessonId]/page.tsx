@@ -24,7 +24,7 @@ export default function LessonViewerPage() {
 
   useEffect(() => {
     setLoading(true);
-    getLesson(lessonId)
+    getLesson(lessonId, courseId)
       .then(setLesson)
       .catch((err) => {
         if (err instanceof ApiError) {

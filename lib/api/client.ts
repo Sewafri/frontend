@@ -1,6 +1,6 @@
 import { toast } from "sonner"
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1"
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "https://backend-gsqo.onrender.com/api/v1"
 
 export class ApiError extends Error {
   constructor(
@@ -75,11 +75,24 @@ async function attemptRefresh(): Promise<RefreshResult> {
   }
 }
 
+type ApiOptions = RequestInit & { params?: Record<string, string | undefined>; silent?: boolean }
+
+async function handleApiError(res: Response, json: unknown, silent?: boolean) {
+  const msg = json && typeof json === "object" && "message" in json
+    ? (json as { message: string }).message
+    : `Request failed with status ${res.status}`
+  const code = json && typeof json === "object" && "code" in json
+    ? (json as { code: string }).code
+    : "UNKNOWN_ERROR"
+  if (!silent) toast.error(msg)
+  throw new ApiError(res.status, code, msg)
+}
+
 export async function api<T>(
   path: string,
-  options: RequestInit & { params?: Record<string, string | undefined> } = {},
+  options: ApiOptions = {},
 ): Promise<T> {
-  const { params, ...fetchOptions } = options
+  const { params, silent, ...fetchOptions } = options
 
   let url = `${BASE_URL}${path}`
   if (params) {
@@ -137,18 +150,14 @@ export async function api<T>(
   const json = await res.json().catch(() => null)
 
   if (!res.ok) {
-    const msg = json?.message ?? `Request failed with status ${res.status}`
-    toast.error(msg)
-    throw new ApiError(res.status, json?.code ?? "UNKNOWN_ERROR", msg)
+    await handleApiError(res, json, silent)
   }
 
   if (json && typeof json === "object" && "success" in json) {
     if (json.success === true && "data" in json) {
       return json.data as T
     }
-    const msg = json.message ?? "Unknown API error"
-    toast.error(msg)
-    throw new ApiError(res.status, json.code ?? "API_ERROR", msg)
+    await handleApiError(res, json, silent)
   }
 
   return json as T
@@ -156,7 +165,7 @@ export async function api<T>(
 
 export async function apiMutate<T>(
   path: string,
-  options: RequestInit & { params?: Record<string, string | undefined> } = {},
+  options: ApiOptions = {},
   successMessage?: string,
 ): Promise<T> {
   const result = await api<T>(path, options)

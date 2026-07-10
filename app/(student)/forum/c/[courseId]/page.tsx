@@ -18,6 +18,7 @@ export default function ForumThreadListPage() {
   const [loading, setLoading] = useState(true)
   const [showNew, setShowNew] = useState(false)
   const [newTitle, setNewTitle] = useState("")
+  const [newBody, setNewBody] = useState("")
   const [creating, setCreating] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [searching, setSearching] = useState(false)
@@ -59,7 +60,7 @@ export default function ForumThreadListPage() {
     if (!newTitle.trim()) return
     setCreating(true)
     try {
-      const thread = await createForumThread(courseId, newTitle.trim())
+      const thread = await createForumThread(courseId, newTitle.trim(), newBody.trim())
       router.push(`/forum/c/${courseId}/t/${thread.id}`)
     } catch { setCreating(false) }
   }
@@ -110,20 +111,29 @@ export default function ForumThreadListPage() {
         </div>
 
         {showNew && (
-          <div className="flex items-center gap-2 rounded-xl border border-border-default bg-surface-dark p-4">
+          <div className="space-y-2 rounded-xl border border-border-default bg-surface-dark p-4">
             <input
               value={newTitle}
               onChange={(e) => setNewTitle(e.target.value)}
               placeholder="Thread title..."
-              className="flex-1 rounded-lg border border-border-default bg-surface-card px-3 py-2 text-sm text-text-primary placeholder-text-secondary outline-none focus:border-accent-500/50"
+              className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2 text-sm text-text-primary placeholder-text-secondary outline-none focus:border-accent-500/50"
             />
-            <button
-              onClick={handleCreate}
-              disabled={creating || !newTitle.trim()}
-              className="cursor-pointer rounded-xl bg-accent-500 px-4 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-accent-500/90 disabled:opacity-50"
-            >
-              {creating ? "Creating..." : "Create"}
-            </button>
+            <textarea
+              value={newBody}
+              onChange={(e) => setNewBody(e.target.value)}
+              placeholder="Description (optional)"
+              rows={3}
+              className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2 text-sm text-text-primary placeholder-text-secondary outline-none focus:border-accent-500/50"
+            />
+            <div className="flex justify-end">
+              <button
+                onClick={handleCreate}
+                disabled={creating || !newTitle.trim()}
+                className="cursor-pointer rounded-xl bg-accent-500 px-4 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-accent-500/90 disabled:opacity-50"
+              >
+                {creating ? "Creating..." : "Create"}
+              </button>
+            </div>
           </div>
         )}
       </div>

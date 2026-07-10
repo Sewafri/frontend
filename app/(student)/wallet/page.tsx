@@ -5,14 +5,18 @@ import Link from "next/link";
 import { PageHeader } from "@/components/ui/page-header";
 import GlassCard from "@/components/ui/glass-card";
 import { BlockchainBadge } from "@/components/blockchain/blockchain-badge";
+import { WalletLinkButton } from "@/components/wallet/wallet-link-button";
+import { VaultSection } from "@/components/wallet/vault-section";
 import {
   getMyWallet, updateWalletVisibility, downloadCertificate,
 } from "@/lib/data/wallet";
 import type { WalletDTO, BadgeDTO } from "@/lib/data/wallet";
-import { Award, Trophy, Globe, Copy, Check, Loader2, Download } from "lucide-react";
+import { Award, Trophy, Globe, Copy, Check, Loader2, Download, Wallet } from "lucide-react";
 import type { Certificate } from "@/types/db";
+import { useAuth } from "@/lib/auth/auth-context";
 
 export default function WalletPage() {
+  const { user } = useAuth();
   const [wallet, setWallet] = useState<WalletDTO | null>(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
@@ -77,6 +81,24 @@ export default function WalletPage() {
         title="My Wallet"
         description="Your certificates, badges, and public profile"
       />
+
+      {/* Wallet Linking */}
+      <div className="mb-6 rounded-lg border border-border-default bg-surface-card p-4">
+        <div className="mb-2 flex items-center gap-2">
+          <Wallet className="h-4 w-4 text-accent-500" />
+          <span className="text-xs font-semibold text-text-primary">Crypto Wallet</span>
+        </div>
+        <WalletLinkButton
+          linkedAddress={user?.walletAddress ?? null}
+          onLinked={() => window.location.reload()}
+          onUnlinked={() => window.location.reload()}
+        />
+      </div>
+
+      {/* Vault / Redemption */}
+      <div className="mb-8">
+        <VaultSection />
+      </div>
 
       {/* Stats + Controls */}
       <GlassCard className="mb-8">

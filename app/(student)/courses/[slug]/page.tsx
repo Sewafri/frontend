@@ -8,6 +8,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import { RatingStars } from "@/components/ui/rating-stars";
 import { WishlistButton } from "@/components/courses/wishlist-button";
 import { ReviewSection } from "@/components/courses/review-section";
+import { CryptoEnroll } from "@/components/courses/crypto-enroll";
 import { getCourseById, enrollInCourse } from "@/lib/data/courses";
 import { getLessons } from "@/lib/data/lessons";
 import { getRatingSummary } from "@/lib/data/ratings";
@@ -153,6 +154,7 @@ export default function CourseDetailPage() {
             {error && (
               <p className="text-xs text-accent-red">{error}</p>
             )}
+            <CryptoEnroll courseId={course.id} onEnrolled={() => router.push(`/my-learning/${courseId}`)} />
           </div>
         </div>
       </div>
