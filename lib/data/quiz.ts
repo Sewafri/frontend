@@ -22,7 +22,7 @@ export interface QuizManageQuestion {
 }
 
 export async function getQuizManage(quizId: string): Promise<QuizManageSession> {
-  const data = await api<QuizManageSession>(`/quizzes/${quizId}/manage`)
+  const data = await api<QuizManageSession>(`/quizzes/${quizId}`)
   return data
 }
 

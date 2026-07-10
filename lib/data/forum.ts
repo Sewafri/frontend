@@ -91,6 +91,6 @@ export async function deleteForumPost(postId: string): Promise<void> {
 export async function toggleUpvotePost(postId: string): Promise<{ upvoted: boolean }> {
   return apiMutate<{ upvoted: boolean }>(
     `/forum/posts/${postId}/upvote`,
-    { method: "POST" },
+    { method: "PUT" },
   )
 }

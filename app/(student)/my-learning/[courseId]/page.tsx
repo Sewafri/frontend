@@ -14,6 +14,7 @@ import type { Course } from "@/types/db";
 import type { Lesson } from "@/types/db";
 import type { QuizSummary } from "@/lib/data/quiz";
 import { ApiError } from "@/lib/api/client";
+import { AskTutor } from "@/components/courses/ask-tutor";
 
 export default function CurriculumPage() {
   const params = useParams();
@@ -209,6 +210,8 @@ export default function CurriculumPage() {
           )}
         </>
       )}
+
+      {course && <AskTutor courseId={courseId} courseTitle={course.title} />}
     </div>
   );
 }

@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import GlassCard from "@/components/ui/glass-card";
 import { ArrowLeft, Save } from "lucide-react";
 import { getLesson, updateLesson } from "@/lib/data/lessons";
+import { LessonResources } from "@/components/lessons/lesson-resources";
 
 export default function EditLessonPage() {
   const params = useParams();
@@ -83,6 +84,10 @@ export default function EditLessonPage() {
           </div>
         </div>
       </GlassCard>
+
+      <div className="mt-8">
+        <LessonResources lessonId={lessonId} editable />
+      </div>
     </div>
   );
 }

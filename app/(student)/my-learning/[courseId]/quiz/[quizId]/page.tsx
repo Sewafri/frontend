@@ -78,6 +78,8 @@ export default function QuizPage() {
             err.message.includes("exhausted")
           ) {
             setMaxedOut(true);
+          } else if (err.statusCode === 404) {
+            console.warn("startQuizAttempt not available (route not deployed) — submitting without attemptId")
           } else {
             setError(err.message);
           }

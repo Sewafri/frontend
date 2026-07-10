@@ -7,6 +7,7 @@ import { ArrowLeft, BookOpen } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
 import LessonContent from "@/components/lessons/lesson-content";
 import { getLesson, completeLesson } from "@/lib/data/lessons";
+import { LessonResources } from "@/components/lessons/lesson-resources";
 import { ApiError } from "@/lib/api/client";
 import type { Lesson } from "@/types/db";
 
@@ -68,7 +69,14 @@ export default function LessonViewerPage() {
             <ArrowLeft className="h-4 w-4" /> Back to Curriculum
           </Link>
         </div>
-        <PageHeader title="Lesson Unavailable" description={error} />
+        <PageHeader
+          title="Lesson Unavailable"
+          description={
+            error.includes("not found")
+              ? "This lesson content endpoint is not yet available. Please check back later."
+              : error
+          }
+        />
       </div>
     );
   }
@@ -110,6 +118,10 @@ export default function LessonViewerPage() {
           {error}
         </div>
       )}
+
+      <div className="mt-8">
+        <LessonResources lessonId={lessonId} />
+      </div>
     </div>
   );
 }
