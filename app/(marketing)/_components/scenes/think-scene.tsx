@@ -17,8 +17,8 @@ function FloatingQ({ delay, x }: { delay: number; x: number }) {
       transition={{ duration: 4, delay, repeat: Infinity, ease: "easeInOut" }}
       transform={`translate(${x}, 0)`}
     >
-      <path d="M0 -2 Q0 -6 3 -6 Q6 -6 6 -3 Q6 0 3 1 Q3 2 3 3" stroke="#92400e" strokeWidth="1.2" fill="none" strokeLinecap="round" opacity={0.5} />
-      <circle cx="3" cy="5" r="0.7" fill="#4F7F1F" stroke="#92400e" strokeWidth="0.4" opacity={0.5} />
+      <path d="M0 -2 Q0 -6 3 -6 Q6 -6 6 -3 Q6 0 3 1 Q3 2 3 3" stroke="#475569" strokeWidth="1.2" fill="none" strokeLinecap="round" opacity={0.5} />
+      <circle cx="3" cy="5" r="0.7" fill="#94a3b8" stroke="#475569" strokeWidth="0.4" opacity={0.5} />
     </motion.g>
   );
 }
@@ -33,7 +33,7 @@ export default function ThinkScene({ className }: ThinkSceneProps) {
 
   return (
     <div className={cn("relative flex flex-col items-center py-10 select-none", className)}>
-      <style>{`.holo{filter:drop-shadow(0 0 3px rgba(79,127,31,.5)) drop-shadow(0 0 8px rgba(79,127,31,.25));opacity:.75}`}</style>
+      <style>{`.holo{filter:drop-shadow(0 0 3px rgba(148,163,184,.5)) drop-shadow(0 0 8px rgba(148,163,184,.25));opacity:.75}`}</style>
       {/* ── Floating question marks ── */}
       <svg
         width="100"
@@ -59,23 +59,23 @@ export default function ThinkScene({ className }: ThinkSceneProps) {
           <svg width="24" height="32" viewBox="0 0 24 32">
             <defs>
               <radialGradient id="bulb-glow">
-                <stop offset="0%" stopColor="#4F7F1F" stopOpacity="0.5" />
-                <stop offset="100%" stopColor="#4F7F1F" stopOpacity="0" />
+                <stop offset="0%" stopColor="#94a3b8" stopOpacity="0.5" />
+                <stop offset="100%" stopColor="#94a3b8" stopOpacity="0" />
               </radialGradient>
             </defs>
             <circle cx="12" cy="16" r="14" fill="url(#bulb-glow)" />
             <motion.path
               d="M12 2 Q18 2 18 10 Q18 16 14 20 L10 20 Q6 16 6 10 Q6 2 12 2 Z"
-              fill="#fbbf24"
-              stroke="#f59e0b"
+              fill="#94a3b8"
+              stroke="#64748b"
               strokeWidth="0.8"
-              animate={{ fill: ["#fbbf24", "#fef3c7", "#fbbf24"] }}
+              animate={{ fill: ["#94a3b8", "#cbd5e1", "#94a3b8"] }}
               transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
             />
-            <rect x="10" y="20" width="4" height="4" rx="1" fill="#f59e0b" />
-            <rect x="9" y="24" width="6" height="2" rx="0.8" fill="#f59e0b" />
-            <path d="M10 20 L8 23" stroke="#f59e0b" strokeWidth="0.6" />
-            <path d="M14 20 L16 23" stroke="#f59e0b" strokeWidth="0.6" />
+            <rect x="10" y="20" width="4" height="4" rx="1" fill="#64748b" />
+            <rect x="9" y="24" width="6" height="2" rx="0.8" fill="#64748b" />
+            <path d="M10 20 L8 23" stroke="#64748b" strokeWidth="0.6" />
+            <path d="M14 20 L16 23" stroke="#64748b" strokeWidth="0.6" />
             {/* Light rays */}
             {[0, 1, 2, 3, 4, 5].map((i) => {
               const a = (i / 6) * 360;
@@ -86,7 +86,7 @@ export default function ThinkScene({ className }: ThinkSceneProps) {
                   x1="12" y1="2"
                   x2={12 + Math.cos(rad) * 10}
                   y2={2 + Math.sin(rad) * 10}
-                  stroke="#92400e"
+                  stroke="#475569"
                   strokeWidth="1"
                   strokeLinecap="round"
                   initial={{ opacity: 0, scale: 0 }}

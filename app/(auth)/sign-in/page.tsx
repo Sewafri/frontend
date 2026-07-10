@@ -11,6 +11,11 @@ import { BRAND } from "@/constants/brand";
 import { useAuth } from "@/lib/auth/auth-context";
 import { ApiError } from "@/lib/api/client";
 
+function googleSignIn() {
+  const backendUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1"
+  window.location.href = `${backendUrl}/auth/google`
+}
+
 export default function SignInPage() {
   const router = useRouter();
   const { login } = useAuth();
@@ -59,7 +64,7 @@ export default function SignInPage() {
           <div className="grid grid-cols-2 gap-3">
             <Button
               variant="outline"
-              disabled
+              onClick={googleSignIn}
               className="text-text-secondary"
             >
               <svg className="mr-2 size-4" viewBox="0 0 24 24" fill="currentColor">

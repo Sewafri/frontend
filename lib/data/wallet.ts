@@ -1,4 +1,4 @@
-import { api } from "@/lib/api/client"
+import { api, apiMutate } from "@/lib/api/client"
 import type { Certificate } from "@/types/db"
 
 export interface BadgeDTO {
@@ -33,10 +33,11 @@ export async function getPublicWallet(
 export async function updateWalletVisibility(
   isPublic: boolean,
 ): Promise<void> {
-  await api<void>("/wallet/me/visibility", {
-    method: "PATCH",
-    body: JSON.stringify({ isPublic }),
-  })
+  await apiMutate<void>(
+    "/wallet/me/visibility",
+    { method: "PATCH", body: JSON.stringify({ isPublic }) },
+    isPublic ? "Wallet is now public" : "Wallet is now private",
+  )
 }
 
 const BASE_URL =

@@ -17,7 +17,7 @@ function Badge({
     destructive:
       "border-accent-red/20 bg-accent-red/10 text-accent-red",
     success:
-      "border-emerald-500/20 bg-emerald-500/10 text-emerald-600",
+      "border-accent-green/20 bg-accent-green/10 text-accent-green",
   }
 
   return (

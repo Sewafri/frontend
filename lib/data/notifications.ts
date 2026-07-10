@@ -1,4 +1,4 @@
-import { api } from "@/lib/api/client"
+import { api, apiMutate } from "@/lib/api/client"
 import type { Notification } from "@/types/db"
 
 export async function getNotifications(): Promise<Notification[]> {
@@ -7,12 +7,13 @@ export async function getNotifications(): Promise<Notification[]> {
 }
 
 export async function markNotificationRead(id: string): Promise<Notification> {
-  const data = await api<Notification>(`/notifications/${id}/read`, {
-    method: "PATCH",
-  })
+  const data = await apiMutate<Notification>(
+    `/notifications/${id}/read`,
+    { method: "PATCH" },
+  )
   return data
 }
 
 export async function markAllNotificationsRead(): Promise<void> {
-  await api("/notifications/read-all", { method: "PATCH" })
+  await apiMutate("/notifications/read-all", { method: "PATCH" }, "All notifications marked as read")
 }

@@ -21,9 +21,9 @@ function flagLevel(count: number): "clean" | "minor" | "flagged" {
 }
 
 function FlagIcon({ level }: { level: "clean" | "minor" | "flagged" }) {
-  if (level === "clean") return <ShieldCheck className="h-4 w-4 text-green-600" />;
-  if (level === "minor") return <Shield className="h-4 w-4 text-amber-600" />;
-  return <ShieldAlert className="h-4 w-4 text-red-600" />;
+  if (level === "clean") return <ShieldCheck className="h-4 w-4 text-accent-green" />;
+  if (level === "minor") return <Shield className="h-4 w-4 text-accent-amber" />;
+  return <ShieldAlert className="h-4 w-4 text-accent-red" />;
 }
 
 function IntegrityEventList({ events, label }: { events: { type: string; timestamp: string; detail?: string }[]; label: string }) {
@@ -66,7 +66,7 @@ function AttemptRow({ attempt }: { attempt: QuizAttempt & { user: { id: string; 
             <span>Attempt {attempt.attemptNumber}</span>
             <span>Score: {attempt.score}%</span>
             <span>{attempt.passed ? "Passed" : "Failed"}</span>
-            {flags > 0 && <span className="text-amber-600">{flags} integrity flag{flags !== 1 ? "s" : ""}</span>}
+            {flags > 0 && <span className="text-accent-amber">{flags} integrity flag{flags !== 1 ? "s" : ""}</span>}
           </div>
         </div>
         {expanded ? <ChevronDown className="h-4 w-4 text-text-tertiary" /> : <ChevronRight className="h-4 w-4 text-text-tertiary" />}

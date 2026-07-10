@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { SidebarNav, type SidebarLink } from "@/components/navigation/sidebar-nav";
 import { DashboardHeader } from "@/components/layouts/header";
-import { LayoutDashboard, Users, ClipboardCheck, BookOpen, Award, DollarSign, BarChart3, Settings } from "lucide-react";
+import { LayoutDashboard, Users, ClipboardCheck, BookOpen, Award, DollarSign, BarChart3, Settings, Flag } from "lucide-react";
 import { useAuth } from "@/lib/auth/auth-context";
 import { getInitials, capitalizeRole } from "@/lib/utils/user";
 
@@ -16,6 +16,7 @@ const ADMIN_LINKS: SidebarLink[] = [
   { label: "Certificates", href: "/admin/certificates", icon: Award },
   { label: "Payments", href: "/admin/payments", icon: DollarSign },
   { label: "Analytics", href: "/admin/analytics", icon: BarChart3 },
+  { label: "Reports", href: "/admin/reports", icon: Flag },
   { label: "Settings", href: "/admin/settings", icon: Settings },
 ];
 

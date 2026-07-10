@@ -1,4 +1,4 @@
-import { api } from "@/lib/api/client"
+import { api, apiMutate } from "@/lib/api/client"
 import type { User, Course } from "@/types/db"
 
 export interface AdminDashboardData {
@@ -39,18 +39,19 @@ export async function getAdminUsers(params?: {
 }
 
 export async function suspendUser(userId: string): Promise<void> {
-  await api(`/admin/users/${userId}/suspend`, { method: "PATCH" })
+  await apiMutate(`/admin/users/${userId}/suspend`, { method: "PATCH" }, "User suspended")
 }
 
 export async function reactivateUser(userId: string): Promise<void> {
-  await api(`/admin/users/${userId}/reactivate`, { method: "PATCH" })
+  await apiMutate(`/admin/users/${userId}/reactivate`, { method: "PATCH" }, "User reactivated")
 }
 
 export async function changeUserRole(userId: string, role: "STUDENT" | "INSTRUCTOR" | "ADMIN"): Promise<void> {
-  await api(`/admin/users/${userId}/role`, {
-    method: "PATCH",
-    body: JSON.stringify({ role }),
-  })
+  await apiMutate(
+    `/admin/users/${userId}/role`,
+    { method: "PATCH", body: JSON.stringify({ role }) },
+    "Role changed",
+  )
 }
 
 export async function getAdminCourses(): Promise<{ courses: Course[]; total: number }> {
@@ -62,5 +63,5 @@ export async function getAdminCertificates(): Promise<{ certificates: AdminCerti
 }
 
 export async function revokeCertificate(certId: string): Promise<void> {
-  await api(`/certificates/${certId}/revoke`, { method: "PATCH" })
+  await apiMutate(`/certificates/${certId}/revoke`, { method: "PATCH" }, "Certificate revoked")
 }

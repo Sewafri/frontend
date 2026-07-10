@@ -14,7 +14,7 @@ function Teardrop({ delay, side }: { delay: number; side: "left" | "right" }) {
   return (
     <motion.path
       d="M0 0 Q-2 4 0 6 Q2 4 0 0"
-      fill="#4F7F1F" stroke="#92400e" strokeWidth="0.6"
+      fill="#94a3b8" stroke="#475569" strokeWidth="0.6"
       opacity={0.5}
       initial={{ x: startX, y: -4, opacity: 0 }}
       animate={{ opacity: [0, 0.5, 0], x: [startX, startX + (side === "left" ? -4 : 4)], y: [-4, 12] }}
@@ -33,7 +33,7 @@ export default function LaughScene({ className }: LaughSceneProps) {
 
   return (
     <div className={cn("relative flex flex-col items-center py-10 select-none", className)}>
-      <style>{`.holo{filter:drop-shadow(0 0 3px rgba(79,127,31,.5)) drop-shadow(0 0 8px rgba(79,127,31,.25));opacity:.75}`}</style>
+      <style>{`.holo{filter:drop-shadow(0 0 3px rgba(148,163,184,.5)) drop-shadow(0 0 8px rgba(148,163,184,.25));opacity:.75}`}</style>
       {/* ── Teardrops ── */}
       <div className="holo absolute inset-0 pointer-events-none">
         <svg width="100%" height="100%" viewBox="0 0 200 60" className="w-full h-full opacity-60">
@@ -101,7 +101,7 @@ export default function LaughScene({ className }: LaughSceneProps) {
               <motion.div
                 key={i}
                 className="absolute text-xs font-bold"
-                style={{ left: "50%", top: "50%", color: "#4F7F1F" }}
+                style={{ left: "50%", top: "50%", color: "#94a3b8" }}
                 initial={{ x: 0, y: 0, opacity: 1, scale: 0.5 }}
                 animate={{
                   x: Math.cos(rad) * 40,

@@ -1,111 +1,121 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { PageHeader } from "@/components/ui/page-header";
 import GlassCard from "@/components/ui/glass-card";
-import { ArrowLeft, Save, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Plus, Trash2 } from "lucide-react";
 import {
-  getQuizManage,
   addQuizQuestion,
   updateQuizQuestion,
   deleteQuizQuestion,
   type QuizManageQuestion,
 } from "@/lib/data/quiz";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+
+let tempIdCounter = 0;
+function nextTempId() {
+  return `__new_${++tempIdCounter}`;
+}
 
 export default function QuizEditorPage() {
   const params = useParams();
-  const router = useRouter();
   const courseId = params.id as string;
   const quizId = params.quizId as string;
   const [questions, setQuestions] = useState<QuizManageQuestion[]>([]);
-  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (!quizId) return;
-    getQuizManage(quizId)
-      .then((data) => setQuestions(data.questions ?? []))
-      .catch(() => setQuestions([]))
-      .finally(() => setLoading(false));
+    import("@/lib/data/quiz").then(({ getQuizManage }) =>
+      getQuizManage(quizId)
+        .then((data) => setQuestions(data.questions ?? []))
+        .catch(() => setQuestions([])),
+    );
   }, [quizId]);
 
-  const handleAddQuestion = useCallback(async () => {
-    try {
-      const q = await addQuizQuestion(quizId, {
+  function handleAddQuestion() {
+    setQuestions((prev) => [
+      ...prev,
+      {
+        id: nextTempId(),
         text: "",
-        options: [
-          { text: "", isCorrect: false },
-          { text: "", isCorrect: false },
+        type: "MULTIPLE_CHOICE",
+        points: 1,
+        orderIndex: prev.length,
+        answerOptions: [
+          { id: nextTempId(), text: "", isCorrect: false },
+          { id: nextTempId(), text: "", isCorrect: false },
         ],
-        orderIndex: questions.length,
-      });
-      setQuestions((prev) => [...prev, q]);
-    } catch {}
-  }, [quizId, questions.length]);
+      },
+    ]);
+  }
 
-  const handleSaveQuestion = useCallback(
-    async (q: QuizManageQuestion) => {
-      setSaving(q.id);
-      try {
+  async function handleSaveQuestion(q: QuizManageQuestion) {
+    if (!q.text.trim()) return;
+    setSaving(q.id);
+    try {
+      if (q.id.startsWith("__new_")) {
+        const created = await addQuizQuestion(quizId, {
+          text: q.text,
+          options: q.answerOptions.map((o) => ({ text: o.text, isCorrect: o.isCorrect })),
+          orderIndex: q.orderIndex,
+        });
+        setQuestions((prev) => prev.map((item) => (item.id === q.id ? created : item)));
+      } else {
         const updated = await updateQuizQuestion(quizId, q.id, {
           text: q.text,
           options: q.answerOptions.map((o) => ({
-            id: o.id,
+            id: o.id.startsWith("__new_") ? undefined : o.id,
             text: o.text,
             isCorrect: o.isCorrect,
           })),
         });
-        setQuestions((prev) =>
-          prev.map((item) => (item.id === q.id ? updated : item)),
-        );
-      } finally {
-        setSaving(null);
+        setQuestions((prev) => prev.map((item) => (item.id === q.id ? updated : item)));
       }
-    },
-    [quizId],
-  );
+    } finally {
+      setSaving(null);
+    }
+  }
 
-  const handleDeleteQuestion = useCallback(
-    async (questionId: string) => {
-      try {
-        await deleteQuizQuestion(quizId, questionId);
-        setQuestions((prev) => prev.filter((q) => q.id !== questionId));
-      } catch {}
-    },
-    [quizId],
-  );
+  async function handleDeleteQuestion() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      if (!deleteTarget.startsWith("__new_")) {
+        await deleteQuizQuestion(quizId, deleteTarget);
+      }
+      setQuestions((prev) => prev.filter((q) => q.id !== deleteTarget));
+      setDeleteTarget(null);
+    } catch {
+      setDeleteTarget(null);
+    } finally {
+      setDeleting(false);
+    }
+  }
 
-  const updateField = useCallback(
-    (qId: string, field: string, value: unknown) => {
-      setQuestions((prev) =>
-        prev.map((q) => (q.id === qId ? { ...q, [field]: value } : q)),
-      );
-    },
-    [],
-  );
+  function updateField(qId: string, field: string, value: string) {
+    setQuestions((prev) =>
+      prev.map((q) => (q.id === qId ? { ...q, [field]: value } : q)),
+    );
+  }
 
-  const updateOption = useCallback(
-    (qId: string, optIdx: number, field: string, value: unknown) => {
-      setQuestions((prev) =>
-        prev.map((q) =>
-          q.id === qId
-            ? {
-                ...q,
-                answerOptions: q.answerOptions.map((o, i) =>
-                  i === optIdx ? { ...o, [field]: value } : o,
-                ),
-              }
-            : q,
-        ),
-      );
-    },
-    [],
-  );
-
-  if (loading) {
-    return <div className="flex flex-col items-center justify-center py-20"><p className="text-sm text-text-secondary">Loading quiz...</p></div>;
+  function updateOption(qId: string, optIdx: number, field: string, value: string | boolean) {
+    setQuestions((prev) =>
+      prev.map((q) =>
+        q.id === qId
+          ? {
+              ...q,
+              answerOptions: q.answerOptions.map((o, i) =>
+                i === optIdx ? { ...o, [field]: value } : o,
+              ),
+            }
+          : q,
+      ),
+    );
   }
 
   return (
@@ -134,7 +144,7 @@ export default function QuizEditorPage() {
             <GlassCard key={q.id}>
               <div className="flex items-start justify-between mb-3">
                 <span className="text-sm font-medium text-text-primary">Question {idx + 1}</span>
-                <button onClick={() => handleDeleteQuestion(q.id)} aria-label="Remove question" className="cursor-pointer text-accent-red hover:text-accent-red/80"><Trash2 className="h-4 w-4" /></button>
+                <button onClick={() => setDeleteTarget(q.id)} aria-label="Remove question" className="cursor-pointer text-accent-red hover:text-accent-red/80"><Trash2 className="h-4 w-4" /></button>
               </div>
               <input
                 type="text"
@@ -194,6 +204,17 @@ export default function QuizEditorPage() {
           ))}
         </div>
       )}
+
+      <ConfirmDialog
+        open={!!deleteTarget}
+        onOpenChange={(o) => { if (!o) setDeleteTarget(null) }}
+        title="Delete Question"
+        description="Are you sure you want to delete this question? This action cannot be undone."
+        confirmLabel="Delete"
+        variant="destructive"
+        loading={deleting}
+        onConfirm={handleDeleteQuestion}
+      />
     </div>
   );
 }

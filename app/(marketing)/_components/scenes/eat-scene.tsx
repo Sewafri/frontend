@@ -14,7 +14,7 @@ function Crumb({ delay, side }: { delay: number; side: "left" | "right" }) {
   return (
     <motion.circle
       cx={0} cy={0} r="1.5"
-      fill="#fca5a5"
+      fill="#d4d4d4"
       initial={{ opacity: 0, x: 0, y: 0 }}
       animate={{ opacity: [0, 0.7, 0], x: [0, x], y: [0, -12] }}
       transition={{ duration: 1.2, delay, repeat: Infinity, ease: "easeOut" }}
@@ -44,7 +44,7 @@ export default function EatScene({ className }: EatSceneProps) {
             transition={{ duration: 2.5, delay: d, repeat: Infinity, ease: "easeInOut" }}
           >
             <svg width="8" height="8" viewBox="0 0 8 8">
-              <path d="M4 0 L4.8 3.2 L8 4 L4.8 4.8 L4 8 L3.2 4.8 L0 4 L3.2 3.2 Z" fill="#4F7F1F" stroke="#92400e" strokeWidth="0.4" opacity={0.7} />
+              <path d="M4 0 L4.8 3.2 L8 4 L4.8 4.8 L4 8 L3.2 4.8 L0 4 L3.2 3.2 Z" fill="#94a3b8" stroke="#475569" strokeWidth="0.4" opacity={0.7} />
             </svg>
           </motion.div>
         ))}
@@ -74,20 +74,20 @@ export default function EatScene({ className }: EatSceneProps) {
           <Crumb delay={1.4} side="right" />
 
           {/* Cake slice */}
-          <path d="M6 18 L18 6 L30 18 Z" fill="#fca5a5" stroke="#f43f5e" strokeWidth="0.8" />
-          <path d="M6 18 L18 24 L30 18 Z" fill="#fef3c7" stroke="#f59e0b" strokeWidth="0.8" />
-          <path d="M8 20 L18 26 L28 20" fill="none" stroke="#f59e0b" strokeWidth="0.5" opacity="0.5" />
-          <path d="M10 22 L18 28 L26 22" fill="none" stroke="#f59e0b" strokeWidth="0.5" opacity="0.3" />
+          <path d="M6 18 L18 6 L30 18 Z" fill="#d4d4d4" stroke="#737373" strokeWidth="0.8" />
+          <path d="M6 18 L18 24 L30 18 Z" fill="#e5e5e5" stroke="#a3a3a3" strokeWidth="0.8" />
+          <path d="M8 20 L18 26 L28 20" fill="none" stroke="#a3a3a3" strokeWidth="0.5" opacity="0.5" />
+          <path d="M10 22 L18 28 L26 22" fill="none" stroke="#a3a3a3" strokeWidth="0.5" opacity="0.3" />
           {/* Frosting drip */}
-          <path d="M8 18 Q10 20 12 18 Q14 19 16 18 Q18 20 20 18 Q22 19 24 18 Q26 20 28 18" fill="none" stroke="#fbcfe8" strokeWidth="1.5" />
+          <path d="M8 18 Q10 20 12 18 Q14 19 16 18 Q18 20 20 18 Q22 19 24 18 Q26 20 28 18" fill="none" stroke="#d4d4d4" strokeWidth="1.5" />
           {/* Cherry */}
-          <circle cx="18" cy="6" r="3" fill="#ef4444" />
-          <path d="M18 3 Q20 1 22 2" stroke="#15803d" strokeWidth="0.8" fill="none" />
+          <circle cx="18" cy="6" r="3" fill="#94a3b8" />
+          <path d="M18 3 Q20 1 22 2" stroke="#64748b" strokeWidth="0.8" fill="none" />
           {/* Candle */}
-          <rect x="16" y="1" width="2" height="5" rx="0.5" fill="#fbbf24" />
+          <rect x="16" y="1" width="2" height="5" rx="0.5" fill="#94a3b8" />
           <motion.path
             d="M17 1 Q17 -1 18 0 Q17 1 17 1"
-            fill="#f97316"
+            fill="#64748b"
             animate={{ opacity: [0.6, 1, 0.6] }}
             transition={{ duration: 0.4, repeat: Infinity }}
           />
@@ -95,7 +95,7 @@ export default function EatScene({ className }: EatSceneProps) {
           {bite && (
             <motion.path
               d="M18 6 Q22 8 22 12 Q18 12 16 10 Z"
-      fill="#4F7F1F" stroke="#92400e" strokeWidth="0.5"
+      fill="#94a3b8" stroke="#475569" strokeWidth="0.5"
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: [0, 1, 0], scale: [0.5, 1.2, 0.5], x: [0, 6], y: [0, -4] }}
               transition={{ duration: 0.4 }}
@@ -122,7 +122,7 @@ export default function EatScene({ className }: EatSceneProps) {
               <line
                 key={i}
                 x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2}
-                stroke="#4F7F1F"
+                stroke="#94a3b8"
                 strokeWidth="1.5"
                 strokeLinecap="round"
                 className="origin-center"
@@ -150,7 +150,7 @@ export default function EatScene({ className }: EatSceneProps) {
       </motion.div>
 
       <style>{`
-        .holo { filter: drop-shadow(0 0 3px rgba(79,127,31,.5)) drop-shadow(0 0 8px rgba(79,127,31,.25)); opacity: .75; }
+        .holo { filter: drop-shadow(0 0 3px rgba(148,163,184,.5)) drop-shadow(0 0 8px rgba(148,163,184,.25)); opacity: .75; }
         @keyframes eat-burst-0 { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; transform: translate(-4px, -4px); } }
         @keyframes eat-burst-1 { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; transform: translate(4px, -6px); } }
         @keyframes eat-burst-2 { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; transform: translate(-6px, 2px); } }

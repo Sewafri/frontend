@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { ChevronLeft, type LucideIcon } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { ChevronLeft, LogOut, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BRAND } from "@/constants/brand";
 import { motion, AnimatePresence } from "motion/react";
+import { useAuth } from "@/lib/auth/auth-context";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
 export interface SidebarLink {
   label: string;
@@ -57,8 +59,23 @@ function SidebarLinkItem({ link, collapsed, active, accent, onClose }: { link: S
 
 export function SidebarNav({ links, user, accentClass = "brand", mobileOpen, onMobileClose }: SidebarNavProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
+  const [logoutOpen, setLogoutOpen] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
   const accent = accentMap[accentClass] ?? accentMap.brand;
+  const { logout } = useAuth();
+
+  const handleSignOut = async () => {
+    setLoggingOut(true);
+    try {
+      await logout();
+      router.push("/sign-in");
+    } finally {
+      setLoggingOut(false);
+      setLogoutOpen(false);
+    }
+  };
 
   const sidebarContent = (
     <nav
@@ -111,39 +128,67 @@ export function SidebarNav({ links, user, accentClass = "brand", mobileOpen, onM
         })}
       </div>
 
-      <div className={cn(
-        "border-t border-border-default py-3",
-        collapsed ? "flex justify-center px-2" : "px-3",
-      )}>
+      <div className="border-t border-border-default">
         <div className={cn(
-          "flex items-center rounded-xl transition-colors hover:bg-surface-card-hover",
-          collapsed ? "justify-center p-2" : "gap-3 px-2 py-2",
+          "py-3",
+          collapsed ? "flex flex-col items-center gap-1 px-2" : "px-3",
         )}>
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-accent-400 to-accent-600 text-xs font-semibold text-white shadow-sm">
-            {user.initials}
+          <div className={cn(
+            "flex items-center rounded-xl transition-colors hover:bg-surface-card-hover",
+            collapsed ? "justify-center p-2" : "gap-3 px-2 py-2",
+          )}>
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-accent-400 to-accent-600 text-xs font-semibold text-white shadow-sm">
+              {user.initials}
+            </div>
+            <AnimatePresence>
+              {!collapsed && (
+                <motion.div
+                  initial={{ opacity: 0, width: 0 }}
+                  animate={{ opacity: 1, width: "auto" }}
+                  exit={{ opacity: 0, width: 0 }}
+                  className="min-w-0 flex-1 overflow-hidden"
+                >
+                  <p className="truncate text-sm font-medium text-text-primary">{user.name}</p>
+                  <p className="truncate text-xs text-text-tertiary">{user.role}</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
-          <AnimatePresence>
-            {!collapsed && (
-              <motion.div
-                initial={{ opacity: 0, width: 0 }}
-                animate={{ opacity: 1, width: "auto" }}
-                exit={{ opacity: 0, width: 0 }}
-                className="min-w-0 flex-1 overflow-hidden"
-              >
-                <p className="truncate text-sm font-medium text-text-primary">{user.name}</p>
-                <p className="truncate text-xs text-text-tertiary">{user.role}</p>
-              </motion.div>
+          <button
+            onClick={() => setLogoutOpen(true)}
+            className={cn(
+              "flex w-full cursor-pointer items-center gap-3 rounded-xl text-sm font-medium text-accent-red transition-colors hover:bg-accent-red/5",
+              collapsed ? "justify-center p-2" : "px-2 py-2",
             )}
-          </AnimatePresence>
+          >
+            <LogOut className="h-4 w-4 shrink-0" />
+            {!collapsed && <span>Sign Out</span>}
+          </button>
         </div>
       </div>
     </nav>
   );
 
+  const sidebarWithConfirm = (
+    <>
+      {sidebarContent}
+      <ConfirmDialog
+        open={logoutOpen}
+        onOpenChange={setLogoutOpen}
+        title="Sign Out"
+        description="Are you sure you want to sign out?"
+        confirmLabel="Sign Out"
+        variant="destructive"
+        loading={loggingOut}
+        onConfirm={handleSignOut}
+      />
+    </>
+  );
+
   if (mobileOpen !== undefined) {
     return (
       <>
-        <div className="hidden md:flex">{sidebarContent}</div>
+        <div className="hidden md:flex">{sidebarWithConfirm}</div>
         {mobileOpen && (
           <div className="fixed inset-0 z-50 md:hidden">
             <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" onClick={onMobileClose} />
@@ -154,7 +199,7 @@ export function SidebarNav({ links, user, accentClass = "brand", mobileOpen, onM
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
               className="fixed left-0 top-0 h-full"
             >
-              {sidebarContent}
+              {sidebarWithConfirm}
             </motion.div>
           </div>
         )}
@@ -162,5 +207,5 @@ export function SidebarNav({ links, user, accentClass = "brand", mobileOpen, onM
     );
   }
 
-  return sidebarContent;
+  return sidebarWithConfirm;
 }

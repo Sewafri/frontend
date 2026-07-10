@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { PageHeader } from "@/components/ui/page-header";
 import { getAdminCertificates, revokeCertificate, type AdminCertificate } from "@/lib/data/admin";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { Award, ShieldOff } from "lucide-react";
 
 export default function AdminCertificatesPage() {
@@ -10,6 +11,7 @@ export default function AdminCertificatesPage() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [revokingId, setRevokingId] = useState<string | null>(null);
+  const [revokeOpen, setRevokeOpen] = useState(false);
 
   const fetchCerts = () => {
     setLoading(true);
@@ -26,16 +28,15 @@ export default function AdminCertificatesPage() {
     fetchCerts();
   }, []);
 
-  const handleRevoke = async (certId: string) => {
-    if (!confirm("Revoke this certificate? This cannot be undone.")) return;
-    setRevokingId(certId);
+  const handleRevoke = async () => {
+    if (!revokingId) return;
     try {
-      await revokeCertificate(certId);
+      await revokeCertificate(revokingId);
+      setRevokeOpen(false);
+      setRevokingId(null);
       fetchCerts();
     } catch {
-      alert("Failed to revoke certificate");
-    } finally {
-      setRevokingId(null);
+      setRevokeOpen(false);
     }
   };
 
@@ -109,7 +110,7 @@ export default function AdminCertificatesPage() {
                   <td className="px-5 py-3.5">
                     {c.status === "ISSUED" && (
                       <button
-                        onClick={() => handleRevoke(c.id)}
+                        onClick={() => { setRevokingId(c.id); setRevokeOpen(true) }}
                         disabled={revokingId === c.id}
                         className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-medium text-accent-red transition-colors hover:bg-accent-red/10 disabled:opacity-50"
                       >
@@ -124,6 +125,17 @@ export default function AdminCertificatesPage() {
           </table>
         </div>
       )}
+
+      <ConfirmDialog
+        open={revokeOpen}
+        onOpenChange={setRevokeOpen}
+        title="Revoke Certificate"
+        description="Are you sure you want to revoke this certificate? This cannot be undone."
+        confirmLabel="Revoke"
+        variant="destructive"
+        loading={revokingId !== null}
+        onConfirm={handleRevoke}
+      />
     </div>
   );
 }

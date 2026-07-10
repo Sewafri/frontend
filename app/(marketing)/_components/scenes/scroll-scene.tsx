@@ -14,7 +14,7 @@ const MESSAGES = ["💡", "❤️", "🔥", "⭐", "🎯"];
 function PhoneGlow() {
   return (
     <motion.div
-      className="absolute -inset-3 rounded-2xl bg-lime-400/10 blur-md"
+      className="absolute -inset-3 rounded-2xl bg-accent-400/10 blur-md"
       animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.04, 1] }}
       transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
     />
@@ -38,7 +38,7 @@ export default function ScrollScene({ className }: ScrollSceneProps) {
 
   return (
     <div className={cn("relative flex flex-col items-center py-10 select-none", className)}>
-      <style>{`.holo{filter:drop-shadow(0 0 3px rgba(79,127,31,.5)) drop-shadow(0 0 8px rgba(79,127,31,.25));opacity:.75}`}</style>
+      <style>{`.holo{filter:drop-shadow(0 0 3px rgba(148,163,184,.5)) drop-shadow(0 0 8px rgba(148,163,184,.25));opacity:.75}`}</style>
       {/* ── Phone with glow ── */}
       <div className="holo relative mb-1">
         <PhoneGlow />
@@ -58,18 +58,18 @@ export default function ScrollScene({ className }: ScrollSceneProps) {
         >
           <svg width="28" height="40" viewBox="0 0 28 40">
             <rect x="1" y="1" width="26" height="38" rx="4" fill="#1f2937" stroke="#374151" strokeWidth="1.2" />
-            <rect x="4" y="4" width="20" height="28" rx="2" fill="#4F7F1F" stroke="#92400e" strokeWidth="0.4" />
+            <rect x="4" y="4" width="20" height="28" rx="2" fill="#64748b" stroke="#475569" strokeWidth="0.4" />
             {/* Screen content */}
             <motion.g
               animate={{ opacity: [0.3, 0.6, 0.3] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <rect x="6" y="6" width="16" height="2" rx="1" fill="#4F7F1F" stroke="#92400e" strokeWidth="0.3" opacity={0.6} />
-              <rect x="6" y="10" width="12" height="1.5" rx="0.75" fill="#4F7F1F" stroke="#92400e" strokeWidth="0.3" opacity={0.4} />
-              <rect x="6" y="13" width="14" height="1.5" rx="0.75" fill="#4F7F1F" stroke="#92400e" strokeWidth="0.3" opacity={0.4} />
-              <rect x="6" y="17" width="16" height="2" rx="1" fill="#4F7F1F" stroke="#92400e" strokeWidth="0.3" opacity={0.5} />
-              <rect x="6" y="21" width="10" height="1.5" rx="0.75" fill="#4F7F1F" stroke="#92400e" strokeWidth="0.3" opacity={0.4} />
-              <rect x="6" y="25" width="14" height="1.5" rx="0.75" fill="#4F7F1F" stroke="#92400e" strokeWidth="0.3" opacity={0.4} />
+              <rect x="6" y="6" width="16" height="2" rx="1" fill="#64748b" stroke="#475569" strokeWidth="0.3" opacity={0.6} />
+              <rect x="6" y="10" width="12" height="1.5" rx="0.75" fill="#64748b" stroke="#475569" strokeWidth="0.3" opacity={0.4} />
+              <rect x="6" y="13" width="14" height="1.5" rx="0.75" fill="#64748b" stroke="#475569" strokeWidth="0.3" opacity={0.4} />
+              <rect x="6" y="17" width="16" height="2" rx="1" fill="#64748b" stroke="#475569" strokeWidth="0.3" opacity={0.5} />
+              <rect x="6" y="21" width="10" height="1.5" rx="0.75" fill="#64748b" stroke="#475569" strokeWidth="0.3" opacity={0.4} />
+              <rect x="6" y="25" width="14" height="1.5" rx="0.75" fill="#64748b" stroke="#475569" strokeWidth="0.3" opacity={0.4} />
             </motion.g>
             {/* Home indicator */}
             <rect x="9" y="35" width="10" height="2" rx="1" fill="#4b5563" />
@@ -78,7 +78,7 @@ export default function ScrollScene({ className }: ScrollSceneProps) {
             {/* Notification badge */}
             <motion.circle
               cx="19" cy="7" r="3"
-              fill="#ef4444"
+              fill="#94a3b8"
               animate={{ scale: [1, 1.15, 1] }}
               transition={{ duration: 1.5, repeat: Infinity }}
             />
@@ -101,7 +101,7 @@ export default function ScrollScene({ className }: ScrollSceneProps) {
 
       {/* ── Screen reflection shine ── */}
       <motion.div
-        className="h-1 w-16 rounded-full bg-lime-300/20 blur-[2px]"
+        className="h-1 w-16 rounded-full bg-accent-300/20 blur-[2px]"
         animate={{ scaleX: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }}
         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
       />

@@ -1,4 +1,4 @@
-import { api } from "@/lib/api/client"
+import { api, apiMutate } from "@/lib/api/client"
 import type { Enrollment } from "@/types/db"
 
 export async function getCourseEnrollments(

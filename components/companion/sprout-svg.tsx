@@ -390,12 +390,12 @@ function Ball() {
 function Cake() {
   return (
     <g transform="translate(40, 50)">
-      <path d="M-5 0 L5 0 L7 -4 L-7 -4 Z" fill="#fca5a5" stroke="#f43f5e" strokeWidth="0.6" />
-      <path d="M-7 -3 L7 -3 L6 -6 L-6 -6 Z" fill="#fef3c7" stroke="#f59e0b" strokeWidth="0.6" />
-      <path d="M-6 -5 L6 -5 L4 -8 L-4 -8 Z" fill="#fbcfe8" stroke="#f472b6" strokeWidth="0.6" />
-      <circle cx="2.5" cy="-7" r="1.2" fill="#ef4444" />
-      <rect x="-1.5" y="-10" width="0.6" height="3" rx="0.3" fill="#fbbf24" />
-      <path d="M-1.5 -10 Q0 -12 1.5 -10" stroke="#f59e0b" strokeWidth="0.5" fill="none" />
+      <path d="M-5 0 L5 0 L7 -4 L-7 -4 Z" fill="#d4d4d4" stroke="#737373" strokeWidth="0.6" />
+      <path d="M-7 -3 L7 -3 L6 -6 L-6 -6 Z" fill="#e5e5e5" stroke="#a3a3a3" strokeWidth="0.6" />
+      <path d="M-6 -5 L6 -5 L4 -8 L-4 -8 Z" fill="#f5f5f5" stroke="#d4d4d4" strokeWidth="0.6" />
+      <circle cx="2.5" cy="-7" r="1.2" fill="#94a3b8" />
+      <rect x="-1.5" y="-10" width="0.6" height="3" rx="0.3" fill="#94a3b8" />
+      <path d="M-1.5 -10 Q0 -12 1.5 -10" stroke="#64748b" strokeWidth="0.5" fill="none" />
     </g>
   );
 }
@@ -405,8 +405,8 @@ function Phone() {
   return (
     <g transform="translate(40, 48)">
       <rect x="-3.5" y="-7" width="7" height="12" rx="1.2" fill="#1f2937" stroke="#374151" strokeWidth="0.6" />
-      <rect x="-2.5" y="-5.5" width="5" height="8" rx="0.5" fill="#60a5fa" />
-      <rect x="-2" y="-4.5" width="4" height="3" rx="0.3" fill="#93c5fd" opacity="0.6" />
+      <rect x="-2.5" y="-5.5" width="5" height="8" rx="0.5" fill="#94a3b8" />
+      <rect x="-2" y="-4.5" width="4" height="3" rx="0.3" fill="#cbd5e1" opacity="0.6" />
       <circle cx="0" cy="4.5" r="0.6" fill="#4b5563" />
       <circle cx="-1.2" cy="-1" r="0.3" fill="white" opacity="0.8" />
       <circle cx="1" cy="-1" r="0.3" fill="white" opacity="0.6" />

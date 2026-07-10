@@ -56,7 +56,7 @@ export default function PlayScene({ className }: PlaySceneProps) {
               return (
                 <line
                   key={a} x1="25" y1="25" x2={x} y2={y}
-                  stroke="#4F7F1F" strokeWidth="2.5" strokeLinecap="round"
+                  stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round"
                   className="origin-center"
                   style={{ animation: `sprout-burst 0.5s ease-out forwards` }}
                 />
@@ -90,8 +90,8 @@ export default function PlayScene({ className }: PlaySceneProps) {
           <Companion variant="celebrating" size="sm" tone="sky" animate intensity={celebrate ? "high" : "normal"} />
           {celebrate && (
             <svg width="16" height="16" viewBox="0 0 16 16" className="holo absolute -top-2 -right-3">
-              <path d="M8 2 L8.8 5.2 L12 6 L8.8 6.8 L8 10 L7.2 6.8 L4 6 L7.2 5.2 Z" fill="#4F7F1F" stroke="#92400e" strokeWidth="0.8" />
-              <path d="M4 1 L4.4 2.8 L6.2 3.2 L4.4 3.6 L4 5.4 L3.6 3.6 L1.8 3.2 L3.6 2.8 Z" fill="#4F7F1F" stroke="#78350f" strokeWidth="0.5" opacity="0.6" />
+              <path d="M8 2 L8.8 5.2 L12 6 L8.8 6.8 L8 10 L7.2 6.8 L4 6 L7.2 5.2 Z" fill="#94a3b8" stroke="#475569" strokeWidth="0.8" />
+              <path d="M4 1 L4.4 2.8 L6.2 3.2 L4.4 3.6 L4 5.4 L3.6 3.6 L1.8 3.2 L3.6 2.8 Z" fill="#94a3b8" stroke="#334155" strokeWidth="0.5" opacity="0.6" />
             </svg>
           )}
         </motion.div>
@@ -107,7 +107,7 @@ export default function PlayScene({ className }: PlaySceneProps) {
           100% { opacity: 0; transform: scale(1.3); }
         }
         .holo {
-          filter: drop-shadow(0 0 3px rgba(79,127,31,.5)) drop-shadow(0 0 8px rgba(79,127,31,.25));
+          filter: drop-shadow(0 0 3px rgba(148,163,184,.5)) drop-shadow(0 0 8px rgba(148,163,184,.25));
           opacity: .75;
         }
       `}</style>

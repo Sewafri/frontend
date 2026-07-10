@@ -4,8 +4,9 @@ import { useState } from "react";
 import { PageHeader } from "@/components/ui/page-header";
 import GlassCard from "@/components/ui/glass-card";
 import { useAuth } from "@/lib/auth/auth-context";
-import { updateProfile } from "@/lib/data/users";
-import { User, Lock, Bell, CreditCard } from "lucide-react";
+import { updateProfile, deleteAccount } from "@/lib/data/users";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import { User, Lock, Bell, CreditCard, TriangleAlert } from "lucide-react";
 
 const NOTIFICATION_SETTINGS = [
   { label: "Course updates", description: "Get notified when course content is updated" },
@@ -20,6 +21,8 @@ export default function SettingsPage() {
   const [bio, setBio] = useState("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   async function handleSave() {
     setSaving(true);
@@ -139,6 +142,41 @@ export default function SettingsPage() {
               Payment history will appear here once available.
             </p>
           </GlassCard>
+        </section>
+
+        <section>
+          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-accent-red">
+            <TriangleAlert className="h-5 w-5" /> Danger Zone
+          </h2>
+          <GlassCard>
+            <p className="mb-4 text-sm text-text-secondary">
+              Permanently delete your account and all associated data. This action cannot be undone.
+            </p>
+            <button
+              onClick={() => setDeleteOpen(true)}
+              disabled={deleting}
+              className="cursor-pointer rounded-lg border border-accent-red/30 px-4 py-2 text-sm font-medium text-accent-red transition-colors hover:bg-accent-red/10 disabled:opacity-50"
+            >
+              {deleting ? "Deleting..." : "Delete Account"}
+            </button>
+          </GlassCard>
+
+          <ConfirmDialog
+            open={deleteOpen}
+            onOpenChange={setDeleteOpen}
+            title="Delete Account"
+            description="Are you sure you want to delete your account? This cannot be undone."
+            confirmLabel="Delete Account"
+            variant="destructive"
+            loading={deleting}
+            onConfirm={async () => {
+              setDeleting(true);
+              try {
+                await deleteAccount();
+                window.location.href = "/sign-in";
+              } catch { setDeleting(false); setDeleteOpen(false) }
+            }}
+          />
         </section>
       </div>
     </div>

@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import GlassCard from "@/components/ui/glass-card";
 import { ArrowLeft, Plus, FileQuestion, Edit3, Trash2 } from "lucide-react";
 import { getCourseQuizzes, createCourseQuiz, deleteQuiz, type QuizSummary } from "@/lib/data/quiz";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
 export default function QuizListPage() {
   const params = useParams();
@@ -14,6 +15,8 @@ export default function QuizListPage() {
   const courseId = params.id as string;
   const [quizzes, setQuizzes] = useState<QuizSummary[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const fetchQuizzes = useCallback(async () => {
     try {
@@ -37,11 +40,15 @@ export default function QuizListPage() {
     } catch {}
   }
 
-  async function handleDelete(quizId: string) {
+  async function handleDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
     try {
-      await deleteQuiz(quizId);
+      await deleteQuiz(deleteTarget);
+      setDeleteTarget(null);
       await fetchQuizzes();
-    } catch {}
+    } catch { setDeleteTarget(null) }
+    finally { setDeleting(false) }
   }
 
   return (
@@ -80,13 +87,24 @@ export default function QuizListPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Link href={`/instructor/courses/${courseId}/quiz/${quiz.id}`} className="rounded-lg border border-border-default px-3 py-1.5 text-xs font-medium text-text-secondary transition-colors hover:text-text-primary"><Edit3 className="h-3.5 w-3.5 inline mr-1" />Edit</Link>
-                  <button onClick={() => handleDelete(quiz.id)} className="cursor-pointer rounded-lg border border-border-default px-3 py-1.5 text-xs font-medium text-accent-red transition-colors hover:bg-accent-red/10"><Trash2 className="h-3.5 w-3.5 inline mr-1" />Delete</button>
+                  <button onClick={() => setDeleteTarget(quiz.id)} className="cursor-pointer rounded-lg border border-border-default px-3 py-1.5 text-xs font-medium text-accent-red transition-colors hover:bg-accent-red/10"><Trash2 className="h-3.5 w-3.5 inline mr-1" />Delete</button>
                 </div>
               </div>
             </GlassCard>
           ))}
         </div>
       )}
+
+      <ConfirmDialog
+        open={!!deleteTarget}
+        onOpenChange={(o) => { if (!o) setDeleteTarget(null) }}
+        title="Delete Quiz"
+        description="Are you sure you want to delete this quiz? This action cannot be undone."
+        confirmLabel="Delete"
+        variant="destructive"
+        loading={deleting}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 }

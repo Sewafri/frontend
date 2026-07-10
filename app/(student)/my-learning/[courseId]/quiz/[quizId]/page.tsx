@@ -18,6 +18,7 @@ import { useQuizIntegrity } from "@/hooks/use-quiz-integrity";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import { SessionIndicator } from "@/components/quiz/session-indicator";
 import { ApiError } from "@/lib/api/client";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import type { QuizSession } from "@/types/db";
 
 export default function QuizPage() {
@@ -43,6 +44,7 @@ export default function QuizPage() {
   const [pageLoading, setPageLoading] = useState(true);
   const [attemptId, setAttemptId] = useState<string | null>(null);
   const [maxedOut, setMaxedOut] = useState(false);
+  const [leaveConfirmOpen, setLeaveConfirmOpen] = useState(false);
 
   const integrity = useQuizIntegrity({
     quizId,
@@ -269,10 +271,7 @@ export default function QuizPage() {
           onClick={(e) => {
             if (!submitted) {
               e.preventDefault();
-              if (confirm("Leave the quiz? Your progress will not be saved.")) {
-                integrity.cleanup();
-                router.push(`/my-learning/${courseId}`);
-              }
+              setLeaveConfirmOpen(true);
             }
           }}
         >
@@ -488,6 +487,18 @@ export default function QuizPage() {
           </motion.div>
         </motion.div>
       )}
+      <ConfirmDialog
+        open={leaveConfirmOpen}
+        onOpenChange={setLeaveConfirmOpen}
+        title="Leave the quiz?"
+        description="Your progress will not be saved."
+        confirmLabel="Leave"
+        variant="destructive"
+        onConfirm={() => {
+          integrity.cleanup();
+          router.push(`/my-learning/${courseId}`);
+        }}
+      />
     </div>
   );
 }

@@ -1,3 +1,5 @@
+import { toast } from "sonner"
+
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1"
 
 export class ApiError extends Error {
@@ -104,7 +106,9 @@ export async function api<T>(
   try {
     res = await fetch(url, { ...fetchOptions, headers })
   } catch {
-    throw new ApiError(0, "NETWORK_ERROR", "Unable to reach the server. Is the backend running?")
+    const msg = "Unable to reach the server. Is the backend running?"
+    toast.error(msg)
+    throw new ApiError(0, "NETWORK_ERROR", msg)
   }
 
   if (res.status === 204) {
@@ -133,23 +137,29 @@ export async function api<T>(
   const json = await res.json().catch(() => null)
 
   if (!res.ok) {
-    throw new ApiError(
-      res.status,
-      json?.code ?? "UNKNOWN_ERROR",
-      json?.message ?? `Request failed with status ${res.status}`,
-    )
+    const msg = json?.message ?? `Request failed with status ${res.status}`
+    toast.error(msg)
+    throw new ApiError(res.status, json?.code ?? "UNKNOWN_ERROR", msg)
   }
 
   if (json && typeof json === "object" && "success" in json) {
     if (json.success === true && "data" in json) {
       return json.data as T
     }
-    throw new ApiError(
-      res.status,
-      json.code ?? "API_ERROR",
-      json.message ?? "Unknown API error",
-    )
+    const msg = json.message ?? "Unknown API error"
+    toast.error(msg)
+    throw new ApiError(res.status, json.code ?? "API_ERROR", msg)
   }
 
   return json as T
+}
+
+export async function apiMutate<T>(
+  path: string,
+  options: RequestInit & { params?: Record<string, string | undefined> } = {},
+  successMessage?: string,
+): Promise<T> {
+  const result = await api<T>(path, options)
+  if (successMessage) toast.success(successMessage)
+  return result
 }
