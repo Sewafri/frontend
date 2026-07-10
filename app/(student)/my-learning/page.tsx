@@ -8,6 +8,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import { getMyEnrollments } from "@/lib/data/enrollments";
 import { BookOpen, Calendar, Flame, Clock } from "lucide-react";
 import Link from "next/link";
+import Companion from "@/components/companion/companion";
 import type { Enrollment } from "@/types/db";
 
 export default function MyLearningPage() {
@@ -89,12 +90,22 @@ export default function MyLearningPage() {
           <p className="text-sm text-text-secondary">Loading enrollments...</p>
         ) : enrolledCourses.length === 0 ? (
           <GlassCard>
-            <p className="py-6 text-center text-sm text-text-secondary">
-              No enrollments yet.{" "}
-              <Link href="/courses" className="text-accent-500 hover:underline">
-                Browse courses
+            <div className="flex flex-col items-center py-6">
+              <Companion
+                message="Ready to start? Pick a course that excites you."
+                variant="thinking"
+                size="lg"
+                bubblePosition="top"
+                animate
+                className="mb-4"
+              />
+              <Link
+                href="/courses"
+                className="mt-2 rounded-lg bg-accent-500 px-5 py-2 text-sm font-medium text-text-on-accent transition-colors hover:bg-accent-500/90"
+              >
+                Browse Courses
               </Link>
-            </p>
+            </div>
           </GlassCard>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2">

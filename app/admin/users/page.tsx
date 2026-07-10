@@ -50,7 +50,7 @@ export default function AdminUsersPage() {
       await suspendUser(userId);
       fetchUsers();
     } catch {
-      alert("Failed to suspend user");
+      // error toast handled by api() client
     } finally {
       setActionUserId(null);
     }
@@ -62,7 +62,7 @@ export default function AdminUsersPage() {
       await reactivateUser(userId);
       fetchUsers();
     } catch {
-      alert("Failed to reactivate user");
+      // error toast handled by api() client
     } finally {
       setActionUserId(null);
     }
@@ -74,7 +74,7 @@ export default function AdminUsersPage() {
       await changeUserRole(userId, role);
       fetchUsers();
     } catch {
-      alert("Failed to change role");
+      // error toast handled by api() client
     } finally {
       setActionUserId(null);
     }

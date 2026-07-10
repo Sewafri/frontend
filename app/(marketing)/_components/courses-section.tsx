@@ -5,7 +5,7 @@ import { CourseCard } from "@/components/courses/course-card";
 
 export default function CoursesSection() {
   return (
-    <section className="py-20">
+    <section id="courses" className="py-20">
       <div className="mb-10 flex items-end justify-between">
         <div>
           <div className="inline-flex items-center gap-2 rounded-full border border-accent-500/10 bg-accent-50/50 px-3 py-1 text-xs font-medium text-accent-500 mb-3">

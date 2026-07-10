@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/ui/page-header";
 import GlassCard from "@/components/ui/glass-card";
 import { ArrowLeft, Plus, GripVertical, FileText, Play, FileQuestion, Trash2 } from "lucide-react";
 import { getLessons, createLesson, deleteLesson, reorderLesson } from "@/lib/data/lessons";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import type { Lesson } from "@/types/db";
 
 const typeIcons = { VIDEO: Play, TEXT: FileText, MIXED: FileText, CODE: FileQuestion } as const;
@@ -18,6 +19,8 @@ export default function CurriculumPage() {
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
   const [newTitle, setNewTitle] = useState("");
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const fetchLessons = useCallback(async () => {
     try {
@@ -50,11 +53,15 @@ export default function CurriculumPage() {
     }
   }
 
-  async function handleDelete(lessonId: string) {
+  async function handleDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
     try {
-      await deleteLesson(lessonId);
+      await deleteLesson(deleteTarget);
+      setDeleteTarget(null);
       await fetchLessons();
-    } catch {}
+    } catch { setDeleteTarget(null) }
+    finally { setDeleting(false) }
   }
 
   async function handleReorder(lessonId: string, newIndex: number) {
@@ -123,7 +130,7 @@ export default function CurriculumPage() {
                   >
                     Edit
                   </Link>
-                  <button onClick={() => handleDelete(lesson.id)} className="cursor-pointer text-accent-red hover:text-accent-red/80" aria-label="Delete lesson">
+                  <button onClick={() => setDeleteTarget(lesson.id)} className="cursor-pointer text-accent-red hover:text-accent-red/80" aria-label="Delete lesson">
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
                 </div>
@@ -132,6 +139,17 @@ export default function CurriculumPage() {
           })}
         </div>
       )}
+
+      <ConfirmDialog
+        open={!!deleteTarget}
+        onOpenChange={(o) => { if (!o) setDeleteTarget(null) }}
+        title="Delete Lesson"
+        description="Are you sure you want to delete this lesson? This action cannot be undone."
+        confirmLabel="Delete"
+        variant="destructive"
+        loading={deleting}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 }

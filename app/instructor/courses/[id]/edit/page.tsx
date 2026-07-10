@@ -6,7 +6,8 @@ import Link from "next/link";
 import { PageHeader } from "@/components/ui/page-header";
 import GlassCard from "@/components/ui/glass-card";
 import { Save, ArrowLeft, Trash2 } from "lucide-react";
-import { getCourseById, updateCourse, deleteCourse } from "@/lib/data/courses";
+import { getCourseById, updateCourse, deleteCourse, publishCourse, unpublishCourse } from "@/lib/data/courses";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import type { Course } from "@/types/db";
 
 export default function EditCoursePage() {
@@ -20,6 +21,8 @@ export default function EditCoursePage() {
   const [price, setPrice] = useState("");
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [publishing, setPublishing] = useState(false);
 
   useEffect(() => {
     if (params.id) {
@@ -60,7 +63,28 @@ export default function EditCoursePage() {
       router.push("/instructor/courses");
     } catch {
       setDeleting(false);
+      setDeleteOpen(false);
     }
+  }
+
+  async function handlePublish() {
+    if (!params.id) return;
+    setPublishing(true);
+    try {
+      const updated = await publishCourse(params.id as string);
+      setCourse(updated);
+    } catch { /* noop */ }
+    finally { setPublishing(false); }
+  }
+
+  async function handleUnpublish() {
+    if (!params.id) return;
+    setPublishing(true);
+    try {
+      const updated = await unpublishCourse(params.id as string);
+      setCourse(updated);
+    } catch { /* noop */ }
+    finally { setPublishing(false); }
   }
 
   if (loading) {
@@ -117,15 +141,25 @@ export default function EditCoursePage() {
             </div>
             <div>
               <label className="mb-1.5 block text-xs font-medium text-text-secondary">Status</label>
-              <select defaultValue={course.status} className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary outline-none focus:border-accent-500/50">
-                <option>Draft</option>
-                <option>Published</option>
-              </select>
+              <div className="flex items-center gap-2">
+                <span className={`text-sm font-medium ${course.status === "PUBLISHED" ? "text-accent-green" : "text-accent-amber"}`}>
+                  {course.status === "PUBLISHED" ? "Published" : course.status === "DRAFT" ? "Draft" : "Unpublished"}
+                </span>
+                {course.status === "PUBLISHED" ? (
+                  <button onClick={handleUnpublish} disabled={publishing} className="cursor-pointer text-xs text-accent-red hover:text-accent-red/80 disabled:opacity-50">
+                    {publishing ? "..." : "Unpublish"}
+                  </button>
+                ) : (
+                  <button onClick={handlePublish} disabled={publishing} className="cursor-pointer text-xs text-accent-green hover:text-accent-green/80 disabled:opacity-50">
+                    {publishing ? "..." : "Publish"}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
 
           <div className="flex items-center justify-between border-t border-border-default pt-6">
-            <button onClick={handleDelete} disabled={deleting} className="cursor-pointer flex items-center gap-2 rounded-lg border border-accent-red/30 px-4 py-2 text-sm font-medium text-accent-red transition-colors hover:bg-accent-red/10 disabled:opacity-50">
+            <button onClick={() => setDeleteOpen(true)} disabled={deleting} className="cursor-pointer flex items-center gap-2 rounded-lg border border-accent-red/30 px-4 py-2 text-sm font-medium text-accent-red transition-colors hover:bg-accent-red/10 disabled:opacity-50">
               <Trash2 className="h-4 w-4" /> {deleting ? "Deleting..." : "Delete Course"}
             </button>
             <div className="flex items-center gap-3">
@@ -137,6 +171,17 @@ export default function EditCoursePage() {
           </div>
         </div>
       </GlassCard>
+
+      <ConfirmDialog
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+        title="Delete Course"
+        description="Are you sure you want to delete this course? This action cannot be undone."
+        confirmLabel="Delete"
+        variant="destructive"
+        loading={deleting}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 }

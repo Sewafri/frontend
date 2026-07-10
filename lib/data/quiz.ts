@@ -1,4 +1,4 @@
-import { api } from "@/lib/api/client"
+import { api, apiMutate } from "@/lib/api/client"
 import type { QuizAttempt, QuizSession, StartAttemptResult } from "@/types/db"
 
 export interface QuizManageSession {
@@ -32,9 +32,10 @@ export async function getQuizQuestions(quizId: string): Promise<QuizSession> {
 }
 
 export async function startQuizAttempt(quizId: string): Promise<StartAttemptResult> {
-  const data = await api<StartAttemptResult>(`/quizzes/${quizId}/start`, {
-    method: "POST",
-  })
+  const data = await apiMutate<StartAttemptResult>(
+    `/quizzes/${quizId}/start`,
+    { method: "POST" },
+  )
   return data
 }
 
@@ -46,14 +47,18 @@ export async function submitQuiz(
     attemptId?: string
   },
 ): Promise<QuizAttempt> {
-  const data = await api<QuizAttempt>(`/quizzes/${quizId}/submit`, {
-    method: "POST",
-    body: JSON.stringify({
-      answers,
-      integrityReport: options?.integrityReport,
-      attemptId: options?.attemptId,
-    }),
-  })
+  const data = await apiMutate<QuizAttempt>(
+    `/quizzes/${quizId}/submit`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        answers,
+        integrityReport: options?.integrityReport,
+        attemptId: options?.attemptId,
+      }),
+    },
+    "Quiz submitted",
+  )
   return data
 }
 
@@ -73,10 +78,11 @@ export async function createCourseQuiz(
     isFinalAssessment?: boolean
   },
 ): Promise<QuizSummary> {
-  const data = await api<{ quiz: QuizSummary }>(`/courses/${courseId}/quizzes`, {
-    method: "POST",
-    body: JSON.stringify(input),
-  })
+  const data = await apiMutate<{ quiz: QuizSummary }>(
+    `/courses/${courseId}/quizzes`,
+    { method: "POST", body: JSON.stringify(input) },
+    "Quiz created",
+  )
   return data.quiz
 }
 
@@ -91,15 +97,16 @@ export async function updateQuiz(
     isFinalAssessment: boolean
   }>,
 ): Promise<QuizSummary> {
-  const data = await api<{ quiz: QuizSummary }>(`/quizzes/${quizId}`, {
-    method: "PATCH",
-    body: JSON.stringify(input),
-  })
+  const data = await apiMutate<{ quiz: QuizSummary }>(
+    `/quizzes/${quizId}`,
+    { method: "PATCH", body: JSON.stringify(input) },
+    "Quiz updated",
+  )
   return data.quiz
 }
 
 export async function deleteQuiz(quizId: string): Promise<void> {
-  await api(`/quizzes/${quizId}`, { method: "DELETE" })
+  await apiMutate(`/quizzes/${quizId}`, { method: "DELETE" }, "Quiz deleted")
 }
 
 export async function addQuizQuestion(
@@ -112,10 +119,11 @@ export async function addQuizQuestion(
     options: { text: string; isCorrect: boolean }[]
   },
 ): Promise<QuizQuestion> {
-  const data = await api<{ question: QuizQuestion }>(`/quizzes/${quizId}/questions`, {
-    method: "POST",
-    body: JSON.stringify(input),
-  })
+  const data = await apiMutate<{ question: QuizQuestion }>(
+    `/quizzes/${quizId}/questions`,
+    { method: "POST", body: JSON.stringify(input) },
+    "Question added",
+  )
   return data.question
 }
 
@@ -129,12 +137,10 @@ export async function updateQuizQuestion(
     options: { id?: string; text: string; isCorrect: boolean }[]
   }>,
 ): Promise<QuizQuestion> {
-  const data = await api<{ question: QuizQuestion }>(
+  const data = await apiMutate<{ question: QuizQuestion }>(
     `/quizzes/${quizId}/questions/${questionId}`,
-    {
-      method: "PATCH",
-      body: JSON.stringify(input),
-    },
+    { method: "PATCH", body: JSON.stringify(input) },
+    "Question updated",
   )
   return data.question
 }
@@ -143,7 +149,11 @@ export async function deleteQuizQuestion(
   quizId: string,
   questionId: string,
 ): Promise<void> {
-  await api(`/quizzes/${quizId}/questions/${questionId}`, { method: "DELETE" })
+  await apiMutate(
+    `/quizzes/${quizId}/questions/${questionId}`,
+    { method: "DELETE" },
+    "Question deleted",
+  )
 }
 
 export interface QuizSummary {

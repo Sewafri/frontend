@@ -52,13 +52,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(async () => {
     const { refreshToken } = getStoredTokens()
-    try {
-      await api("/auth/logout", {
-        method: "POST",
-        body: JSON.stringify({ refreshToken }),
-      })
-    } catch {
-      // idempotent — always clear local state
+    if (refreshToken) {
+      try {
+        await api("/auth/logout", {
+          method: "POST",
+          body: JSON.stringify({ refreshToken }),
+        })
+      } catch {
+        // idempotent — always clear local state
+      }
     }
     clearTokens()
     setUser(null)
