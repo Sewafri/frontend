@@ -9,10 +9,11 @@ export async function getForumThreads(courseId: string): Promise<ForumThread[]> 
 export async function createForumThread(
   courseId: string,
   title: string,
+  body?: string,
 ): Promise<ForumThread> {
   const data = await apiMutate<{ thread: ForumThread }>(
     `/courses/${courseId}/forum/threads`,
-    { method: "POST", body: JSON.stringify({ title }) },
+    { method: "POST", body: JSON.stringify({ title, body: body || title }) },
     "Thread created",
   )
   return data.thread
@@ -35,6 +36,7 @@ export async function getForumThread(
 ): Promise<{ thread: ForumThread & { posts: ForumPost[] } }> {
   const data = await api<{ thread: ForumThread & { posts: ForumPost[] } }>(
     `/forum/threads/${threadId}`,
+    { silent: true },
   )
   return data
 }
@@ -91,6 +93,13 @@ export async function deleteForumPost(postId: string): Promise<void> {
 export async function toggleUpvotePost(postId: string): Promise<{ upvoted: boolean }> {
   return apiMutate<{ upvoted: boolean }>(
     `/forum/posts/${postId}/upvote`,
-    { method: "POST" },
+    { method: "PUT" },
+  )
+}
+
+export async function removeUpvotePost(postId: string): Promise<{ upvoted: boolean }> {
+  return apiMutate<{ upvoted: boolean }>(
+    `/forum/posts/${postId}/upvote`,
+    { method: "DELETE" },
   )
 }

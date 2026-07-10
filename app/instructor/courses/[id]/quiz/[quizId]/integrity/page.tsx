@@ -165,13 +165,17 @@ export default function IntegrityReviewPage() {
         description={`${attempts.length} total submissions · ${flaggedAttempts} with flags · ${totalFlags} total flags`}
       />
 
-      {error && (
+      {error && error.includes("not found") ? (
+        <div className="mb-4 rounded-lg bg-accent-amber/10 px-4 py-3 text-sm text-accent-amber">
+          Integrity review will be available once quiz attempts are tracked on the backend.
+        </div>
+      ) : error ? (
         <div className="mb-4 rounded-lg bg-accent-red/10 p-3 text-sm text-accent-red">
           {error}
         </div>
-      )}
+      ) : null}
 
-      {attempts.length === 0 ? (
+      {attempts.length === 0 && !error ? (
         <div className="flex flex-col items-center py-16 text-text-tertiary">
           <Shield className="mb-3 h-10 w-10" />
           <p className="text-sm">No submissions yet</p>

@@ -1,7 +1,13 @@
 import { api, apiMutate } from "@/lib/api/client"
 import type { Lesson } from "@/types/db"
 
-export async function getLesson(id: string): Promise<Lesson> {
+export async function getLesson(id: string, courseId?: string): Promise<Lesson> {
+  if (courseId) {
+    const lessons = await getLessons(courseId)
+    const lesson = lessons.find((l) => l.id === id)
+    if (!lesson) throw new Error("Lesson not found")
+    return lesson
+  }
   const data = await api<{ lesson: Lesson }>(`/lessons/${id}`)
   return data.lesson
 }

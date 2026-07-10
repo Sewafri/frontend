@@ -12,7 +12,7 @@ import {
 import { PageHeader } from "@/components/ui/page-header";
 import Companion from "@/components/companion/companion";
 import {
-  submitQuiz, getQuizQuestions, startQuizAttempt,
+  submitQuiz, getQuizQuestions,
 } from "@/lib/data/quiz";
 import { useQuizIntegrity } from "@/hooks/use-quiz-integrity";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
@@ -42,7 +42,6 @@ export default function QuizPage() {
   } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pageLoading, setPageLoading] = useState(true);
-  const [attemptId, setAttemptId] = useState<string | null>(null);
   const [maxedOut, setMaxedOut] = useState(false);
   const [leaveConfirmOpen, setLeaveConfirmOpen] = useState(false);
 
@@ -68,9 +67,6 @@ export default function QuizPage() {
         if (data.requireFullscreen) {
           await integrity.enterFullscreen();
         }
-
-        const started = await startQuizAttempt(quizId);
-        setAttemptId(started.attemptId);
       } catch (err) {
         if (err instanceof ApiError) {
           if (
@@ -105,10 +101,7 @@ export default function QuizPage() {
     setSubmitting(true);
     setError(null);
     try {
-      const attempt = await submitQuiz(quizId, answers, {
-        integrityReport: integrity.report as unknown as Record<string, unknown>,
-        attemptId: attemptId ?? undefined,
-      });
+      const attempt = await submitQuiz(quizId, answers);
       setResult({
         score: attempt.score,
         passed: attempt.passed,
@@ -132,7 +125,7 @@ export default function QuizPage() {
     } finally {
       setSubmitting(false);
     }
-  }, [session, quizId, answers, attemptId, integrity]);
+  }, [session, quizId, answers, integrity]);
 
   useEffect(() => {
     if (submitted && result?.passed && !reduced && !confettiFired.current) {

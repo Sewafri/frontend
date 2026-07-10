@@ -5,8 +5,14 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { BookOpen, User, ChevronDown, Play } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
+import { RatingStars } from "@/components/ui/rating-stars";
+import { WishlistButton } from "@/components/courses/wishlist-button";
+import { ReviewSection } from "@/components/courses/review-section";
+import { CryptoEnroll } from "@/components/courses/crypto-enroll";
 import { getCourseById, enrollInCourse } from "@/lib/data/courses";
 import { getLessons } from "@/lib/data/lessons";
+import { getRatingSummary } from "@/lib/data/ratings";
+import { getMyEnrollments } from "@/lib/data/enrollments";
 import { useAuth } from "@/lib/auth/auth-context";
 import { ApiError } from "@/lib/api/client";
 import type { Course } from "@/types/db";
@@ -18,9 +24,11 @@ export default function CourseDetailPage() {
   const { isAuthenticated } = useAuth();
   const [course, setCourse] = useState<Course | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
+  const [ratingSummary, setRatingSummary] = useState<{ averageRating: number | null; ratingCount: number } | null>(null);
   const [loading, setLoading] = useState(true);
   const [enrolling, setEnrolling] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isEnrolled, setIsEnrolled] = useState(false);
 
   const courseId = params.slug as string;
 
@@ -29,10 +37,14 @@ export default function CourseDetailPage() {
     Promise.all([
       getCourseById(courseId),
       getLessons(courseId).catch(() => [] as Lesson[]),
+      getRatingSummary(courseId).catch(() => null),
+      getMyEnrollments().catch(() => []),
     ])
-      .then(([c, l]) => {
+      .then(([c, l, rs, enrollments]) => {
         setCourse(c);
         setLessons(l);
+        setRatingSummary(rs);
+        setIsEnrolled(enrollments.some((e) => e.courseId === courseId));
       })
       .catch(() => setCourse(null))
       .finally(() => setLoading(false));
@@ -111,6 +123,13 @@ export default function CourseDetailPage() {
                 <User className="h-4 w-4" />
                 {instructorName}
               </span>
+              {ratingSummary && ratingSummary.averageRating != null && (
+                <RatingStars
+                  rating={ratingSummary.averageRating}
+                  reviewCount={ratingSummary.ratingCount}
+                  size="sm"
+                />
+              )}
               {course.skillTags.length > 0 && (
                 <span className="text-xs text-text-tertiary">
                   {course.skillTags.join(", ")}
@@ -122,16 +141,20 @@ export default function CourseDetailPage() {
             <span className="text-3xl font-bold text-accent-500">
               {displayPrice}
             </span>
-            <button
-              onClick={handleEnroll}
-              disabled={enrolling}
-              className="cursor-pointer rounded-lg bg-accent-500 px-8 py-3 font-medium text-text-on-accent transition-colors hover:bg-accent-500/90 disabled:opacity-50"
-            >
-              {enrolling ? "Enrolling..." : "Enroll Now"}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleEnroll}
+                disabled={enrolling}
+                className="cursor-pointer rounded-lg bg-accent-500 px-8 py-3 font-medium text-text-on-accent transition-colors hover:bg-accent-500/90 disabled:opacity-50"
+              >
+                {enrolling ? "Enrolling..." : "Enroll Now"}
+              </button>
+              <WishlistButton courseId={courseId} variant="icon" size="md" />
+            </div>
             {error && (
               <p className="text-xs text-accent-red">{error}</p>
             )}
+            <CryptoEnroll courseId={course.id} onEnrolled={() => router.push(`/my-learning/${courseId}`)} />
           </div>
         </div>
       </div>
@@ -192,6 +215,10 @@ export default function CourseDetailPage() {
             </ul>
           </div>
         </div>
+      </div>
+
+      <div className="mt-8">
+        <ReviewSection courseId={courseId} isEnrolled={isEnrolled} />
       </div>
     </div>
   );

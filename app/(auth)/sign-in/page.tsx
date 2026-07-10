@@ -12,7 +12,7 @@ import { useAuth } from "@/lib/auth/auth-context";
 import { ApiError } from "@/lib/api/client";
 
 function googleSignIn() {
-  const backendUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1"
+  const backendUrl = process.env.NEXT_PUBLIC_API_URL ?? "https://backend-gsqo.onrender.com/api/v1"
   window.location.href = `${backendUrl}/auth/google`
 }
 

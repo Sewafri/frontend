@@ -41,7 +41,7 @@ export async function updateWalletVisibility(
 }
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api/v1"
+  process.env.NEXT_PUBLIC_API_URL ?? "https://backend-gsqo.onrender.com/api/v1"
 
 export async function downloadCertificate(certificateId: string) {
   const raw = localStorage.getItem("auth_tokens")

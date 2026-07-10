@@ -1,12 +1,36 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { PageHeader } from "@/components/ui/page-header";
-import GlassCard from "@/components/ui/glass-card";
-import { GraduationCap, Send } from "lucide-react";
+import { useState } from "react"
+import { PageHeader } from "@/components/ui/page-header"
+import GlassCard from "@/components/ui/glass-card"
+import { GraduationCap, Send, AlertCircle } from "lucide-react"
+import { applyAsInstructor } from "@/lib/data/instructor-applications"
+import { ApiError } from "@/lib/api/client"
 
 export default function InstructorApplyPage() {
-  const [submitted, setSubmitted] = useState(false);
+  const [submitted, setSubmitted] = useState(false)
+  const [expertise, setExpertise] = useState("")
+  const [bio, setBio] = useState("")
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!expertise.trim() || !bio.trim()) {
+      setError("Please fill in all required fields")
+      return
+    }
+    setSubmitting(true)
+    setError(null)
+    try {
+      await applyAsInstructor({ bio: bio.trim(), expertise: expertise.trim() })
+      setSubmitted(true)
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "Failed to submit application")
+    } finally {
+      setSubmitting(false)
+    }
+  }
 
   if (submitted) {
     return (
@@ -24,7 +48,7 @@ export default function InstructorApplyPage() {
           </div>
         </GlassCard>
       </div>
-    );
+    )
   }
 
   return (
@@ -32,58 +56,60 @@ export default function InstructorApplyPage() {
       <PageHeader title="Become an Instructor" description="Share your knowledge with thousands of students" />
 
       <GlassCard>
-        <div className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <h3 className="mb-4 text-sm font-semibold text-text-primary">Personal Information</h3>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label className="mb-1.5 block text-xs font-medium text-text-secondary">Full Name</label>
-                <input type="text" placeholder="Dr. Sarah Wilson" className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary placeholder-text-tertiary outline-none transition-colors focus:border-accent-500/50 focus:ring-2 focus:ring-accent-500/10" />
-              </div>
-              <div>
-                <label className="mb-1.5 block text-xs font-medium text-text-secondary">Email</label>
-                <input type="email" placeholder="sarah@example.com" className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary placeholder-text-tertiary outline-none transition-colors focus:border-accent-500/50 focus:ring-2 focus:ring-accent-500/10" />
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t border-border-default pt-6">
-            <h3 className="mb-4 text-sm font-semibold text-text-primary">Expertise & Experience</h3>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label className="mb-1.5 block text-xs font-medium text-text-secondary">Area of Expertise</label>
-                <select className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary outline-none transition-colors focus:border-accent-500/50 focus:ring-2 focus:ring-accent-500/10">
-                  <option>Web Development</option>
-                  <option>Data Science</option>
-                  <option>UI/UX Design</option>
-                  <option>Mobile Development</option>
-                  <option>DevOps</option>
-                  <option>Other</option>
-                </select>
-              </div>
-              <div>
-                <label className="mb-1.5 block text-xs font-medium text-text-secondary">Years of Experience</label>
-                <select className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary outline-none transition-colors focus:border-accent-500/50 focus:ring-2 focus:ring-accent-500/10">
-                  <option>1-2 years</option>
-                  <option>3-5 years</option>
-                  <option>5-10 years</option>
-                  <option>10+ years</option>
-                </select>
-              </div>
+            <h3 className="mb-4 text-sm font-semibold text-text-primary">Tell Us About Yourself</h3>
+            <div>
+              <label className="mb-1.5 block text-xs font-medium text-text-secondary">
+                Area of Expertise <span className="text-accent-red">*</span>
+              </label>
+              <input
+                type="text"
+                value={expertise}
+                onChange={(e) => setExpertise(e.target.value)}
+                placeholder="e.g., Web Development, Data Science, UI/UX Design"
+                maxLength={500}
+                required
+                className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary placeholder-text-tertiary outline-none transition-colors focus:border-accent-500/50 focus:ring-2 focus:ring-accent-500/10"
+              />
             </div>
             <div className="mt-4">
-              <label className="mb-1.5 block text-xs font-medium text-text-secondary">Bio / Teaching Philosophy</label>
-              <textarea rows={5} placeholder="Tell us about your teaching experience and philosophy..." className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary placeholder-text-tertiary outline-none transition-colors focus:border-accent-500/50 focus:ring-2 focus:ring-accent-500/10" />
+              <label className="mb-1.5 block text-xs font-medium text-text-secondary">
+                Bio / Teaching Philosophy <span className="text-accent-red">*</span>
+              </label>
+              <textarea
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+                rows={5}
+                placeholder="Tell us about your teaching experience, qualifications, and philosophy..."
+                minLength={10}
+                maxLength={5000}
+                required
+                className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary placeholder-text-tertiary outline-none transition-colors focus:border-accent-500/50 focus:ring-2 focus:ring-accent-500/10"
+              />
+              <p className="mt-1 text-right text-xs text-text-tertiary">{bio.length}/5000</p>
             </div>
           </div>
 
+          {error && (
+            <div className="flex items-center gap-2 rounded-lg border border-accent-red/20 bg-accent-red/5 px-4 py-3 text-xs text-accent-red">
+              <AlertCircle className="h-4 w-4 shrink-0" />
+              {error}
+            </div>
+          )}
+
           <div className="flex justify-end border-t border-border-default pt-6">
-            <button onClick={() => setSubmitted(true)} className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-accent-500 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-accent-500/90">
-              <Send className="h-4 w-4" /> Submit Application
+            <button
+              type="submit"
+              disabled={submitting}
+              className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-accent-500 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-accent-500/90 disabled:opacity-50"
+            >
+              <Send className="h-4 w-4" />
+              {submitting ? "Submitting..." : "Submit Application"}
             </button>
           </div>
-        </div>
+        </form>
       </GlassCard>
     </div>
-  );
+  )
 }
