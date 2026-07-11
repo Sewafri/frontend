@@ -62,7 +62,7 @@ export default function CoursesCatalogPage() {
             onClick={() => setActiveCategory(null)}
             className={`cursor-pointer rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
               !activeCategory
-                ? "bg-accent-500 text-text-primary shadow-sm"
+                ? "bg-accent-500 text-text-on-accent shadow-sm"
                 : "bg-surface-card text-text-secondary ring-1 ring-border-default hover:text-text-primary"
             }`}
           >
@@ -74,7 +74,7 @@ export default function CoursesCatalogPage() {
               onClick={() => setActiveCategory(cat)}
               className={`cursor-pointer rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
                 activeCategory === cat
-                  ? "bg-accent-500 text-text-primary shadow-sm"
+                  ? "bg-accent-500 text-text-on-accent shadow-sm"
                   : "bg-surface-card text-text-secondary ring-1 ring-border-default hover:text-text-primary"
               }`}
             >

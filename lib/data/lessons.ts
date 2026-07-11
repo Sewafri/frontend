@@ -28,6 +28,8 @@ export async function createLesson(
     videoUrl?: string
     isRequired?: boolean
     orderIndex?: number
+    language?: string
+    starterCode?: string
   },
 ): Promise<Lesson> {
   const data = await apiMutate<{ lesson: Lesson }>(
@@ -45,6 +47,8 @@ export async function updateLesson(
     contentBody: string
     videoUrl: string
     isRequired: boolean
+    language: string
+    starterCode: string
   }>,
 ): Promise<Lesson> {
   const data = await apiMutate<{ lesson: Lesson }>(
@@ -73,4 +77,69 @@ export async function deleteLesson(id: string): Promise<void> {
 
 export async function completeLesson(id: string): Promise<void> {
   await apiMutate(`/lessons/${id}/complete`, { method: "POST" }, "Lesson completed")
+}
+
+export interface CourseProgress {
+  enrolled: boolean
+  completedLessonIds: string[]
+  progressPercent: number
+  certificateId: string | null
+}
+
+export async function getCourseProgress(courseId: string): Promise<CourseProgress> {
+  const data = await api<CourseProgress>(`/courses/${courseId}/lessons/progress`)
+  return data
+}
+
+export interface CodeExecutionResult {
+  output: string
+  error?: string
+  note?: string
+  clientSide?: boolean
+}
+
+export async function executeCode(
+  lessonId: string,
+  code: string,
+  language: string,
+): Promise<CodeExecutionResult> {
+  const data = await api<CodeExecutionResult>(`/lessons/${lessonId}/execute`, {
+    method: "POST",
+    body: JSON.stringify({ code, language }),
+    silent: true,
+  })
+  return data
+}
+
+export async function saveStudentCode(
+  lessonId: string,
+  code: string,
+  language: string,
+): Promise<void> {
+  await apiMutate(
+    `/lessons/${lessonId}/save-code`,
+    {
+      method: "POST",
+      body: JSON.stringify({ code, language }),
+      silent: true,
+    },
+  )
+}
+
+export async function getStudentCode(
+  lessonId: string,
+): Promise<{ code: string | null; language: string | null }> {
+  const data = await api<{ code: string | null; language: string | null }>(
+    `/lessons/${lessonId}/student-code`,
+    { silent: true },
+  )
+  return data
+}
+
+export async function regenerateQuiz(lessonId: string): Promise<void> {
+  await apiMutate<{ quiz: unknown }>(
+    `/lessons/${lessonId}/regenerate-quiz`,
+    { method: "POST" },
+    undefined,
+  )
 }

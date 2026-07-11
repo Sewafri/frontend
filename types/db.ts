@@ -53,10 +53,14 @@ export interface Lesson {
   contentBody?: string | null
   videoUrl?: string | null
   isRequired: boolean
+  language?: string | null
+  starterCode?: string | null
   courseId: string
   createdAt: string
   updatedAt: string
 }
+
+export type CodeLanguage = "javascript" | "typescript" | "python" | "html" | "css" | "jsx" | "tsx"
 
 export interface Quiz {
   id: string

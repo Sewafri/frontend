@@ -13,6 +13,7 @@ export async function updateProfile(input: {
   fullName?: string
   bio?: string
   avatarUrl?: string
+  walletAddress?: string
 }): Promise<void> {
   await apiMutate("/users/me", {
     method: "PATCH",
@@ -26,4 +27,10 @@ export async function deleteAccount(): Promise<void> {
 
 export async function getPublicProfile(userId: string): Promise<{ user: PublicProfile }> {
   return api<{ user: PublicProfile }>(`/users/${userId}`)
+}
+
+export async function searchUsers(query: string): Promise<{ users: Array<{ id: string; fullName: string; photoUrl: string | null; role: string }> }> {
+  return api<{ users: Array<{ id: string; fullName: string; photoUrl: string | null; role: string }> }>(
+    `/users/search?q=${encodeURIComponent(query)}`,
+  )
 }

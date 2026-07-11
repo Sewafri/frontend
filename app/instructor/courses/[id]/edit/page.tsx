@@ -172,7 +172,7 @@ export default function EditCoursePage() {
             </button>
             <div className="flex items-center gap-3">
               <Link href={`/instructor/courses/${params.id}/curriculum`} className="rounded-lg border border-border-default px-4 py-2 text-sm font-medium text-text-secondary transition-colors hover:text-text-primary">Manage Curriculum</Link>
-              <button onClick={handleSave} disabled={saving} className="cursor-pointer flex items-center gap-2 rounded-lg bg-accent-500 px-6 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-accent-500/90 disabled:opacity-50">
+              <button onClick={handleSave} disabled={saving} className="cursor-pointer flex items-center gap-2 rounded-lg bg-accent-500 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-500/90 disabled:opacity-50">
                 <Save className="h-4 w-4" /> {saving ? "Saving..." : "Save Changes"}
               </button>
             </div>

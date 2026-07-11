@@ -63,7 +63,7 @@ export default function QuizListPage() {
         title="Quizzes"
         description="Manage course assessments"
         actions={
-          <button onClick={handleCreate} className="cursor-pointer flex items-center gap-2 rounded-lg bg-accent-500 px-4 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-accent-500/90">
+          <button onClick={handleCreate} className="cursor-pointer flex items-center gap-2 rounded-lg bg-accent-500 px-4 py-2 text-sm font-medium text-text-on-accent transition-colors hover:bg-accent-500/90">
             <Plus className="h-4 w-4" /> New Quiz
           </button>
         }

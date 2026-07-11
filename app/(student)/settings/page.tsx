@@ -85,7 +85,7 @@ export default function SettingsPage() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="cursor-pointer rounded-lg bg-accent-500 px-5 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-accent-500/90 disabled:opacity-50"
+                className="cursor-pointer rounded-lg bg-accent-500 px-5 py-2 text-sm font-medium text-text-on-accent transition-colors hover:bg-accent-500/90 disabled:opacity-50"
               >
                 {saving ? "Saving..." : saved ? "Saved!" : "Save Profile"}
               </button>

@@ -6,7 +6,7 @@ import ProgressBar from "@/components/ui/progress-bar";
 import { StatCard } from "@/components/ui/stat-card";
 import { PageHeader } from "@/components/ui/page-header";
 import { getMyEnrollments } from "@/lib/data/enrollments";
-import { BookOpen, Calendar, Flame, Clock } from "lucide-react";
+import { BookOpen, Calendar, TrendingUp, Layers } from "lucide-react";
 import Link from "next/link";
 import Companion from "@/components/companion/companion";
 import type { Enrollment } from "@/types/db";
@@ -42,25 +42,39 @@ export default function MyLearningPage() {
       label: "Active Courses",
       value: String(activeEnrollments.length),
       icon: BookOpen,
-      trend: "up" as const,
+      iconBg: "bg-gray-100 dark:bg-gray-800",
+      iconColor: "text-gray-900 dark:text-gray-100",
+      trend: enrollments.length > 0 ? "Active" : undefined,
+      trendUp: true,
     },
     {
       label: "Completed",
       value: String(completedEnrollments.length),
       icon: Calendar,
-      trend: "neutral" as const,
+      iconBg: "bg-gray-100 dark:bg-gray-800",
+      iconColor: "text-gray-900 dark:text-gray-100",
+      trend: completedEnrollments.length > 0 ? `${completedEnrollments.length} course${completedEnrollments.length > 1 ? "s" : ""}` : undefined,
+      trendUp: completedEnrollments.length > 0,
     },
     {
-      label: "Average Progress",
+      label: "Overall Progress",
       value: `${avgProgress}%`,
-      icon: Clock,
-      trend: avgProgress > 50 ? ("up" as const) : ("neutral" as const),
+      icon: TrendingUp,
+      iconBg: "bg-gray-100 dark:bg-gray-800",
+      iconColor: "text-gray-900 dark:text-gray-100",
+      trend: activeEnrollments.length > 0 && avgProgress >= 100 && completedEnrollments.length === 0
+        ? "All active"
+        : avgProgress > 50 ? "On track" : undefined,
+      trendUp: avgProgress > 50,
     },
     {
       label: "Total Enrolled",
       value: String(enrollments.length),
-      icon: Flame,
-      trend: "neutral" as const,
+      icon: Layers,
+      iconBg: "bg-gray-100 dark:bg-gray-800",
+      iconColor: "text-gray-900 dark:text-gray-100",
+      trend: enrollments.length > 0 ? "Total" : undefined,
+      trendUp: true,
     },
   ];
 

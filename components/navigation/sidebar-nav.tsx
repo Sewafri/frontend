@@ -25,9 +25,9 @@ interface SidebarNavProps {
 }
 
 const accentMap: Record<string, { active: string; hover: string }> = {
-  brand: { active: "bg-accent-50 text-accent-500", hover: "hover:bg-accent-50/50 hover:text-accent-500" },
-  admin: { active: "bg-accent-green/10 text-accent-green", hover: "hover:bg-accent-green/5 hover:text-accent-green" },
-  instructor: { active: "bg-accent-purple/10 text-accent-purple", hover: "hover:bg-accent-purple/5 hover:text-accent-purple" },
+  brand: { active: "bg-gray-100 text-gray-900 font-semibold", hover: "hover:bg-gray-50 hover:text-gray-900" },
+  admin: { active: "bg-gray-100 text-gray-900 font-semibold", hover: "hover:bg-gray-50 hover:text-gray-900" },
+  instructor: { active: "bg-gray-100 text-gray-900 font-semibold", hover: "hover:bg-gray-50 hover:text-gray-900" },
 };
 
 function SidebarLinkItem({ link, collapsed, active, accent, onClose }: { link: SidebarLink; collapsed: boolean; active: boolean; accent: { active: string; hover: string }; onClose?: () => void }) {

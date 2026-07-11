@@ -9,21 +9,41 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BRAND } from "@/constants/brand";
 import { useAuth } from "@/lib/auth/auth-context";
+import { useGoogleSignIn } from "@/lib/auth/use-google-signin";
 import { ApiError } from "@/lib/api/client";
-
-function googleSignIn() {
-  const backendUrl = process.env.NEXT_PUBLIC_API_URL ?? "https://backend-gsqo.onrender.com/api/v1"
-  window.location.href = `${backendUrl}/auth/google`
-}
 
 export default function SignInPage() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, googleSignIn: authGoogleSignIn } = useAuth();
+  const { configured: googleConfigured, signInWithGoogle } = useGoogleSignIn();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+
+  async function handleGoogleSignIn() {
+    setError(null);
+    setGoogleLoading(true);
+    try {
+      const credential = await signInWithGoogle();
+      const user = await authGoogleSignIn(credential);
+      if (user.role === "ADMIN") router.push("/admin");
+      else if (user.role === "INSTRUCTOR") router.push("/instructor");
+      else router.push("/my-learning");
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setError(err.message);
+      } else if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Google sign-in failed");
+      }
+    } finally {
+      setGoogleLoading(false);
+    }
+  }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -64,14 +84,22 @@ export default function SignInPage() {
           <div className="grid grid-cols-2 gap-3">
             <Button
               variant="outline"
-              onClick={googleSignIn}
+              onClick={handleGoogleSignIn}
+              disabled={!googleConfigured || googleLoading}
               className="text-text-secondary"
             >
-              <svg className="mr-2 size-4" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
-                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-              </svg>
-              Google
+              {googleLoading ? (
+                <svg className="mr-2 size-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+              ) : (
+                <svg className="mr-2 size-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                </svg>
+              )}
+              {googleLoading ? "Signing in..." : "Google"}
             </Button>
             <Button
               variant="outline"

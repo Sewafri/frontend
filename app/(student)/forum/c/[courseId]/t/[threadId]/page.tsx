@@ -178,7 +178,7 @@ export default function ForumThreadDetailPage() {
               <div className="space-y-2">
                 <textarea value={editBody} onChange={(e) => setEditBody(e.target.value)} className="min-h-[80px] w-full rounded-lg border border-border-default bg-surface-card p-3 text-sm text-text-primary outline-none focus:border-accent-500/50" />
                 <div className="flex gap-2">
-                  <button onClick={() => handleEdit(post.id)} className="cursor-pointer rounded-lg bg-accent-500 px-3 py-1.5 text-xs text-text-primary">Save</button>
+                  <button onClick={() => handleEdit(post.id)} className="cursor-pointer rounded-lg bg-accent-500 px-3 py-1.5 text-xs text-text-on-accent">Save</button>
                   <button onClick={() => setEditingPostId(null)} className="cursor-pointer rounded-lg border border-border-default px-3 py-1.5 text-xs text-text-secondary">Cancel</button>
                 </div>
               </div>
@@ -238,7 +238,7 @@ export default function ForumThreadDetailPage() {
           <button
             onClick={handlePostReply}
             disabled={posting || !replyBody.trim()}
-            className="mt-3 cursor-pointer rounded-xl bg-accent-500 px-6 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-accent-500/90 disabled:opacity-50"
+            className="mt-3 cursor-pointer rounded-xl bg-accent-500 px-6 py-2 text-sm font-medium text-text-on-accent transition-colors hover:bg-accent-500/90 disabled:opacity-50"
           >
             {posting ? "Posting..." : "Post Reply"}
           </button>

@@ -195,7 +195,7 @@ export default function QuizEditorPage() {
                 <button
                   onClick={() => handleSaveQuestion(q)}
                   disabled={saving === q.id}
-                  className="cursor-pointer rounded-lg bg-accent-500 px-4 py-1.5 text-xs font-medium text-text-primary transition-colors hover:bg-accent-500/90 disabled:opacity-50"
+                  className="cursor-pointer rounded-lg bg-accent-500 px-4 py-1.5 text-xs font-medium text-text-on-accent transition-colors hover:bg-accent-500/90 disabled:opacity-50"
                 >
                   {saving === q.id ? "Saving..." : "Save Question"}
                 </button>

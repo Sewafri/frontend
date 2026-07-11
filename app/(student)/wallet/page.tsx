@@ -216,9 +216,9 @@ export default function WalletPage() {
       ) : (
         <GlassCard>
           <div className="flex flex-col items-center py-12">
-            <Trophy className="mb-3 h-10 w-10 text-text-tertiary" />
+            <Trophy className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
             <p className="text-sm text-text-secondary">No badges or certificates yet</p>
-            <p className="mt-1 text-xs text-text-tertiary">Complete courses to earn them</p>
+            <p className="mt-1.5 text-xs text-text-tertiary">Complete courses to earn them</p>
           </div>
         </GlassCard>
       )}

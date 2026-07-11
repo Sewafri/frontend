@@ -82,7 +82,7 @@ export default function ForumThreadListPage() {
           </Link>
           <button
             onClick={() => setShowNew(!showNew)}
-            className="cursor-pointer flex items-center gap-2 rounded-xl bg-accent-500 px-4 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-accent-500/90"
+            className="cursor-pointer flex items-center gap-2 rounded-xl bg-accent-500 px-4 py-2 text-sm font-medium text-text-on-accent transition-colors hover:bg-accent-500/90"
           >
             <Plus className="h-4 w-4" /> New Thread
           </button>
@@ -104,7 +104,7 @@ export default function ForumThreadListPage() {
               <X className="h-4 w-4" />
             </button>
           ) : (
-            <button onClick={handleSearch} className="cursor-pointer rounded-lg bg-accent-500 px-4 py-2 text-xs font-medium text-text-primary hover:bg-accent-500/90">
+            <button onClick={handleSearch} className="cursor-pointer rounded-lg bg-accent-500 px-4 py-2 text-xs font-medium text-text-on-accent hover:bg-accent-500/90">
               Search
             </button>
           )}
@@ -129,7 +129,7 @@ export default function ForumThreadListPage() {
               <button
                 onClick={handleCreate}
                 disabled={creating || !newTitle.trim()}
-                className="cursor-pointer rounded-xl bg-accent-500 px-4 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-accent-500/90 disabled:opacity-50"
+                className="cursor-pointer rounded-xl bg-accent-500 px-4 py-2 text-sm font-medium text-text-on-accent transition-colors hover:bg-accent-500/90 disabled:opacity-50"
               >
                 {creating ? "Creating..." : "Create"}
               </button>

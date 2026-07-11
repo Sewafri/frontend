@@ -16,14 +16,14 @@ const STATUS_LABELS: Record<string, string> = {
   REFUNDED: "Refunded",
 }
 
-const STATUS_COLORS: Record<string, string> = {
-  PENDING: "text-accent-amber",
-  AWAITING_CONFIRMATIONS: "text-accent-500",
-  CONFIRMED: "text-accent-green",
-  FAILED: "text-accent-red",
-  EXPIRED: "text-text-tertiary",
-  UNDERPAID: "text-accent-red",
-  REFUNDED: "text-text-tertiary",
+const STATUS_PILLS: Record<string, string> = {
+  PENDING: "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300",
+  AWAITING_CONFIRMATIONS: "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300",
+  CONFIRMED: "bg-gray-900 text-white dark:bg-white dark:text-gray-900",
+  FAILED: "bg-gray-200 text-gray-600 dark:bg-gray-800 dark:text-gray-400",
+  EXPIRED: "bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500",
+  UNDERPAID: "bg-gray-200 text-gray-600 dark:bg-gray-800 dark:text-gray-400",
+  REFUNDED: "bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400",
 }
 
 export default function PaymentsPage() {
@@ -87,16 +87,16 @@ export default function PaymentsPage() {
       )}
 
       {!loading && !error && payments.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-20 text-text-tertiary">
-          <CreditCard className="mb-3 h-10 w-10" />
-          <p className="text-sm">No payments yet.</p>
+        <div className="flex flex-col items-center justify-center py-20">
+          <CreditCard className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
+          <p className="text-sm text-text-secondary">No payments yet.</p>
         </div>
       )}
 
       {!loading && payments.length > 0 && (
         <div className="space-y-3">
           {payments.map((p) => {
-            const color = STATUS_COLORS[p.status] ?? "text-text-tertiary"
+            const color = STATUS_PILLS[p.status] ?? "bg-gray-100 text-gray-500 dark:bg-gray-500/10 dark:text-gray-400"
             const label = STATUS_LABELS[p.status] ?? p.status
             const isCrypto = p.method === "CRYPTO"
             const needsAction = isCrypto && (p.status === "AWAITING_CONFIRMATIONS" || p.status === "UNDERPAID" || p.status === "EXPIRED")
@@ -142,7 +142,7 @@ export default function PaymentsPage() {
                     )}
                   </div>
                   <div className="flex shrink-0 flex-col items-end gap-2">
-                    <span className={`text-xs font-medium ${color}`}>{label}</span>
+                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${color}`}>{label}</span>
                     {needsAction && (
                       <div className="flex gap-1.5">
                         {p.status !== "EXPIRED" && (

@@ -50,6 +50,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return data.user
   }, [])
 
+  const googleSignIn = useCallback(async (idToken: string) => {
+    const data = await api<AuthResponse>("/auth/google", {
+      method: "POST",
+      body: JSON.stringify({ idToken }),
+    })
+    storeTokens(data.accessToken, data.refreshToken)
+    setUser(data.user)
+    return data.user
+  }, [])
+
   const logout = useCallback(async () => {
     const { refreshToken } = getStoredTokens()
     if (refreshToken) {
@@ -74,6 +84,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isAuthenticated: !!user,
         login,
         register,
+        googleSignIn,
         logout,
       }}
     >

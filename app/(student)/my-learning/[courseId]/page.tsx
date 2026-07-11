@@ -1,15 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { BookOpen, Check, Lock, Play, ArrowLeft, FileQuestion } from "lucide-react";
+import { BookOpen, Check, Lock, Play, ArrowLeft, FileQuestion, Sparkles, Loader2, Award } from "lucide-react";
 import { PageHeader } from "@/components/ui/page-header";
 import GlassCard from "@/components/ui/glass-card";
 import ProgressBar from "@/components/ui/progress-bar";
 import { getCourseById } from "@/lib/data/courses";
-import { getLessons, completeLesson } from "@/lib/data/lessons";
+import { getLessons, completeLesson, getCourseProgress } from "@/lib/data/lessons";
 import { getCourseQuizzes } from "@/lib/data/quiz";
+import { confirmStripeSession } from "@/lib/data/payments";
 import type { Course } from "@/types/db";
 import type { Lesson } from "@/types/db";
 import type { QuizSummary } from "@/lib/data/quiz";
@@ -18,34 +19,79 @@ import { AskTutor } from "@/components/courses/ask-tutor";
 
 export default function CurriculumPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const courseId = params.courseId as string;
   const [course, setCourse] = useState<Course | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [quizzes, setQuizzes] = useState<QuizSummary[]>([]);
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
+  const [progressPercent, setProgressPercent] = useState(0);
+  const [certificateId, setCertificateId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [confirming, setConfirming] = useState(false);
+  const [confirmError, setConfirmError] = useState<string | null>(null);
   const [completingId, setCompletingId] = useState<string | null>(null);
+  const [showWelcome, setShowWelcome] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
-    Promise.all([
-      getCourseById(courseId).catch(() => null),
-      getLessons(courseId).catch(() => [] as Lesson[]),
-      getCourseQuizzes(courseId).catch(() => [] as QuizSummary[]),
-    ])
-      .then(([c, l, q]) => {
-        setCourse(c);
-        setLessons(l);
-        setQuizzes(q);
-      })
-      .finally(() => setLoading(false));
-  }, [courseId]);
+    const sessionId = searchParams.get("session_id");
+
+    async function init() {
+      setLoading(true);
+
+      // If returning from Stripe, confirm the session first
+      if (sessionId) {
+        setConfirming(true);
+        setConfirmError(null);
+        try {
+          await confirmStripeSession(sessionId);
+        } catch (err) {
+          setConfirmError(
+            err instanceof ApiError ? err.message : "Failed to confirm payment",
+          );
+        } finally {
+          setConfirming(false);
+        }
+      }
+
+      // Load course data
+      const [c, l, q, progress] = await Promise.all([
+        getCourseById(courseId).catch(() => null),
+        getLessons(courseId).catch(() => [] as Lesson[]),
+        getCourseQuizzes(courseId).catch(() => [] as QuizSummary[]),
+        getCourseProgress(courseId).catch(() => ({
+          enrolled: false,
+          completedLessonIds: [] as string[],
+          progressPercent: 0,
+          certificateId: null,
+        })),
+      ]);
+
+      setCourse(c);
+      setLessons(l);
+      setQuizzes(q);
+      setCompletedIds(new Set(progress.completedLessonIds));
+      setProgressPercent(progress.progressPercent);
+      setCertificateId(progress.certificateId ?? null);
+      setShowWelcome(progress.progressPercent === 0 && l.length > 0);
+      setLoading(false);
+    }
+
+    init();
+  }, [courseId, searchParams]);
 
   async function handleComplete(lessonId: string) {
     setCompletingId(lessonId);
     try {
       await completeLesson(lessonId);
       setCompletedIds((prev) => new Set(prev).add(lessonId));
+      // Refresh progress from server
+      const progress = await getCourseProgress(courseId).catch(() => null);
+      if (progress) {
+        setProgressPercent(progress.progressPercent);
+        setCompletedIds(new Set(progress.completedLessonIds));
+        setCertificateId(progress.certificateId ?? null);
+      }
     } catch (err) {
       if (err instanceof ApiError) {
         console.error("Failed to complete lesson:", err.message);
@@ -82,7 +128,7 @@ export default function CurriculumPage() {
   }));
 
   const completedCount = displayLessons.filter((l) => l.completed).length;
-  const progress = displayLessons.length > 0
+  const displayProgress = progressPercent > 0 ? progressPercent : displayLessons.length > 0
     ? Math.round((completedCount / displayLessons.length) * 100)
     : 0;
 
@@ -93,6 +139,37 @@ export default function CurriculumPage() {
           <ArrowLeft className="h-4 w-4" /> My Learning
         </Link>
       </div>
+
+      {/* Confirming payment after Stripe redirect */}
+      {confirming && (
+        <div className="mb-6 flex items-center gap-3 rounded-xl border border-accent-500/20 bg-accent-500/5 p-4">
+          <Loader2 className="h-5 w-5 animate-spin text-accent-500" />
+          <p className="text-sm text-text-primary">Confirming your payment...</p>
+        </div>
+      )}
+      {confirmError && (
+        <div className="mb-6 rounded-xl border border-accent-red/20 bg-accent-red/5 p-4">
+          <p className="text-sm text-accent-red">{confirmError}</p>
+        </div>
+      )}
+
+      {showWelcome && (
+        <div className="mb-6 overflow-hidden rounded-xl border border-accent-500/20 bg-gradient-to-r from-accent-500/5 to-transparent p-6">
+          <div className="flex items-start gap-4">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent-500/10">
+              <Sparkles className="h-6 w-6 text-accent-500" />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-text-primary">
+                Welcome to {course.title}!
+              </h2>
+              <p className="mt-1 text-sm text-text-secondary">
+                You&apos;re enrolled and ready to go. Start with the first lesson below, and work your way through the curriculum at your own pace.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       <PageHeader
         title={course.title}
@@ -111,7 +188,7 @@ export default function CurriculumPage() {
                 <BookOpen className="h-7 w-7 text-accent-500" />
               </div>
               <div className="flex-1">
-                <ProgressBar value={progress} label="Course Progress" className="max-w-md" />
+                <ProgressBar value={displayProgress} label="Course Progress" className="max-w-md" />
               </div>
               <div className="text-right">
                 <span className="text-2xl font-bold text-text-primary">{completedCount}</span>
@@ -119,6 +196,32 @@ export default function CurriculumPage() {
               </div>
             </div>
           </GlassCard>
+
+          {/* Certificate banner — shown when course is 100% complete */}
+          {displayProgress === 100 && certificateId && (
+            <div className="mb-6 overflow-hidden rounded-xl border border-accent-green/20 bg-accent-green/5 p-6">
+              <div className="flex items-start gap-4">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent-green/10">
+                  <Award className="h-6 w-6 text-accent-green" />
+                </div>
+                <div className="flex-1">
+                  <h2 className="text-lg font-semibold text-text-primary">
+                    Course Complete!
+                  </h2>
+                  <p className="mt-1 text-sm text-text-secondary">
+                    You&apos;ve completed all the lessons. Claim your on-chain certificate.
+                  </p>
+                </div>
+                <Link
+                  href={`/certificates/${certificateId}`}
+                  className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-accent-500 px-5 py-2.5 text-sm font-medium text-text-on-accent transition-colors hover:bg-accent-500/90"
+                >
+                  <Award className="h-4 w-4" />
+                  View Certificate
+                </Link>
+              </div>
+            </div>
+          )}
 
           <div className="space-y-2">
             {displayLessons.map((lesson, i) => (

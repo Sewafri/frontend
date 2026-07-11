@@ -15,6 +15,7 @@ import {
   type Message,
   type ConversationParticipant,
 } from "@/lib/data/messaging"
+import { searchUsers } from "@/lib/data/users"
 import { ApiError } from "@/lib/api/client"
 import { useAuth } from "@/lib/auth/auth-context"
 
@@ -56,7 +57,9 @@ export default function MessagesPage() {
   const [input, setInput] = useState("")
   const [sending, setSending] = useState(false)
   const [showNewConv, setShowNewConv] = useState(false)
-  const [newConvId, setNewConvId] = useState("")
+  const [searchQuery, setSearchQuery] = useState("")
+  const [searchResults, setSearchResults] = useState<Array<{ id: string; fullName: string; photoUrl: string | null; role: string }>>([])
+  const [searching, setSearching] = useState(false)
   const [creatingConv, setCreatingConv] = useState(false)
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -139,18 +142,38 @@ export default function MessagesPage() {
     }
   }
 
-  async function handleCreateConversation(e: React.FormEvent) {
-    e.preventDefault()
-    if (!newConvId.trim() || creatingConv) return
+  // Search users when the user types
+  useEffect(() => {
+    if (searchQuery.length < 2) {
+      setSearchResults([])
+      return
+    }
+    const timer = setTimeout(async () => {
+      setSearching(true)
+      try {
+        const result = await searchUsers(searchQuery)
+        setSearchResults(result.users.filter((u) => u.id !== currentUserId))
+      } catch {
+        setSearchResults([])
+      } finally {
+        setSearching(false)
+      }
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [searchQuery, currentUserId])
+
+  async function startConversationWith(userId: string) {
+    if (creatingConv) return
     setCreatingConv(true)
     try {
-      const result = await createConversation(newConvId.trim())
+      const result = await createConversation(userId)
       setConversations((prev) => {
         const exists = prev.find((c) => c.id === result.conversation.id)
         return exists ? prev : [result.conversation, ...prev]
       })
       setShowNewConv(false)
-      setNewConvId("")
+      setSearchQuery("")
+      setSearchResults([])
       openConversation(result.conversation.id)
     } catch {
       // silently fail
@@ -197,30 +220,53 @@ export default function MessagesPage() {
           </div>
 
           {showNewConv && (
-            <form
-              onSubmit={handleCreateConversation}
-              className="border-b border-border-default p-3"
-            >
+            <div className="border-b border-border-default p-3">
               <label className="mb-1 block text-xs font-medium text-text-secondary">
-                Enter User ID to message
+                Search by name or email
               </label>
-              <div className="flex gap-2">
+              <div className="relative">
                 <input
                   type="text"
-                  value={newConvId}
-                  onChange={(e) => setNewConvId(e.target.value)}
-                  placeholder="User ID..."
-                  className="flex-1 rounded-lg border border-border-default bg-surface-card px-3 py-1.5 text-xs text-text-primary placeholder-text-tertiary focus:border-accent-500 focus:outline-none"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Type at least 2 characters..."
+                  autoFocus
+                  className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-1.5 text-xs text-text-primary placeholder-text-tertiary focus:border-accent-500 focus:outline-none"
                 />
-                <button
-                  type="submit"
-                  disabled={!newConvId.trim() || creatingConv}
-                  className="cursor-pointer rounded-lg bg-accent-500 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-accent-500/90 disabled:opacity-50"
-                >
-                  {creatingConv ? "..." : "Start"}
-                </button>
+                {searching && (
+                  <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                    <Loader2 className="h-3 w-3 animate-spin text-text-tertiary" />
+                  </div>
+                )}
               </div>
-            </form>
+
+              {searchResults.length > 0 && (
+                <div className="mt-2 max-h-48 space-y-1 overflow-y-auto">
+                  {searchResults.map((u) => (
+                    <button
+                      key={u.id}
+                      onClick={() => startConversationWith(u.id)}
+                      disabled={creatingConv}
+                      className="flex w-full cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-surface-card-hover disabled:opacity-50"
+                    >
+                      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent-500/10 text-[10px] font-semibold text-accent-500">
+                        {u.fullName.split(" ").map((n) => n[0]).join("").slice(0, 2)}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate text-xs font-medium text-text-primary">
+                          {u.fullName}
+                        </div>
+                        <div className="text-[10px] text-text-tertiary">{u.role}</div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {searchQuery.length >= 2 && !searching && searchResults.length === 0 && (
+                <p className="mt-2 text-[10px] text-text-tertiary">No users found</p>
+              )}
+            </div>
           )}
 
           <div className="flex-1 overflow-y-auto">
@@ -230,9 +276,9 @@ export default function MessagesPage() {
               </div>
             ) : conversations.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <MessageSquare className="mb-2 h-8 w-8 text-text-tertiary" />
+                <MessageSquare className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
                 <p className="text-sm text-text-secondary">No conversations yet</p>
-                <p className="mt-1 text-xs text-text-tertiary">
+                <p className="mt-1.5 text-xs text-text-tertiary">
                   Start a conversation with an instructor or classmate
                 </p>
               </div>
@@ -290,9 +336,9 @@ export default function MessagesPage() {
         >
           {!activeConvId ? (
             <div className="flex h-full flex-col items-center justify-center text-center">
-              <MessageSquare className="mb-3 h-12 w-12 text-text-tertiary" />
+              <MessageSquare className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
               <p className="text-sm text-text-secondary">Select a conversation</p>
-              <p className="text-xs text-text-tertiary">
+              <p className="mt-1.5 text-xs text-text-tertiary">
                 Choose a conversation from the left to start messaging
               </p>
             </div>
