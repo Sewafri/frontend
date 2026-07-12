@@ -50,6 +50,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return data.user
   }, [])
 
+  const googleSignIn = useCallback((opts?: {
+    role?: "STUDENT" | "INSTRUCTOR"
+    onSuccess?: (user: User) => void
+    onError?: (err: unknown) => void
+  }) => {
+    if (typeof window === "undefined" || !window.google?.accounts?.id) return
+
+    window.google.accounts.id.initialize({
+      client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? "",
+      callback: async (response: { credential: string }) => {
+        try {
+          const data = await api<AuthResponse>("/auth/google", {
+            method: "POST",
+            body: JSON.stringify({ idToken: response.credential, role: opts?.role }),
+          })
+          storeTokens(data.accessToken, data.refreshToken)
+          setUser(data.user)
+          opts?.onSuccess?.(data.user)
+        } catch (err) {
+          opts?.onError?.(err)
+        }
+      },
+      cancel_on_tap_outside: false,
+    })
+
+    window.google.accounts.id.prompt()
+  }, [])
+
   const logout = useCallback(async () => {
     const { refreshToken } = getStoredTokens()
     if (refreshToken) {
@@ -75,6 +103,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         login,
         register,
         logout,
+        googleSignIn,
       }}
     >
       {children}
