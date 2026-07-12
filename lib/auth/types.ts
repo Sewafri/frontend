@@ -23,14 +23,26 @@ export interface RegisterInput {
   role?: "STUDENT" | "INSTRUCTOR"
 }
 
+export interface GoogleAuthInput {
+  idToken: string
+  role?: "STUDENT" | "INSTRUCTOR"
+}
+
 export interface AuthState {
   user: User | null
   isLoading: boolean
   isAuthenticated: boolean
 }
 
+export interface GoogleSignInOptions {
+  role?: "STUDENT" | "INSTRUCTOR"
+  onSuccess?: (user: User) => void
+  onError?: (err: unknown) => void
+}
+
 export interface AuthContextValue extends AuthState {
   login: (input: LoginInput) => Promise<User>
   register: (input: RegisterInput) => Promise<User>
   logout: () => Promise<void>
+  googleSignIn: (opts?: GoogleSignInOptions) => void
 }
