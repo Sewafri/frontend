@@ -52,7 +52,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         mobileOpen={mobileSidebar}
         onMobileClose={() => setMobileSidebar(false)}
       />
-      <div className="ml-0 flex flex-1 flex-col md:ml-56">
+      <div className="ml-0 flex flex-1 flex-col md:ml-1">
         <DashboardHeader
           breadcrumb="Admin"
           currentPage="Overview"

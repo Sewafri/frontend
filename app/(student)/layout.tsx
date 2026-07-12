@@ -51,7 +51,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
         mobileOpen={mobileSidebar}
         onMobileClose={() => setMobileSidebar(false)}
       />
-      <div className="ml-0 flex flex-1 flex-col md:ml-56">
+      <div className="ml-0 flex flex-1 flex-col md:ml-1">
         <DashboardHeader
           breadcrumb="Student"
           currentPage="Learning"
