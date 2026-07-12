@@ -23,6 +23,11 @@ export interface RegisterInput {
   role?: "STUDENT" | "INSTRUCTOR"
 }
 
+export interface GoogleLoginInput {
+  idToken: string
+  role?: "STUDENT" | "INSTRUCTOR"
+}
+
 export interface AuthState {
   user: User | null
   isLoading: boolean
@@ -32,5 +37,6 @@ export interface AuthState {
 export interface AuthContextValue extends AuthState {
   login: (input: LoginInput) => Promise<User>
   register: (input: RegisterInput) => Promise<User>
+  googleLogin: (input: GoogleLoginInput) => Promise<User>
   logout: () => Promise<void>
 }
