@@ -47,7 +47,7 @@ export default function InstructorLayout({ children }: { children: React.ReactNo
         mobileOpen={mobileSidebar}
         onMobileClose={() => setMobileSidebar(false)}
       />
-      <div className="ml-0 flex flex-1 flex-col md:ml-1">
+      <div className="ml-0 flex flex-1 flex-col md:ml-0.5">
         <DashboardHeader
           breadcrumb="Instructor"
           currentPage="Dashboard"
