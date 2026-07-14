@@ -98,6 +98,40 @@
   --color-neutral-900: #171717;
   --color-neutral-950: #0a0a0a;
 
+  /* ── SewAfri Brand Palette (Green + Amber) — USE FOR ALL NEW PAGES ── */
+  --color-brand-green: #0a7c42;
+  --color-brand-green-dark: #065c30;
+  --color-brand-green-light: #e8f7ef;
+  --color-brand-green-bright: #12b85e;
+  --color-brand-green-mid: #0d9650;
+  --color-brand-amber: #f5a623;
+  --color-brand-amber-light: #fff8eb;
+  --color-brand-amber-dark: #d48a0a;
+  --color-brand-dark: #0f1117;
+  --color-brand-text: #1a1d23;
+  --color-brand-text-mid: #555d6b;
+  --color-brand-text-light: #8b919d;
+  --color-brand-bg: #fafaf9;
+  --color-brand-card: #ffffff;
+  --color-brand-border: #eaeaea;
+
+  /* ── Landing page aliases (deprecated — use --color-brand-* instead) ── */
+  --color-landing-green: var(--color-brand-green);
+  --color-landing-green-dark: var(--color-brand-green-dark);
+  --color-landing-green-light: var(--color-brand-green-light);
+  --color-landing-green-bright: var(--color-brand-green-bright);
+  --color-landing-green-mid: var(--color-brand-green-mid);
+  --color-landing-amber: var(--color-brand-amber);
+  --color-landing-amber-light: var(--color-brand-amber-light);
+  --color-landing-amber-dark: var(--color-brand-amber-dark);
+  --color-landing-dark: var(--color-brand-dark);
+  --color-landing-text: var(--color-brand-text);
+  --color-landing-text-mid: var(--color-brand-text-mid);
+  --color-landing-text-light: var(--color-brand-text-light);
+  --color-landing-bg: var(--color-brand-bg);
+  --color-landing-card: var(--color-brand-card);
+  --color-landing-border: var(--color-brand-border);
+
   /* ── Semantic accents (monochrome — black only) ── */
   --color-accent-green: #111827;
   --color-accent-red: #374151;
@@ -361,6 +395,73 @@ section[id] {
   animation: shimmer 1.5s infinite;
 }
 
+/* ── Confetti canvas ── */
+#confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ── Mascot animations ── */
+@keyframes mascotFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes mascotBounce {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.15); }
+  50% { transform: scale(1.1); }
+  70% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+@keyframes mascotBlink {
+  0%, 42%, 44%, 100% { transform: scaleY(1); }
+  43% { transform: scaleY(0.1); }
+}
+@keyframes mascotWave {
+  0%, 100% { transform: rotate(0deg); }
+  15% { transform: rotate(14deg); }
+  30% { transform: rotate(-8deg); }
+  40% { transform: rotate(10deg); }
+  50% { transform: rotate(-4deg); }
+  60%, 100% { transform: rotate(0deg); }
+}
+@keyframes shadowPulse {
+  0%, 100% { transform: scaleX(1); opacity: 0.3; }
+  50% { transform: scaleX(0.85); opacity: 0.15; }
+}
+@keyframes particleFloat {
+  0%, 100% { opacity: 0; transform: translateY(0) scale(0); }
+  20% { opacity: 0.6; transform: translateY(-20px) scale(1); }
+  80% { opacity: 0.3; transform: translateY(-60px) scale(0.8); }
+}
+@keyframes sparkleOut {
+  0% { opacity: 1; transform: translate(0, 0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--sx, 0), var(--sy, 0)) scale(0); }
+}
+
+.animate-mascot-float { animation: mascotFloat 3s ease-in-out infinite; }
+.animate-mascot-blinking { animation: mascotBlink 4s infinite; }
+.animate-mascot-wave { animation: mascotWave 2.5s ease-in-out infinite; animation-delay: 1s; transform-origin: 70% 90%; }
+.animate-shadow-pulse { animation: shadowPulse 3s ease-in-out infinite; }
+.animate-particle { animation: particleFloat 4s ease-in-out infinite; }
+.sparkle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 50%;
+  animation: sparkleOut 0.6s ease-out forwards;
+}
+
+@keyframes statCount {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* ── Nexus-inspired animations ── */
 @keyframes fade-up {
   0% { opacity: 0; transform: translateY(24px); }
@@ -396,4 +497,78 @@ section[id] {
 
 .animate-ticker {
   animation: ticker-scroll 32s linear infinite;
+}
+
+/* ── Auth page styles ── */
+@keyframes slide-up {
+  0% { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.35s ease-out forwards;
+}
+
+.auth-input {
+  height: 44px !important;
+  border-radius: 10px !important;
+  border: 1.5px solid var(--color-landing-border) !important;
+  background: var(--color-landing-bg) !important;
+  font-size: 14px !important;
+  color: var(--color-landing-text) !important;
+  transition: border-color 0.2s, box-shadow 0.2s !important;
+}
+
+.auth-input:focus {
+  border-color: var(--color-landing-green) !important;
+  box-shadow: 0 0 0 3px rgba(10, 124, 66, 0.08) !important;
+  outline: none !important;
+}
+
+.auth-input::placeholder {
+  color: var(--color-landing-text-light) !important;
+  opacity: 0.6;
+}
+
+.auth-social-btn {
+  width: 100% !important;
+  height: 44px !important;
+  border-radius: 10px !important;
+  border: 1.5px solid var(--color-landing-border) !important;
+  background: var(--color-landing-card) !important;
+  color: var(--color-landing-text-mid) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  transition: border-color 0.2s, background 0.2s !important;
+}
+
+.auth-social-btn:hover:not(:disabled) {
+  border-color: var(--color-landing-green) !important;
+  background: var(--color-landing-green-light) !important;
+}
+
+.auth-submit-btn {
+  width: 100% !important;
+  height: 44px !important;
+  border-radius: 10px !important;
+  border: none !important;
+  background: linear-gradient(135deg, var(--color-landing-green), var(--color-landing-green-mid)) !important;
+  color: white !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  transition: opacity 0.2s, transform 0.15s !important;
+}
+
+.auth-submit-btn:hover:not(:disabled) {
+  opacity: 0.92;
+}
+
+.auth-submit-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* ── Page background grid ── */
+.auth-page {
+  background: var(--color-landing-bg);
+  min-height: 100vh;
 }

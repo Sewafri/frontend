@@ -53,9 +53,9 @@ export default function ResetPasswordPage(props: { searchParams: Promise<{ token
     return (
       <div className="flex min-h-screen items-center justify-center px-4">
         <div className="w-full max-w-sm text-center">
-          <h2 className="mb-2 font-display text-2xl font-bold text-text-primary">Invalid link</h2>
-          <p className="mb-6 text-sm text-text-secondary">This reset link is missing or invalid.</p>
-          <Link href="/forgot-password" className="text-sm text-accent-500 hover:text-accent-600">
+          <h2 className="mb-2 font-display text-2xl font-bold text-brand-text">Invalid link</h2>
+          <p className="mb-6 text-sm text-brand-text-mid">This reset link is missing or invalid.</p>
+          <Link href="/forgot-password" className="text-sm text-brand-green hover:text-accent-600">
             Request a new link
           </Link>
         </div>
@@ -67,11 +67,11 @@ export default function ResetPasswordPage(props: { searchParams: Promise<{ token
     return (
       <div className="flex min-h-screen items-center justify-center px-4">
         <div className="w-full max-w-sm text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-accent-green/10">
-            <CheckCircle className="h-6 w-6 text-accent-green" />
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-green/10">
+            <CheckCircle className="h-6 w-6 text-brand-green" />
           </div>
-          <h2 className="mb-2 font-display text-2xl font-bold text-text-primary">Password reset</h2>
-          <p className="mb-6 text-sm text-text-secondary">Your password has been reset successfully.</p>
+          <h2 className="mb-2 font-display text-2xl font-bold text-brand-text">Password reset</h2>
+          <p className="mb-6 text-sm text-brand-text-mid">Your password has been reset successfully.</p>
           <Button onClick={() => router.push("/sign-in")}>Sign in</Button>
         </div>
       </div>
@@ -81,18 +81,18 @@ export default function ResetPasswordPage(props: { searchParams: Promise<{ token
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="w-full max-w-sm">
-        <div className="rounded-2xl border border-border-default bg-surface-card p-8 shadow-sm">
+        <div className="rounded-2xl border border-brand-border bg-brand-card p-8 shadow-sm">
           <div className="text-center">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-accent-500/10">
-              <Lock className="h-6 w-6 text-accent-500" />
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-green-light">
+              <Lock className="h-6 w-6 text-brand-green" />
             </div>
-            <h2 className="font-display text-2xl font-bold text-text-primary">Set new password</h2>
-            <p className="mt-1.5 text-sm text-text-secondary">Enter your new password below.</p>
+            <h2 className="font-display text-2xl font-bold text-brand-text">Set new password</h2>
+            <p className="mt-1.5 text-sm text-brand-text-mid">Enter your new password below.</p>
           </div>
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="password" className="text-sm text-text-secondary">New password</Label>
+              <Label htmlFor="password" className="text-sm text-brand-text-mid">New password</Label>
               <Input
                 id="password"
                 type="password"
@@ -104,7 +104,7 @@ export default function ResetPasswordPage(props: { searchParams: Promise<{ token
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="confirm" className="text-sm text-text-secondary">Confirm password</Label>
+              <Label htmlFor="confirm" className="text-sm text-brand-text-mid">Confirm password</Label>
               <Input
                 id="confirm"
                 type="password"

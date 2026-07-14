@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef, useCallback } from "react"
 import { motion, AnimatePresence } from "motion/react"
-import { PageHeader } from "@/components/ui/page-header"
 import { Button } from "@/components/ui/button"
 import { Loader2, Send, ArrowLeft, MessageSquare, UserPlus } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -191,28 +190,31 @@ export default function MessagesPage() {
 
   return (
     <div>
-      <PageHeader
-        title="Messages"
-        description={
-          totalUnread > 0
+      {/* Page Header */}
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold tracking-tight text-brand-text sm:text-3xl">
+          Messages
+        </h1>
+        <p className="mt-1 text-sm text-brand-text-mid">
+          {totalUnread > 0
             ? `You have ${totalUnread} unread message${totalUnread !== 1 ? "s" : ""}`
-            : "Your conversations and direct messages"
-        }
-      />
+            : "Your conversations and direct messages"}
+        </p>
+      </div>
 
-      <div className="flex h-[70vh] overflow-hidden rounded-xl border border-border-default bg-surface-dark">
+      <div className="flex h-[70vh] overflow-hidden rounded-xl border border-brand-border bg-brand-card">
         {/* Left pane — Conversation list */}
         <div
           className={cn(
-            "flex w-full flex-col border-r border-border-default sm:w-80",
+            "flex w-full flex-col border-r border-brand-border sm:w-80",
             activeConvId && "hidden sm:flex",
           )}
         >
-          <div className="flex items-center justify-between border-b border-border-default px-4 py-3">
-            <span className="text-sm font-semibold text-text-primary">Inbox</span>
+          <div className="flex items-center justify-between border-b border-brand-border px-4 py-3">
+            <span className="text-sm font-semibold text-brand-text">Inbox</span>
             <button
               onClick={() => setShowNewConv(!showNewConv)}
-              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-text-tertiary transition-colors hover:bg-surface-card-hover hover:text-text-primary"
+              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-brand-text-light transition-colors hover:bg-brand-bg hover:text-brand-text"
               title="New conversation"
             >
               <UserPlus className="h-4 w-4" />
@@ -220,8 +222,8 @@ export default function MessagesPage() {
           </div>
 
           {showNewConv && (
-            <div className="border-b border-border-default p-3">
-              <label className="mb-1 block text-xs font-medium text-text-secondary">
+            <div className="border-b border-brand-border p-3">
+              <label className="mb-1 block text-xs font-medium text-brand-text-mid">
                 Search by name or email
               </label>
               <div className="relative">
@@ -231,11 +233,11 @@ export default function MessagesPage() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Type at least 2 characters..."
                   autoFocus
-                  className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-1.5 text-xs text-text-primary placeholder-text-tertiary focus:border-accent-500 focus:outline-none"
+                  className="w-full rounded-lg border border-brand-border bg-brand-card px-3 py-1.5 text-xs text-brand-text placeholder:text-brand-text-light focus:border-brand-green focus:outline-none"
                 />
                 {searching && (
                   <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                    <Loader2 className="h-3 w-3 animate-spin text-text-tertiary" />
+                    <Loader2 className="h-3 w-3 animate-spin text-brand-text-light" />
                   </div>
                 )}
               </div>
@@ -247,16 +249,16 @@ export default function MessagesPage() {
                       key={u.id}
                       onClick={() => startConversationWith(u.id)}
                       disabled={creatingConv}
-                      className="flex w-full cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-surface-card-hover disabled:opacity-50"
+                      className="flex w-full cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-brand-bg disabled:opacity-50"
                     >
-                      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent-500/10 text-[10px] font-semibold text-accent-500">
+                      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-green-light text-[10px] font-semibold text-brand-green">
                         {u.fullName.split(" ").map((n) => n[0]).join("").slice(0, 2)}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <div className="truncate text-xs font-medium text-text-primary">
+                        <div className="truncate text-xs font-medium text-brand-text">
                           {u.fullName}
                         </div>
-                        <div className="text-[10px] text-text-tertiary">{u.role}</div>
+                        <div className="text-[10px] text-brand-text-light">{u.role}</div>
                       </div>
                     </button>
                   ))}
@@ -264,7 +266,7 @@ export default function MessagesPage() {
               )}
 
               {searchQuery.length >= 2 && !searching && searchResults.length === 0 && (
-                <p className="mt-2 text-[10px] text-text-tertiary">No users found</p>
+                <p className="mt-2 text-[10px] text-brand-text-light">No users found</p>
               )}
             </div>
           )}
@@ -272,13 +274,13 @@ export default function MessagesPage() {
           <div className="flex-1 overflow-y-auto">
             {loading ? (
               <div className="flex items-center justify-center py-12">
-                <Loader2 className="h-5 w-5 animate-spin text-accent-500" />
+                <Loader2 className="h-5 w-5 animate-spin text-brand-text-light" />
               </div>
             ) : conversations.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <MessageSquare className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
-                <p className="text-sm text-text-secondary">No conversations yet</p>
-                <p className="mt-1.5 text-xs text-text-tertiary">
+                <MessageSquare className="mb-4 h-12 w-12 text-brand-text-light" />
+                <p className="text-sm text-brand-text-mid">No conversations yet</p>
+                <p className="mt-1.5 text-xs text-brand-text-light">
                   Start a conversation with an instructor or classmate
                 </p>
               </div>
@@ -291,30 +293,30 @@ export default function MessagesPage() {
                     key={conv.id}
                     onClick={() => openConversation(conv.id)}
                     className={cn(
-                      "flex w-full cursor-pointer items-center gap-3 border-b border-border-default px-4 py-3 text-left transition-colors hover:bg-surface-card-hover",
-                      activeConvId === conv.id && "bg-accent-500/5",
+                      "flex w-full cursor-pointer items-center gap-3 border-b border-brand-border px-4 py-3 text-left transition-colors hover:bg-brand-bg",
+                      activeConvId === conv.id && "bg-brand-green-light/30",
                     )}
                   >
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent-500/10 text-sm font-semibold text-accent-500">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-green-light text-sm font-semibold text-brand-green">
                       {other?.user.fullName?.split(" ").map((n) => n[0]).join("").slice(0, 2) ?? "?"}
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between gap-2">
-                        <span className="truncate text-sm font-medium text-text-primary">
+                        <span className="truncate text-sm font-medium text-brand-text">
                           {other?.user.fullName ?? "Unknown"}
                         </span>
                         {lastMsg && (
-                          <span className="shrink-0 text-[10px] text-text-tertiary">
+                          <span className="shrink-0 text-[10px] text-brand-text-light">
                             {formatTime(lastMsg.sentAt)}
                           </span>
                         )}
                       </div>
                       <div className="mt-0.5 flex items-center gap-2">
-                        <span className="truncate text-xs text-text-secondary">
+                        <span className="truncate text-xs text-brand-text-mid">
                           {lastMsg?.body ?? "No messages yet"}
                         </span>
                         {conv.unreadCount > 0 && (
-                          <span className="flex h-4 min-w-[16px] shrink-0 items-center justify-center rounded-full bg-accent-500 px-1 text-[10px] font-semibold text-white">
+                          <span className="flex h-4 min-w-[16px] shrink-0 items-center justify-center rounded-full bg-brand-green px-1 text-[10px] font-semibold text-white">
                             {conv.unreadCount}
                           </span>
                         )}
@@ -336,27 +338,27 @@ export default function MessagesPage() {
         >
           {!activeConvId ? (
             <div className="flex h-full flex-col items-center justify-center text-center">
-              <MessageSquare className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
-              <p className="text-sm text-text-secondary">Select a conversation</p>
-              <p className="mt-1.5 text-xs text-text-tertiary">
+              <MessageSquare className="mb-4 h-12 w-12 text-brand-text-light" />
+              <p className="text-sm text-brand-text-mid">Select a conversation</p>
+              <p className="mt-1.5 text-xs text-brand-text-light">
                 Choose a conversation from the left to start messaging
               </p>
             </div>
           ) : (
             <>
               {/* Thread header */}
-              <div className="flex items-center gap-3 border-b border-border-default px-4 py-3">
+              <div className="flex items-center gap-3 border-b border-brand-border px-4 py-3">
                 <button
                   onClick={() => setActiveConvId(null)}
-                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-text-tertiary transition-colors hover:bg-surface-card-hover hover:text-text-primary sm:hidden"
+                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-brand-text-light transition-colors hover:bg-brand-bg hover:text-brand-text sm:hidden"
                 >
                   <ArrowLeft className="h-4 w-4" />
                 </button>
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-500/10 text-sm font-semibold text-accent-500">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-green-light text-sm font-semibold text-brand-green">
                   {otherParticipant?.user.fullName?.split(" ").map((n) => n[0]).join("").slice(0, 2) ?? "?"}
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-text-primary">
+                  <p className="text-sm font-medium text-brand-text">
                     {otherParticipant?.user.fullName ?? "Unknown"}
                   </p>
                 </div>
@@ -366,12 +368,12 @@ export default function MessagesPage() {
               <div className="flex-1 overflow-y-auto p-4">
                 {messagesLoading ? (
                   <div className="flex items-center justify-center py-12">
-                    <Loader2 className="h-5 w-5 animate-spin text-accent-500" />
+                    <Loader2 className="h-5 w-5 animate-spin text-brand-text-light" />
                   </div>
                 ) : messages.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-12 text-center">
-                    <p className="text-sm text-text-secondary">No messages yet</p>
-                    <p className="mt-1 text-xs text-text-tertiary">
+                    <p className="text-sm text-brand-text-mid">No messages yet</p>
+                    <p className="mt-1 text-xs text-brand-text-light">
                       Send a message to start the conversation
                     </p>
                   </div>
@@ -391,8 +393,8 @@ export default function MessagesPage() {
                             className={cn(
                               "max-w-[75%] rounded-2xl px-3 py-2 text-sm",
                               isMe
-                                ? "rounded-br-md bg-accent-500 text-white"
-                                : "rounded-bl-md border border-border-default bg-surface-card text-text-primary",
+                                ? "rounded-br-md bg-brand-green text-white"
+                                : "rounded-bl-md border border-brand-border bg-brand-card text-brand-text",
                             )}
                           >
                             <p className="whitespace-pre-wrap break-words leading-relaxed">
@@ -401,7 +403,7 @@ export default function MessagesPage() {
                             <p
                               className={cn(
                                 "mt-1 text-right text-[10px]",
-                                isMe ? "text-white/60" : "text-text-tertiary",
+                                isMe ? "text-white/60" : "text-brand-text-light",
                               )}
                             >
                               {formatMessageTime(msg.sentAt)}
@@ -423,7 +425,7 @@ export default function MessagesPage() {
               {/* Input */}
               <form
                 onSubmit={handleSend}
-                className="flex items-center gap-2 border-t border-border-default p-3"
+                className="flex items-center gap-2 border-t border-brand-border p-3"
               >
                 <input
                   ref={inputRef}
@@ -433,12 +435,12 @@ export default function MessagesPage() {
                   placeholder="Type a message..."
                   maxLength={5000}
                   disabled={sending}
-                  className="flex-1 rounded-lg border border-border-default bg-surface-card px-3 py-2 text-sm text-text-primary placeholder-text-tertiary focus:border-accent-500 focus:outline-none disabled:opacity-50"
+                  className="flex-1 rounded-lg border border-brand-border bg-brand-card px-3 py-2 text-sm text-brand-text placeholder:text-brand-text-light focus:border-brand-green focus:outline-none disabled:opacity-50"
                 />
                 <button
                   type="submit"
                   disabled={!input.trim() || sending}
-                  className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg bg-accent-500 text-white transition-colors hover:bg-accent-500/90 disabled:opacity-30"
+                  className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg bg-brand-green text-white transition-colors hover:bg-brand-green-dark disabled:opacity-30"
                   aria-label="Send"
                 >
                   <Send className="h-4 w-4" />

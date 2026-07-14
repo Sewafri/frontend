@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PageHeader } from "@/components/ui/page-header";
-import GlassCard from "@/components/ui/glass-card";
 import { useAuth } from "@/lib/auth/auth-context";
 import { updateProfile } from "@/lib/data/users";
 import { User, Wallet, Save } from "lucide-react";
@@ -40,66 +38,66 @@ export default function InstructorSettingsPage() {
 
   return (
     <div className="">
-      <PageHeader
-        title="Settings"
-        description="Your account and profile settings"
-      />
+      <div className="mb-7">
+        <h1 className="text-2xl font-bold tracking-tight text-brand-text sm:text-3xl">Settings</h1>
+        <p className="mt-1 text-sm text-brand-text-mid">Your account and profile settings</p>
+      </div>
 
       <div className="space-y-8">
         <section>
-          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-text-primary">
-            <User className="h-5 w-5 text-accent-500" /> Profile
+          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-brand-text">
+            <User className="h-5 w-5 text-brand-green" /> Profile
           </h2>
-          <GlassCard>
+          <div className="rounded-xl border border-brand-border bg-brand-card p-5">
             <div className="grid gap-6 sm:grid-cols-2">
               <div>
-                <label className="mb-1.5 block text-xs font-medium text-text-secondary">Full Name</label>
+                <label className="mb-1.5 block text-xs font-medium text-brand-text-mid">Full Name</label>
                 <input
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2 text-sm text-text-primary outline-none"
+                  className="w-full rounded-lg border border-brand-border bg-brand-card px-3 py-2 text-sm text-brand-text outline-none"
                 />
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-medium text-text-secondary">Email</label>
+                <label className="mb-1.5 block text-xs font-medium text-brand-text-mid">Email</label>
                 <input
                   type="email"
                   value={user?.email ?? ""}
                   readOnly
-                  className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2 text-sm text-text-secondary outline-none"
+                  className="w-full rounded-lg border border-brand-border bg-brand-card px-3 py-2 text-sm text-brand-text-mid outline-none"
                 />
               </div>
               <div className="sm:col-span-2">
-                <label className="mb-1.5 block text-xs font-medium text-text-secondary">Bio</label>
+                <label className="mb-1.5 block text-xs font-medium text-brand-text-mid">Bio</label>
                 <textarea
                   rows={3}
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
-                  className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2 text-sm text-text-primary outline-none"
+                  className="w-full rounded-lg border border-brand-border bg-brand-card px-3 py-2 text-sm text-brand-text outline-none"
                 />
               </div>
             </div>
-          </GlassCard>
+          </div>
         </section>
 
         <section>
-          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-text-primary">
-            <Wallet className="h-5 w-5 text-accent-500" /> Crypto Wallet
+          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-brand-text">
+            <Wallet className="h-5 w-5 text-brand-green" /> Crypto Wallet
           </h2>
-          <GlassCard>
-            <p className="mb-3 text-sm text-text-secondary">
+          <div className="rounded-xl border border-brand-border bg-brand-card p-5">
+            <p className="mb-3 text-sm text-brand-text-mid">
               Set your EVM wallet address (e.g. MetaMask) to receive crypto payments from students.
               Students who pay with cryptocurrency will send ETH directly to this address.
             </p>
             <div>
-              <label className="mb-1.5 block text-xs font-medium text-text-secondary">Wallet Address</label>
+              <label className="mb-1.5 block text-xs font-medium text-brand-text-mid">Wallet Address</label>
               <input
                 type="text"
                 value={walletAddress}
                 onChange={(e) => setWalletAddress(e.target.value)}
                 placeholder="0x..."
-                className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2 font-mono text-sm text-text-primary placeholder-text-secondary outline-none focus:border-accent-500/50"
+                className="w-full rounded-lg border border-brand-border bg-brand-card px-3 py-2 font-mono text-sm text-brand-text placeholder-text-brand-text-mid outline-none focus:border-brand-green/50"
               />
               {walletAddress && !/^0x[0-9a-fA-F]{40}$/.test(walletAddress.trim()) && (
                 <p className="mt-1 text-xs text-accent-red">
@@ -107,14 +105,14 @@ export default function InstructorSettingsPage() {
                 </p>
               )}
             </div>
-          </GlassCard>
+          </div>
         </section>
 
         <div className="flex justify-end">
           <button
             onClick={handleSave}
             disabled={saving}
-            className="cursor-pointer flex items-center gap-2 rounded-lg bg-accent-500 px-6 py-2 text-sm font-medium text-text-on-accent transition-colors hover:bg-accent-500/90 disabled:opacity-50"
+            className="cursor-pointer flex items-center gap-2 rounded-lg bg-brand-green px-6 py-2 text-sm font-medium text-text-on-accent transition-colors hover:bg-brand-green-dark disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             {saving ? "Saving..." : "Save Settings"}

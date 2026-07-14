@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Heart, BookOpen, Star, Trash2, Loader2 } from "lucide-react"
-import { PageHeader } from "@/components/ui/page-header"
 import { getWishlist, removeFromWishlist, type WishlistItem } from "@/lib/data/wishlist"
 import { RatingStars } from "@/components/ui/rating-stars"
 import { cn } from "@/lib/utils"
@@ -44,32 +43,46 @@ export default function WishlistPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <Loader2 className="h-6 w-6 animate-spin text-accent-500" />
+      <div>
+        <div className="mb-7 animate-pulse">
+          <div className="h-8 w-36 rounded-lg bg-brand-green-light/60" />
+          <div className="mt-2 h-4 w-56 rounded bg-brand-green-light/40" />
+        </div>
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="h-6 w-6 animate-spin text-brand-text-light" />
+        </div>
       </div>
     )
   }
 
   return (
     <div>
-      <PageHeader title="Wishlist" description="Courses you've saved for later" />
+      {/* Page Header */}
+      <div className="mb-7">
+        <h1 className="text-2xl font-bold tracking-tight text-brand-text sm:text-3xl">
+          Wishlist
+        </h1>
+        <p className="mt-1 text-sm text-brand-text-mid">
+          Courses you&apos;ve saved for later
+        </p>
+      </div>
 
       {items.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-border-default bg-surface-dark py-20">
-          <Heart className="mb-3 h-12 w-12 text-text-tertiary" />
-          <h2 className="text-lg font-semibold text-text-primary">Your wishlist is empty</h2>
-          <p className="mt-1 text-sm text-text-secondary">
+        <div className="flex flex-col items-center justify-center rounded-xl border border-brand-border bg-brand-card py-20">
+          <Heart className="mb-3 h-12 w-12 text-brand-text-light" />
+          <h2 className="text-lg font-semibold text-brand-text">Your wishlist is empty</h2>
+          <p className="mt-1 text-sm text-brand-text-mid">
             Save courses you&apos;re interested in for later.
           </p>
           <Link
             href="/courses"
-            className="mt-4 rounded-lg bg-accent-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-500/90"
+            className="mt-4 rounded-lg bg-brand-green px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-green-dark"
           >
             Browse Courses
           </Link>
         </div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((item) => {
             const course = item.course
             const instructorName = course.instructor?.fullName ?? "Instructor"
@@ -83,10 +96,10 @@ export default function WishlistPage() {
             return (
               <div
                 key={item.id}
-                className="group relative overflow-hidden rounded-xl border border-border-default bg-surface-card transition-colors hover:border-border-strong"
+                className="group relative overflow-hidden rounded-xl border border-brand-border bg-brand-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
               >
                 <Link href={`/courses/${course.id}`}>
-                  <div className="relative flex h-40 items-center justify-center bg-surface-sunken">
+                  <div className="relative flex h-40 items-center justify-center bg-brand-bg">
                     {course.coverImageUrl ? (
                       <Image
                         src={course.coverImageUrl}
@@ -96,9 +109,9 @@ export default function WishlistPage() {
                         className="object-contain p-6 transition-transform duration-200 group-hover:scale-105"
                       />
                     ) : (
-                      <BookOpen className="h-12 w-12 text-accent-500" />
+                      <BookOpen className="h-12 w-12 text-brand-green" />
                     )}
-                    <span className="absolute right-3 top-3 rounded-full bg-accent-500 px-2.5 py-0.5 text-xs font-semibold text-text-on-accent">
+                    <span className="absolute right-3 top-3 rounded-full bg-brand-green px-2.5 py-0.5 text-xs font-semibold text-white">
                       {course.category}
                     </span>
                   </div>
@@ -107,7 +120,7 @@ export default function WishlistPage() {
                 <button
                   onClick={() => handleRemove(course.id)}
                   disabled={removing === course.id}
-                  className="absolute right-2 top-2 z-10 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-surface-card/80 text-accent-red backdrop-blur-sm transition-colors hover:bg-surface-card disabled:opacity-50"
+                  className="absolute right-2 top-2 z-10 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-white/80 text-red-500 backdrop-blur-sm transition-colors hover:bg-white disabled:opacity-50"
                   aria-label="Remove from wishlist"
                 >
                   <Trash2 className="h-4 w-4" />
@@ -115,10 +128,10 @@ export default function WishlistPage() {
 
                 <Link href={`/courses/${course.id}`}>
                   <div className="space-y-2 p-4">
-                    <h3 className="text-sm font-semibold leading-snug text-text-primary transition-colors group-hover:text-accent-500">
+                    <h3 className="text-sm font-semibold leading-snug text-brand-text transition-colors group-hover:text-brand-green">
                       {course.title}
                     </h3>
-                    <p className="line-clamp-2 text-xs leading-relaxed text-text-secondary">
+                    <p className="line-clamp-2 text-xs leading-relaxed text-brand-text-mid">
                       {course.description}
                     </p>
                     {course.averageRating != null && (
@@ -128,9 +141,9 @@ export default function WishlistPage() {
                         size="sm"
                       />
                     )}
-                    <div className="flex items-center justify-between border-t border-border-default pt-2">
-                      <span className="text-xs text-text-tertiary">{instructorName}</span>
-                      <span className="text-sm font-bold text-accent-500">
+                    <div className="flex items-center justify-between border-t border-brand-border pt-2">
+                      <span className="text-xs text-brand-text-light">{instructorName}</span>
+                      <span className="text-sm font-bold text-brand-green">
                         {displayPrice}
                       </span>
                     </div>

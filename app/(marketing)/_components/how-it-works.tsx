@@ -1,64 +1,64 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "motion/react";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { ScrollReveal } from "./scroll-reveal";
 
 const STEPS = [
-  {
-    number: "01",
-    title: "Register",
-    description: "Pick your course, secure your spot, and join the next cohort. No experience needed.",
-  },
-  {
-    number: "02",
-    title: "Learn Live",
-    description: "Attend live sessions, build real projects, and get graded every week.",
-  },
-  {
-    number: "03",
-    title: "Get Hired",
-    description: "Graduate with a portfolio, a certificate, and direct support landing your first client or job.",
-  },
+  { num: 1, title: "Register & Choose", desc: "Create your free account and pick a course that matches your goals and schedule." },
+  { num: 2, title: "Learn by Building", desc: "Join live sessions, work on real projects with instructor feedback, and collaborate with peers." },
+  { num: 3, title: "Land Your Next Role", desc: "Get career support, portfolio reviews, and a blockchain-verified certificate employers trust." },
 ];
 
-export default function HowItWorks() {
-  const sectionRef = useRef(null);
-  const inView = useInView(sectionRef, { once: true, margin: "-60px" });
-  const reduced = useReducedMotion();
-
+export function HowItWorks() {
   return (
-    <section ref={sectionRef} className="py-20">
-      <motion.div
-        initial={reduced ? {} : { opacity: 0, y: 16 }}
-        animate={reduced || inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-        className="mb-12"
-      >
-        <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-border-default px-3 py-1 text-xs font-medium text-text-tertiary">
-          How It Works
-        </div>
-        <h2 className="text-3xl font-bold tracking-tight text-text-primary text-balance">
-          Simple. Structured. Serious.
-        </h2>
-      </motion.div>
+    <section className="px-4 py-20 sm:px-6 lg:px-10" id="how">
+      <div className="mx-auto max-w-3xl">
+        <ScrollReveal>
+          <div className="mb-14 text-center">
+            <div className="mb-3 flex items-center justify-center gap-3 text-[11px] font-bold uppercase tracking-[0.15em] text-landing-green">
+              <span className="inline-block h-px w-6 bg-landing-green/40" />
+              How It Works
+              <span className="inline-block h-px w-6 bg-landing-green/40" />
+            </div>
+            <h2 className="text-[clamp(1.75rem,3.5vw,2.625rem)] font-extrabold -tracking-[0.03em] text-landing-dark">
+              Simple. Structured. Serious.
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-landing-text-mid sm:text-base">
+              Three steps from enrollment to career growth — no fluff, just results.
+            </p>
+          </div>
+        </ScrollReveal>
 
-      <div className="grid gap-6 md:grid-cols-3">
-        {STEPS.map((step, i) => (
-          <motion.div
-            key={step.number}
-            initial={reduced ? {} : { opacity: 0, y: 24 }}
-            animate={reduced || inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: i * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
-            className="rounded-xl border border-border-default p-6"
-          >
-            <span className="text-xs font-semibold tracking-widest text-text-tertiary">
-              STEP {step.number}
-            </span>
-            <h3 className="mt-3 text-lg font-bold text-text-primary">{step.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-text-secondary">{step.description}</p>
-          </motion.div>
-        ))}
+        {/* Steps with connector line */}
+        <div className="relative grid gap-10 sm:grid-cols-3">
+          {/* Connector line (desktop) */}
+          <div
+            className="pointer-events-none absolute left-[calc(16.66%+20px)] right-[calc(16.66%+20px)] top-10 hidden h-0.5 sm:block"
+            style={{
+              background: "linear-gradient(90deg, #0a7c42, #f5a623)",
+              opacity: 0.2,
+            }}
+          />
+
+          {STEPS.map((step, i) => (
+            <ScrollReveal key={step.num} delay={i * 0.15}>
+              <div className="text-center">
+                <div
+                  className={`mx-auto mb-5 flex size-[56px] items-center justify-center rounded-full text-xl font-extrabold text-white transition-transform duration-300 hover:scale-110 ${
+                    step.num === 1
+                      ? "bg-landing-green"
+                      : step.num === 2
+                        ? "bg-gradient-to-br from-landing-green to-landing-amber"
+                        : "bg-landing-amber"
+                  }`}
+                >
+                  {step.num}
+                </div>
+                <h3 className="text-base font-bold text-landing-dark sm:text-lg">{step.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-landing-text-mid">{step.desc}</p>
+              </div>
+            </ScrollReveal>
+          ))}
+        </div>
       </div>
     </section>
   );

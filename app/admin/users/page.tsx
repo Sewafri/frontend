@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { PageHeader } from "@/components/ui/page-header";
 import { getAdminUsers, suspendUser, reactivateUser, changeUserRole } from "@/lib/data/admin";
 import type { User } from "@/types/db";
 import { Search, ShieldAlert, ShieldCheck, RotateCcw } from "lucide-react";
@@ -11,7 +10,7 @@ type RoleOption = "STUDENT" | "INSTRUCTOR" | "ADMIN";
 const ROLE_COLORS: Record<RoleOption, string> = {
   STUDENT: "bg-accent-blue/10 text-accent-blue",
   INSTRUCTOR: "bg-accent-purple/10 text-accent-purple",
-  ADMIN: "bg-accent-500/10 text-accent-500",
+  ADMIN: "bg-brand-green-light text-brand-green",
 };
 
 export default function AdminUsersPage() {
@@ -82,40 +81,40 @@ export default function AdminUsersPage() {
 
   return (
     <div>
-      <PageHeader
-        title="Users"
-        description={`${total} total users`}
-      />
+      <div className="mb-7">
+        <h1 className="text-2xl font-bold tracking-tight text-brand-text sm:text-3xl">Users</h1>
+        <p className="mt-1 text-sm text-brand-text-mid">{total} total users</p>
+      </div>
 
       <form onSubmit={handleSearch} className="relative mb-4 max-w-md">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-tertiary" />
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-text-light" />
         <input
           type="text"
           placeholder="Search by name or email..."
           aria-label="Search users"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full rounded-lg border border-border-default bg-surface-card py-2.5 pl-10 pr-4 text-sm text-text-primary placeholder-text-tertiary outline-none transition-colors focus:border-accent-500/50 focus:ring-2 focus:ring-accent-500/10"
+          className="w-full rounded-lg border border-brand-border bg-brand-card py-2.5 pl-10 pr-4 text-sm text-brand-text placeholder-brand-text-light outline-none transition-colors focus:border-brand-green/50 focus:ring-2 focus:ring-brand-green/10"
         />
       </form>
 
       {loading && (
         <div className="flex items-center justify-center py-20">
-          <p className="text-sm text-text-secondary">Loading users...</p>
+          <p className="text-sm text-brand-text-mid">Loading users...</p>
         </div>
       )}
 
       {!loading && users.length === 0 && (
         <div className="flex items-center justify-center py-20">
-          <p className="text-sm text-text-tertiary">No users found.</p>
+          <p className="text-sm text-brand-text-light">No users found.</p>
         </div>
       )}
 
       {!loading && users.length > 0 && (
-        <div className="overflow-x-auto rounded-xl border border-border-default bg-surface-card">
+        <div className="overflow-x-auto rounded-xl border border-brand-border bg-brand-card">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-border-default text-xs text-text-tertiary">
+              <tr className="border-b border-brand-border text-xs text-brand-text-light">
                 <th className="px-5 pb-3 pt-4 font-medium">Name</th>
                 <th className="px-5 pb-3 pt-4 font-medium">Email</th>
                 <th className="px-5 pb-3 pt-4 font-medium">Role</th>
@@ -129,10 +128,10 @@ export default function AdminUsersPage() {
                 return (
                   <tr
                     key={u.id}
-                    className="border-b border-border-default transition-colors hover:bg-surface-card-hover last:border-0"
+                    className="border-b border-brand-border transition-colors hover:bg-brand-bg last:border-0"
                   >
-                    <td className="px-5 py-3.5 font-medium text-text-primary">{u.fullName}</td>
-                    <td className="px-5 py-3.5 text-text-secondary">{u.email}</td>
+                    <td className="px-5 py-3.5 font-medium text-brand-text">{u.fullName}</td>
+                    <td className="px-5 py-3.5 text-brand-text-mid">{u.email}</td>
                     <td className="px-5 py-3.5">
                       <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${ROLE_COLORS[u.role as RoleOption] || ROLE_COLORS.STUDENT}`}>
                         {u.role}
@@ -140,7 +139,7 @@ export default function AdminUsersPage() {
                     </td>
                     <td className="px-5 py-3.5">
                       <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                        u.isActive ? "bg-accent-green/10 text-accent-green" : "bg-accent-red/10 text-accent-red"
+                        u.isActive ? "bg-brand-green/10 text-brand-green" : "bg-accent-red/10 text-accent-red"
                       }`}>
                         {u.isActive ? "Active" : "Suspended"}
                       </span>
@@ -160,7 +159,7 @@ export default function AdminUsersPage() {
                           <button
                             onClick={() => handleReactivate(u.id)}
                             disabled={isBusy}
-                            className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-medium text-accent-green transition-colors hover:bg-accent-green/10 disabled:opacity-50"
+                            className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-medium text-brand-green transition-colors hover:bg-brand-green/10 disabled:opacity-50"
                           >
                             <RotateCcw className="h-3.5 w-3.5" />
                             Reactivate
@@ -171,7 +170,7 @@ export default function AdminUsersPage() {
                           value={u.role}
                           onChange={(e) => handleRoleChange(u.id, e.target.value as RoleOption)}
                           disabled={isBusy}
-                          className="rounded-md border border-border-default bg-surface-card px-2 py-1 text-xs text-text-secondary outline-none transition-colors focus:border-accent-500/50 disabled:opacity-50"
+                          className="rounded-md border border-brand-border bg-brand-card px-2 py-1 text-xs text-brand-text-mid outline-none transition-colors focus:border-brand-green/50 disabled:opacity-50"
                         >
                           <option value="STUDENT">Student</option>
                           <option value="INSTRUCTOR">Instructor</option>

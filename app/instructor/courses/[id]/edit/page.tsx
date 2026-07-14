@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { PageHeader } from "@/components/ui/page-header";
-import GlassCard from "@/components/ui/glass-card";
 import { Save, ArrowLeft, Trash2 } from "lucide-react";
 import { CourseCoverUpload } from "@/components/courses/course-cover-upload";
 import { getCourseById, updateCourse, deleteCourse, publishCourse, unpublishCourse } from "@/lib/data/courses";
@@ -91,7 +89,7 @@ export default function EditCoursePage() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
-        <p className="text-lg font-medium text-text-primary">Loading course...</p>
+        <p className="text-lg font-medium text-brand-text">Loading course...</p>
       </div>
     );
   }
@@ -99,8 +97,8 @@ export default function EditCoursePage() {
   if (!course) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
-        <p className="text-lg font-medium text-text-primary">Course not found</p>
-        <Link href="/instructor/courses" className="mt-2 text-sm text-accent-500 hover:underline">Back to courses</Link>
+        <p className="text-lg font-medium text-brand-text">Course not found</p>
+        <Link href="/instructor/courses" className="mt-2 text-sm text-brand-green hover:underline">Back to courses</Link>
       </div>
     );
   }
@@ -108,27 +106,30 @@ export default function EditCoursePage() {
   return (
     <div className="">
       <div className="mb-6 flex items-center gap-3">
-        <Link href="/instructor/courses" className="flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary">
+        <Link href="/instructor/courses" className="flex items-center gap-1 text-sm text-brand-text-mid hover:text-brand-text">
           <ArrowLeft className="h-4 w-4" /> Back to Courses
         </Link>
       </div>
 
-      <PageHeader title="Edit Course" description={`Editing: ${course.title}`} />
+      <div className="mb-7">
+        <h1 className="text-2xl font-bold tracking-tight text-brand-text sm:text-3xl">Edit Course</h1>
+        <p className="mt-1 text-sm text-brand-text-mid">Editing: {course.title}</p>
+      </div>
 
-      <GlassCard>
+      <div className="rounded-xl border border-brand-border bg-brand-card p-5">
         <div className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="sm:col-span-2">
-              <label className="mb-1.5 block text-xs font-medium text-text-secondary">Course Title</label>
-              <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary outline-none focus:border-accent-500/50" />
+              <label className="mb-1.5 block text-xs font-medium text-brand-text-mid">Course Title</label>
+              <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" className="w-full rounded-lg border border-brand-border bg-brand-card px-3 py-2.5 text-sm text-brand-text outline-none focus:border-brand-green focus:shadow-[0_0_0_3px_rgba(10,124,66,0.08)]" />
             </div>
             <div className="sm:col-span-2">
-              <label className="mb-1.5 block text-xs font-medium text-text-secondary">Description</label>
-              <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={4} className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary outline-none focus:border-accent-500/50" />
+              <label className="mb-1.5 block text-xs font-medium text-brand-text-mid">Description</label>
+              <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={4} className="w-full rounded-lg border border-brand-border bg-brand-card px-3 py-2.5 text-sm text-brand-text outline-none focus:border-brand-green focus:shadow-[0_0_0_3px_rgba(10,124,66,0.08)]" />
             </div>
             <div>
-              <label className="mb-1.5 block text-xs font-medium text-text-secondary">Category</label>
-              <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary outline-none focus:border-accent-500/50">
+              <label className="mb-1.5 block text-xs font-medium text-brand-text-mid">Category</label>
+              <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full rounded-lg border border-brand-border bg-brand-card px-3 py-2.5 text-sm text-brand-text outline-none focus:border-brand-green focus:shadow-[0_0_0_3px_rgba(10,124,66,0.08)]">
                 <option>Web Development</option>
                 <option>Data Science</option>
                 <option>UI/UX Design</option>
@@ -137,8 +138,8 @@ export default function EditCoursePage() {
               </select>
             </div>
             <div>
-              <label className="mb-1.5 block text-xs font-medium text-text-secondary">Price ($)</label>
-              <input value={price} onChange={(e) => setPrice(e.target.value)} type="number" className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary outline-none focus:border-accent-500/50" />
+              <label className="mb-1.5 block text-xs font-medium text-brand-text-mid">Price ($)</label>
+              <input value={price} onChange={(e) => setPrice(e.target.value)} type="number" className="w-full rounded-lg border border-brand-border bg-brand-card px-3 py-2.5 text-sm text-brand-text outline-none focus:border-brand-green focus:shadow-[0_0_0_3px_rgba(10,124,66,0.08)]" />
             </div>
             <div className="sm:col-span-2">
               <CourseCoverUpload
@@ -148,9 +149,9 @@ export default function EditCoursePage() {
               />
             </div>
             <div>
-              <label className="mb-1.5 block text-xs font-medium text-text-secondary">Status</label>
+              <label className="mb-1.5 block text-xs font-medium text-brand-text-mid">Status</label>
               <div className="flex items-center gap-2">
-                <span className={`text-sm font-medium ${course.status === "PUBLISHED" ? "text-accent-green" : "text-accent-amber"}`}>
+                <span className={`text-sm font-medium ${course.status === "PUBLISHED" ? "text-brand-green" : "text-brand-amber"}`}>
                   {course.status === "PUBLISHED" ? "Published" : course.status === "DRAFT" ? "Draft" : "Unpublished"}
                 </span>
                 {course.status === "PUBLISHED" ? (
@@ -158,7 +159,7 @@ export default function EditCoursePage() {
                     {publishing ? "..." : "Unpublish"}
                   </button>
                 ) : (
-                  <button onClick={handlePublish} disabled={publishing} className="cursor-pointer text-xs text-accent-green hover:text-accent-green/80 disabled:opacity-50">
+                  <button onClick={handlePublish} disabled={publishing} className="cursor-pointer text-xs text-brand-green hover:text-brand-green/80 disabled:opacity-50">
                     {publishing ? "..." : "Publish"}
                   </button>
                 )}
@@ -166,19 +167,19 @@ export default function EditCoursePage() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between border-t border-border-default pt-6">
+          <div className="flex items-center justify-between border-t border-brand-border pt-6">
             <button onClick={() => setDeleteOpen(true)} disabled={deleting} className="cursor-pointer flex items-center gap-2 rounded-lg border border-accent-red/30 px-4 py-2 text-sm font-medium text-accent-red transition-colors hover:bg-accent-red/10 disabled:opacity-50">
               <Trash2 className="h-4 w-4" /> {deleting ? "Deleting..." : "Delete Course"}
             </button>
             <div className="flex items-center gap-3">
-              <Link href={`/instructor/courses/${params.id}/curriculum`} className="rounded-lg border border-border-default px-4 py-2 text-sm font-medium text-text-secondary transition-colors hover:text-text-primary">Manage Curriculum</Link>
-              <button onClick={handleSave} disabled={saving} className="cursor-pointer flex items-center gap-2 rounded-lg bg-accent-500 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-500/90 disabled:opacity-50">
+              <Link href={`/instructor/courses/${params.id}/curriculum`} className="rounded-lg border border-brand-border px-4 py-2 text-sm font-medium text-brand-text-mid transition-colors hover:text-brand-text">Manage Curriculum</Link>
+              <button onClick={handleSave} disabled={saving} className="cursor-pointer flex items-center gap-2 rounded-lg bg-brand-green px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-green-dark disabled:opacity-50">
                 <Save className="h-4 w-4" /> {saving ? "Saving..." : "Save Changes"}
               </button>
             </div>
           </div>
         </div>
-      </GlassCard>
+      </div>
 
       <ConfirmDialog
         open={deleteOpen}

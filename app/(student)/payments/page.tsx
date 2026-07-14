@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import { CreditCard, Wallet, AlertCircle, Clock, Check, RefreshCw, Loader2, ExternalLink } from "lucide-react"
-import { PageHeader } from "@/components/ui/page-header"
 import { getMyPayments, checkCryptoPayment, retryCryptoPayment } from "@/lib/data/payments"
 import type { PaymentWithDetails } from "@/lib/data/payments"
 
@@ -17,13 +16,13 @@ const STATUS_LABELS: Record<string, string> = {
 }
 
 const STATUS_PILLS: Record<string, string> = {
-  PENDING: "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300",
-  AWAITING_CONFIRMATIONS: "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300",
-  CONFIRMED: "bg-gray-900 text-white dark:bg-white dark:text-gray-900",
-  FAILED: "bg-gray-200 text-gray-600 dark:bg-gray-800 dark:text-gray-400",
-  EXPIRED: "bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-500",
-  UNDERPAID: "bg-gray-200 text-gray-600 dark:bg-gray-800 dark:text-gray-400",
-  REFUNDED: "bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400",
+  PENDING: "bg-brand-bg text-brand-text-mid border border-brand-border",
+  AWAITING_CONFIRMATIONS: "bg-brand-amber-light text-brand-amber border border-brand-amber/30",
+  CONFIRMED: "bg-brand-green-light text-brand-green border border-brand-green/30",
+  FAILED: "bg-accent-red/5 text-accent-red border border-accent-red/20",
+  EXPIRED: "bg-brand-bg text-brand-text-light border border-brand-border",
+  UNDERPAID: "bg-brand-amber-light text-brand-amber border border-brand-amber/30",
+  REFUNDED: "bg-brand-bg text-brand-text-mid border border-brand-border",
 }
 
 export default function PaymentsPage() {
@@ -68,19 +67,24 @@ export default function PaymentsPage() {
 
   return (
     <div>
-      <PageHeader
-        title="Payments"
-        description="View your payment history and manage crypto payments."
-      />
+      {/* Page Header */}
+      <div className="mb-7">
+        <h1 className="text-2xl font-bold tracking-tight text-brand-text sm:text-3xl">
+          Payments
+        </h1>
+        <p className="mt-1 text-sm text-brand-text-mid">
+          View your payment history and manage crypto payments.
+        </p>
+      </div>
 
       {loading && (
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="h-5 w-5 animate-spin text-text-tertiary" />
+          <Loader2 className="h-5 w-5 animate-spin text-brand-text-light" />
         </div>
       )}
 
       {error && (
-        <div className="flex items-center gap-2 rounded-lg bg-accent-red/10 px-4 py-3 text-sm text-accent-red">
+        <div className="flex items-center gap-2 rounded-xl border border-accent-red/20 bg-accent-red/5 px-4 py-3 text-sm text-accent-red">
           <AlertCircle className="h-4 w-4" />
           {error}
         </div>
@@ -88,15 +92,15 @@ export default function PaymentsPage() {
 
       {!loading && !error && payments.length === 0 && (
         <div className="flex flex-col items-center justify-center py-20">
-          <CreditCard className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
-          <p className="text-sm text-text-secondary">No payments yet.</p>
+          <CreditCard className="mb-4 h-12 w-12 text-brand-text-light" />
+          <p className="text-sm text-brand-text-mid">No payments yet.</p>
         </div>
       )}
 
       {!loading && payments.length > 0 && (
         <div className="space-y-3">
           {payments.map((p) => {
-            const color = STATUS_PILLS[p.status] ?? "bg-gray-100 text-gray-500 dark:bg-gray-500/10 dark:text-gray-400"
+            const color = STATUS_PILLS[p.status] ?? "bg-brand-bg text-brand-text-mid border border-brand-border"
             const label = STATUS_LABELS[p.status] ?? p.status
             const isCrypto = p.method === "CRYPTO"
             const needsAction = isCrypto && (p.status === "AWAITING_CONFIRMATIONS" || p.status === "UNDERPAID" || p.status === "EXPIRED")
@@ -104,25 +108,25 @@ export default function PaymentsPage() {
             return (
               <div
                 key={p.id}
-                className="rounded-xl border border-border-default bg-surface-dark p-4"
+                className="rounded-xl border border-brand-border bg-brand-card p-4 transition-all duration-200 hover:shadow-sm"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       {isCrypto ? (
-                        <Wallet className="h-4 w-4 text-accent-500" />
+                        <Wallet className="h-4 w-4 text-brand-green" />
                       ) : (
-                        <CreditCard className="h-4 w-4 text-accent-500" />
+                        <CreditCard className="h-4 w-4 text-brand-green" />
                       )}
-                      <span className="text-sm font-medium text-text-primary">
+                      <span className="text-sm font-medium text-brand-text">
                         {p.course?.title ?? "Payment"}
                       </span>
                     </div>
-                    <p className="text-xs text-text-secondary">
+                    <p className="text-xs text-brand-text-mid">
                       {p.amount} {p.currency} &middot; {new Date(p.createdAt).toLocaleDateString()}
                     </p>
                     {isCrypto && p.cryptoDetail && (
-                      <div className="space-y-0.5 text-[10px] text-text-tertiary">
+                      <div className="space-y-0.5 text-[10px] text-brand-text-light">
                         <p>Network: {p.cryptoDetail.network} &middot; Token: {p.cryptoDetail.tokenSymbol}</p>
                         <p className="font-mono">Address: {p.cryptoDetail.paymentAddress.slice(0, 14)}...</p>
                         <p>Expected: {p.cryptoDetail.expectedAmount} {p.cryptoDetail.tokenSymbol}</p>
@@ -142,14 +146,14 @@ export default function PaymentsPage() {
                     )}
                   </div>
                   <div className="flex shrink-0 flex-col items-end gap-2">
-                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${color}`}>{label}</span>
+                    <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${color}`}>{label}</span>
                     {needsAction && (
                       <div className="flex gap-1.5">
                         {p.status !== "EXPIRED" && (
                           <button
                             onClick={() => handleCheck(p.id)}
                             disabled={checkingId === p.id}
-                            className="flex cursor-pointer items-center gap-1 rounded-md border border-border-default px-2 py-1 text-[10px] text-text-secondary transition-colors hover:bg-surface-card disabled:opacity-50"
+                            className="flex cursor-pointer items-center gap-1 rounded-md border border-brand-border px-2 py-1 text-[10px] text-brand-text-mid transition-colors hover:bg-brand-card disabled:opacity-50"
                           >
                             {checkingId === p.id ? (
                               <Loader2 className="h-3 w-3 animate-spin" />
@@ -163,7 +167,7 @@ export default function PaymentsPage() {
                           <button
                             onClick={() => handleRetry(p.id)}
                             disabled={retryingId === p.id}
-                            className="flex cursor-pointer items-center gap-1 rounded-md border border-accent-500/20 bg-accent-500/5 px-2 py-1 text-[10px] text-accent-500 transition-colors hover:bg-accent-500/10 disabled:opacity-50"
+                            className="flex cursor-pointer items-center gap-1 rounded-md border border-brand-green/20 bg-brand-green-light/40 px-2 py-1 text-[10px] text-brand-green transition-colors hover:bg-brand-green-light disabled:opacity-50"
                           >
                             {retryingId === p.id ? (
                               <Loader2 className="h-3 w-3 animate-spin" />

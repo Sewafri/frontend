@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, BookOpen } from "lucide-react";
-import { PageHeader } from "@/components/ui/page-header";
 import LessonContent from "@/components/lessons/lesson-content";
 import { getLesson, completeLesson } from "@/lib/data/lessons";
 import { LessonResources } from "@/components/lessons/lesson-resources";
@@ -53,7 +52,7 @@ export default function LessonViewerPage() {
   if (loading) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent-500 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-brand-green border-t-transparent" />
       </div>
     );
   }
@@ -64,19 +63,19 @@ export default function LessonViewerPage() {
         <div className="mb-6 flex items-center gap-3">
           <Link
             href={`/my-learning/${courseId}`}
-            className="flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary"
+            className="flex items-center gap-1 text-sm text-brand-text-mid hover:text-brand-text"
           >
             <ArrowLeft className="h-4 w-4" /> Back to Curriculum
           </Link>
         </div>
-        <PageHeader
-          title="Lesson Unavailable"
-          description={
+        <div className="mb-7">
+          <h1 className="text-2xl font-bold tracking-tight text-brand-text sm:text-3xl">Lesson Unavailable</h1>
+          <p className="mt-1 text-sm text-brand-text-mid">{
             error.includes("not found")
               ? "This lesson content endpoint is not yet available. Please check back later."
               : error
-          }
-        />
+          }</p>
+        </div>
       </div>
     );
   }
@@ -88,15 +87,15 @@ export default function LessonViewerPage() {
       <div className="mb-6 flex items-center gap-3">
         <Link
           href={`/my-learning/${courseId}`}
-          className="flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary"
+          className="flex items-center gap-1 text-sm text-brand-text-mid hover:text-brand-text"
         >
           <ArrowLeft className="h-4 w-4" /> Back to Curriculum
         </Link>
       </div>
 
-      <PageHeader
-        title={lesson.title}
-        description={
+      <div className="mb-7">
+        <h1 className="text-2xl font-bold tracking-tight text-brand-text sm:text-3xl">{lesson.title}</h1>
+        <p className="mt-1 text-sm text-brand-text-mid">{
           lesson.contentType === "VIDEO"
             ? "Video Lesson"
             : lesson.contentType === "CODE"
@@ -104,8 +103,8 @@ export default function LessonViewerPage() {
               : lesson.contentType === "MIXED"
                 ? "Mixed Content"
                 : "Lesson"
-        }
-      />
+        }</p>
+      </div>
 
       <LessonContent
         lesson={lesson}
