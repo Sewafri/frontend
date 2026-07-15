@@ -45,7 +45,7 @@ function AnimatedNumber({ target, suffix, decimal = false }: { target: number; s
   }, [counted, target, decimal]);
 
   return (
-    <div ref={ref} className="text-[clamp(1.75rem,3vw,2.25rem)] font-extrabold -tracking-[0.03em] text-landing-dark tabular-nums">
+    <div ref={ref} className="text-[clamp(1.75rem,3vw,2.25rem)] font-extrabold -tracking-[0.03em] text-landing-text tabular-nums">
       {display}
       <span className="font-bold text-landing-green">{suffix}</span>
     </div>

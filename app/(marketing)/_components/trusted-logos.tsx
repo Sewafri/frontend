@@ -15,7 +15,7 @@ export function TrustedLogos() {
           {LOGOS.map((name) => (
             <span
               key={name}
-              className="text-base font-extrabold tracking-tight text-landing-dark opacity-30 transition-opacity hover:opacity-50 sm:text-lg"
+              className="text-base font-extrabold tracking-tight text-landing-text opacity-30 transition-opacity hover:opacity-50 sm:text-lg"
             >
               {name}
             </span>

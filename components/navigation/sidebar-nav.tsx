@@ -25,9 +25,18 @@ interface SidebarNavProps {
 }
 
 const accentMap: Record<string, { active: string; hover: string }> = {
-  brand: { active: "bg-gray-100 text-gray-900 font-semibold", hover: "hover:bg-gray-50 hover:text-gray-900" },
-  admin: { active: "bg-gray-100 text-gray-900 font-semibold", hover: "hover:bg-gray-50 hover:text-gray-900" },
-  instructor: { active: "bg-gray-100 text-gray-900 font-semibold", hover: "hover:bg-gray-50 hover:text-gray-900" },
+  brand: {
+    active: "bg-surface-sunken text-text-primary font-semibold",
+    hover: "hover:bg-surface-card-hover hover:text-text-primary",
+  },
+  admin: {
+    active: "bg-surface-sunken text-text-primary font-semibold",
+    hover: "hover:bg-surface-card-hover hover:text-text-primary",
+  },
+  instructor: {
+    active: "bg-surface-sunken text-text-primary font-semibold",
+    hover: "hover:bg-surface-card-hover hover:text-text-primary",
+  },
 };
 
 function SidebarLinkItem({ link, collapsed, active, accent, onClose }: { link: SidebarLink; collapsed: boolean; active: boolean; accent: { active: string; hover: string }; onClose?: () => void }) {
@@ -90,13 +99,13 @@ export function SidebarNav({ links, user, accentClass = "brand", mobileOpen, onM
       )}>
         {!collapsed ? (
           <Link href="/" onClick={onMobileClose} className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent-500 text-xs font-bold text-white">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent-500 text-xs font-bold text-text-on-accent">
               {BRAND.name.slice(0, 1)}
             </div>
             <span className="text-sm font-semibold text-text-primary">{BRAND.name}</span>
           </Link>
         ) : (
-          <Link href="/" onClick={onMobileClose} className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent-500 text-xs font-bold text-white">
+          <Link href="/" onClick={onMobileClose} className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent-500 text-xs font-bold text-text-on-accent">
             {BRAND.name.slice(0, 1)}
           </Link>
         )}
@@ -137,7 +146,7 @@ export function SidebarNav({ links, user, accentClass = "brand", mobileOpen, onM
             "flex items-center rounded-xl transition-colors hover:bg-surface-card-hover",
             collapsed ? "justify-center p-2" : "gap-3 px-2 py-2",
           )}>
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-accent-400 to-accent-600 text-xs font-semibold text-white shadow-sm">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent-500 text-xs font-semibold text-text-on-accent">
               {user.initials}
             </div>
             <AnimatePresence>

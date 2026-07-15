@@ -19,7 +19,7 @@ export function HowItWorks() {
               How It Works
               <span className="inline-block h-px w-6 bg-landing-green/40" />
             </div>
-            <h2 className="text-[clamp(1.75rem,3.5vw,2.625rem)] font-extrabold -tracking-[0.03em] text-landing-dark">
+            <h2 className="text-[clamp(1.75rem,3.5vw,2.625rem)] font-extrabold -tracking-[0.03em] text-landing-text">
               Simple. Structured. Serious.
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-landing-text-mid sm:text-base">
@@ -53,7 +53,7 @@ export function HowItWorks() {
                 >
                   {step.num}
                 </div>
-                <h3 className="text-base font-bold text-landing-dark sm:text-lg">{step.title}</h3>
+                <h3 className="text-base font-bold text-landing-text sm:text-lg">{step.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-landing-text-mid">{step.desc}</p>
               </div>
             </ScrollReveal>

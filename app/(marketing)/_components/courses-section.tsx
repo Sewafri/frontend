@@ -57,7 +57,7 @@ export function CoursesSection() {
               <span className="inline-block h-px w-6 bg-landing-green/40" />
               Featured Courses
             </div>
-            <h2 className="text-[clamp(1.75rem,3.5vw,2.625rem)] font-extrabold -tracking-[0.03em] text-landing-dark">
+            <h2 className="text-[clamp(1.75rem,3.5vw,2.625rem)] font-extrabold -tracking-[0.03em] text-landing-text">
               Start with our most popular
             </h2>
           </ScrollReveal>
@@ -96,7 +96,7 @@ export function CoursesSection() {
 
                 {/* Body */}
                 <div className="p-5">
-                  <h3 className="text-sm font-bold leading-snug text-landing-dark sm:text-base">
+                  <h3 className="text-sm font-bold leading-snug text-landing-text sm:text-base">
                     {course.title}
                   </h3>
                   <div className="mb-3 mt-2 flex items-center gap-1.5 text-xs text-landing-text-light">
@@ -105,7 +105,7 @@ export function CoursesSection() {
                   </div>
 
                   <div className="flex items-center justify-between border-t border-landing-border pt-3.5">
-                    <span className="text-xl font-extrabold text-landing-dark">{course.price}</span>
+                    <span className="text-xl font-extrabold text-landing-text">{course.price}</span>
                     <div className="flex items-center gap-3 text-xs text-landing-text-light">
                       <span className="flex items-center gap-1 font-bold text-landing-amber">
                         <Star size={13} className="fill-landing-amber text-landing-amber" />

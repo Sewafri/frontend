@@ -50,7 +50,7 @@ export function CategoriesSection() {
               Explore Categories
               <span className="inline-block h-px w-6 bg-landing-green/40" />
             </div>
-            <h2 className="text-[clamp(1.75rem,3.5vw,2.625rem)] font-extrabold -tracking-[0.03em] text-landing-dark">
+            <h2 className="text-[clamp(1.75rem,3.5vw,2.625rem)] font-extrabold -tracking-[0.03em] text-landing-text">
               Find your path
             </h2>
           </div>
@@ -67,7 +67,7 @@ export function CategoriesSection() {
                   >
                     <Icon size={26} />
                   </div>
-                  <h3 className="text-base font-bold text-landing-dark sm:text-lg">{cat.title}</h3>
+                  <h3 className="text-base font-bold text-landing-text sm:text-lg">{cat.title}</h3>
                   <p className="mb-4 text-sm leading-relaxed text-landing-text-mid">{cat.desc}</p>
 
                   <ul className="space-y-2">

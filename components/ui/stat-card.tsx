@@ -11,7 +11,7 @@ interface StatCardProps {
   trendUp?: boolean;
 }
 
-export function StatCard({ label, value, icon: Icon, iconBg = "bg-gray-100 dark:bg-gray-800", iconColor = "text-gray-900 dark:text-gray-100", trend, trendUp }: StatCardProps) {
+export function StatCard({ label, value, icon: Icon, iconBg = "bg-surface-sunken", iconColor = "text-text-primary", trend, trendUp }: StatCardProps) {
   return (
     <div className="rounded-xl border border-border-default bg-surface-card p-5 transition-all hover:shadow-sm">
       <div className="flex items-start justify-between">
@@ -21,7 +21,7 @@ export function StatCard({ label, value, icon: Icon, iconBg = "bg-gray-100 dark:
           {trend && trend !== "neutral" && (
             <span className={cn(
               "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium",
-              "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300",
+              "bg-surface-sunken text-text-secondary",
             )}>
               {trendUp ? <ArrowUp className="h-3 w-3" /> : <ArrowUp className="h-3 w-3 rotate-180" />}
               {trend}

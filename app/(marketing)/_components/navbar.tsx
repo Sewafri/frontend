@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 const NAV_LINKS = [
   { label: "Courses", href: "#courses" },
@@ -10,6 +11,9 @@ const NAV_LINKS = [
   { label: "Why Us", href: "#why" },
   { label: "Categories", href: "#categories" },
 ];
+
+const themeToggleClass =
+  "border-landing-border bg-landing-card text-landing-text-mid hover:bg-landing-bg hover:text-landing-text";
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -28,7 +32,7 @@ export function Navbar() {
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
           scrolled
-            ? "border-b border-black/6 bg-landing-bg/72 shadow-sm backdrop-blur-xl"
+            ? "border-b border-landing-border/80 bg-landing-bg/72 shadow-sm backdrop-blur-xl"
             : "bg-transparent"
         }`}
       >
@@ -45,7 +49,7 @@ export function Navbar() {
                 <Link
                   key={link.label}
                   href={link.href}
-                  className="rounded-lg px-3.5 py-2 text-sm font-medium text-landing-text-mid transition-all hover:bg-black/5 hover:text-landing-text"
+                  className="rounded-lg px-3.5 py-2 text-sm font-medium text-landing-text-mid transition-all hover:bg-surface-overlay hover:text-landing-text"
                 >
                   {link.label}
                 </Link>
@@ -53,8 +57,9 @@ export function Navbar() {
             </div>
           </div>
 
-          {/* Right */}
+          {/* Right — desktop */}
           <div className="hidden items-center gap-2.5 md:flex">
+            <ThemeToggle className={themeToggleClass} />
             <Link
               href="/sign-in"
               className="rounded-[10px] border-2 border-landing-border bg-transparent px-5 py-2 text-sm font-semibold text-landing-text transition-all hover:border-landing-green hover:text-landing-green"
@@ -70,14 +75,17 @@ export function Navbar() {
             </Link>
           </div>
 
-          {/* Mobile toggle */}
-          <button
-            onClick={() => setMobileOpen(true)}
-            className="flex size-10 items-center justify-center rounded-[10px] border border-landing-border bg-landing-card md:hidden"
-            aria-label="Open menu"
-          >
-            <Menu size={20} className="text-landing-text-mid" />
-          </button>
+          {/* Mobile: theme + menu */}
+          <div className="flex items-center gap-2 md:hidden">
+            <ThemeToggle className={themeToggleClass} />
+            <button
+              onClick={() => setMobileOpen(true)}
+              className="flex size-10 items-center justify-center rounded-[10px] border border-landing-border bg-landing-card"
+              aria-label="Open menu"
+            >
+              <Menu size={20} className="text-landing-text-mid" />
+            </button>
+          </div>
         </nav>
       </header>
 
@@ -91,13 +99,16 @@ export function Navbar() {
             className="absolute right-0 top-0 flex h-full w-[280px] flex-col gap-2 bg-landing-card p-6 shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <button
-              onClick={() => setMobileOpen(false)}
-              className="mb-2 flex size-9 items-center justify-center self-end rounded-[10px] border border-landing-border bg-landing-card"
-              aria-label="Close menu"
-            >
-              <X size={18} className="text-landing-text-mid" />
-            </button>
+            <div className="mb-2 flex items-center justify-between">
+              <ThemeToggle className={themeToggleClass} />
+              <button
+                onClick={() => setMobileOpen(false)}
+                className="flex size-9 items-center justify-center rounded-[10px] border border-landing-border bg-landing-card"
+                aria-label="Close menu"
+              >
+                <X size={18} className="text-landing-text-mid" />
+              </button>
+            </div>
 
             {NAV_LINKS.map((link) => (
               <Link

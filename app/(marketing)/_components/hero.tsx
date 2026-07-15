@@ -35,7 +35,7 @@ export function HeroSection() {
           </div>
 
           {/* Headline */}
-          <h1 className="text-[clamp(2.5rem,5.5vw,4.25rem)] font-black leading-[1.05] -tracking-[0.04em] text-landing-dark">
+          <h1 className="text-[clamp(2.5rem,5.5vw,4.25rem)] font-black leading-[1.05] -tracking-[0.04em] text-landing-text">
             Skills that <span className="relative text-landing-green">travel</span>{" "}
             with you.
           </h1>

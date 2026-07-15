@@ -184,7 +184,7 @@ export function CryptoEnroll({ courseId, onEnrolled }: Props) {
               <button
                 onClick={handlePay}
                 disabled={status === "approving" || status === "sending" || status === "done" || !hasBalance}
-                className="flex cursor-pointer items-center gap-1.5 rounded-lg bg-accent-500 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-accent-500/90 disabled:opacity-50"
+                className="flex cursor-pointer items-center gap-1.5 rounded-lg bg-accent-500 px-4 py-2 text-xs font-medium text-text-on-accent transition-colors hover:bg-accent-500/90 disabled:opacity-50"
               >
                 {status === "approving" || status === "sending" || status === "connecting" ? (
                   <Loader2 className="h-3 w-3 animate-spin" />

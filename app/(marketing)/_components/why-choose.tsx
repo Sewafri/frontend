@@ -49,7 +49,7 @@ export function WhyChoose() {
               Why SewAfri
               <span className="inline-block h-px w-6 bg-landing-green/40" />
             </div>
-            <h2 className="text-[clamp(1.75rem,3.5vw,2.625rem)] font-extrabold -tracking-[0.03em] text-landing-dark">
+            <h2 className="text-[clamp(1.75rem,3.5vw,2.625rem)] font-extrabold -tracking-[0.03em] text-landing-text">
               Built for African learners, by African experts
             </h2>
           </div>
@@ -77,7 +77,7 @@ export function WhyChoose() {
                   >
                     <Icon size={20} />
                   </div>
-                  <h3 className={`text-base font-bold sm:text-lg ${feature.accent ? "text-white" : "text-landing-dark"}`}>
+                  <h3 className={`text-base font-bold sm:text-lg ${feature.accent ? "text-white" : "text-landing-text"}`}>
                     {feature.title}
                   </h3>
                   <p
