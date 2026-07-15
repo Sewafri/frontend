@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import { Award, Trophy, Loader2 } from "lucide-react";
 import { BRAND } from "@/constants/brand";
@@ -107,13 +108,24 @@ export default function PublicWalletPage() {
             <h2 className="mb-4 text-lg font-semibold text-text-primary">Badges</h2>
             {badges.length > 0 ? (
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {badges.map((badge) => (
+              {badges.map((badge) => (
                   <div
                     key={badge.id}
                     className="rounded-xl border border-border-default bg-surface-card p-5"
                   >
-                    <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-accent-500/10">
-                      <Trophy className="h-6 w-6 text-accent-500" />
+                    <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-accent-500/10 overflow-hidden">
+                      {badge.iconUrl ? (
+                        <Image
+                          src={badge.iconUrl}
+                          alt={badge.name}
+                          width={40}
+                          height={40}
+                          className="h-8 w-8 object-contain"
+                          unoptimized
+                        />
+                      ) : (
+                        <Trophy className="h-6 w-6 text-accent-500" />
+                      )}
                     </div>
                     <h3 className="text-sm font-semibold text-text-primary">{badge.name}</h3>
                     <p className="mt-0.5 text-xs text-text-secondary">

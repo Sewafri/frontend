@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { BlockchainBadge } from "@/components/blockchain/blockchain-badge";
 import { WalletLinkButton } from "@/components/wallet/wallet-link-button";
@@ -204,8 +205,19 @@ export default function WalletPage() {
             {badges.map((badge) => (
               <div key={badge.id} className="rounded-xl border border-brand-border bg-brand-card p-5 text-center transition-all duration-200 hover:shadow-sm">
                 <div className="mb-3 flex items-center justify-center">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-amber-light">
-                    <Trophy className="h-6 w-6 text-brand-amber" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-amber-light overflow-hidden">
+                    {badge.iconUrl ? (
+                      <Image
+                        src={badge.iconUrl}
+                        alt={badge.name}
+                        width={40}
+                        height={40}
+                        className="h-8 w-8 object-contain"
+                        unoptimized
+                      />
+                    ) : (
+                      <Trophy className="h-6 w-6 text-brand-amber" />
+                    )}
                   </div>
                 </div>
                 <h3 className="text-sm font-semibold text-brand-text">{badge.name}</h3>

@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { BookOpen, Check, Lock, Play, ArrowLeft, FileQuestion, Sparkles, Loader2, Award } from "lucide-react";
+import { BookOpen, Check, Lock, Play, ArrowLeft, FileQuestion, Sparkles, Loader2, Award, MessageSquare } from "lucide-react";
 import ProgressBar from "@/components/ui/progress-bar";
 import { getCourseById } from "@/lib/data/courses";
-import { getLessons, completeLesson, getCourseProgress } from "@/lib/data/lessons";
+import { getLessons, completeLesson, getCourseProgress, getResumeLesson } from "@/lib/data/lessons";
 import { getCourseQuizzes } from "@/lib/data/quiz";
 import { confirmStripeSession } from "@/lib/data/payments";
 import type { Course } from "@/types/db";
@@ -30,6 +30,7 @@ export default function CurriculumPage() {
   const [confirmError, setConfirmError] = useState<string | null>(null);
   const [completingId, setCompletingId] = useState<string | null>(null);
   const [showWelcome, setShowWelcome] = useState(false);
+  const [resumeLessonId, setResumeLessonId] = useState<string | null>(null);
 
   useEffect(() => {
     const sessionId = searchParams.get("session_id");
@@ -53,7 +54,7 @@ export default function CurriculumPage() {
       }
 
       // Load course data
-      const [c, l, q, progress] = await Promise.all([
+      const [c, l, q, progress, resume] = await Promise.all([
         getCourseById(courseId).catch(() => null),
         getLessons(courseId).catch(() => [] as Lesson[]),
         getCourseQuizzes(courseId).catch(() => [] as QuizSummary[]),
@@ -63,6 +64,7 @@ export default function CurriculumPage() {
           progressPercent: 0,
           certificateId: null,
         })),
+        getResumeLesson(courseId).catch(() => ({ lessonId: null })),
       ]);
 
       setCourse(c);
@@ -72,6 +74,7 @@ export default function CurriculumPage() {
       setProgressPercent(progress.progressPercent);
       setCertificateId(progress.certificateId ?? null);
       setShowWelcome(progress.progressPercent === 0 && l.length > 0);
+      setResumeLessonId(resume.lessonId ?? null);
       setLoading(false);
     }
 
@@ -172,6 +175,24 @@ export default function CurriculumPage() {
       <div className="mb-7">
         <h1 className="text-2xl font-bold tracking-tight text-brand-text sm:text-3xl">{course.title}</h1>
         <p className="mt-1 text-sm text-brand-text-mid">Course curriculum and progress</p>
+        <div className="mt-3 flex flex-wrap gap-3">
+          {resumeLessonId && displayProgress > 0 && displayProgress < 100 && (
+            <Link
+              href={`/my-learning/${courseId}/lessons/${resumeLessonId}`}
+              className="inline-flex items-center gap-2 rounded-lg bg-brand-green px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-green-dark"
+            >
+              <Play className="h-4 w-4" />
+              Continue Learning
+            </Link>
+          )}
+          <Link
+            href={`/forum/c/${courseId}`}
+            className="inline-flex items-center gap-2 rounded-lg border border-brand-border bg-brand-card px-4 py-2 text-sm font-medium text-brand-text transition-colors hover:border-brand-green/30 hover:text-brand-green"
+          >
+            <MessageSquare className="h-4 w-4" />
+            Course Forum
+          </Link>
+        </div>
       </div>
 
       {displayLessons.length === 0 ? (
