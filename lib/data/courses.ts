@@ -85,6 +85,27 @@ export async function deleteCourse(id: string): Promise<void> {
   await apiMutate(`/courses/${id}`, { method: "DELETE" }, "Course deleted")
 }
 
-export async function enrollInCourse(courseId: string): Promise<void> {
-  await apiMutate(`/courses/${courseId}/enroll`, { method: "POST" }, "Enrolled successfully")
+export interface EnrollResult {
+  enrollment?: { id: string }
+  checkoutUrl?: string
+  payment?: { id: string; method: string }
+  cryptoDetail?: {
+    paymentAddress: string
+    expectedAmount: string
+    tokenSymbol: string
+    network: string
+    quoteExpiresAt: string
+  }
+}
+
+export async function enrollInCourse(courseId: string, method?: "CARD" | "CRYPTO"): Promise<EnrollResult> {
+  const data = await apiMutate<EnrollResult>(
+    `/courses/${courseId}/enroll`,
+    {
+      method: "POST",
+      body: method ? JSON.stringify({ method }) : undefined,
+    },
+    method ? undefined : "Enrolled successfully",
+  )
+  return data
 }

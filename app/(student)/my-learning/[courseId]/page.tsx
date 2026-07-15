@@ -1,15 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { BookOpen, Check, Lock, Play, ArrowLeft, FileQuestion } from "lucide-react";
-import { PageHeader } from "@/components/ui/page-header";
-import GlassCard from "@/components/ui/glass-card";
+import { BookOpen, Check, Lock, Play, ArrowLeft, FileQuestion, Sparkles, Loader2, Award } from "lucide-react";
 import ProgressBar from "@/components/ui/progress-bar";
 import { getCourseById } from "@/lib/data/courses";
-import { getLessons, completeLesson } from "@/lib/data/lessons";
+import { getLessons, completeLesson, getCourseProgress } from "@/lib/data/lessons";
 import { getCourseQuizzes } from "@/lib/data/quiz";
+import { confirmStripeSession } from "@/lib/data/payments";
 import type { Course } from "@/types/db";
 import type { Lesson } from "@/types/db";
 import type { QuizSummary } from "@/lib/data/quiz";
@@ -18,34 +17,79 @@ import { AskTutor } from "@/components/courses/ask-tutor";
 
 export default function CurriculumPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const courseId = params.courseId as string;
   const [course, setCourse] = useState<Course | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [quizzes, setQuizzes] = useState<QuizSummary[]>([]);
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
+  const [progressPercent, setProgressPercent] = useState(0);
+  const [certificateId, setCertificateId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [confirming, setConfirming] = useState(false);
+  const [confirmError, setConfirmError] = useState<string | null>(null);
   const [completingId, setCompletingId] = useState<string | null>(null);
+  const [showWelcome, setShowWelcome] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
-    Promise.all([
-      getCourseById(courseId).catch(() => null),
-      getLessons(courseId).catch(() => [] as Lesson[]),
-      getCourseQuizzes(courseId).catch(() => [] as QuizSummary[]),
-    ])
-      .then(([c, l, q]) => {
-        setCourse(c);
-        setLessons(l);
-        setQuizzes(q);
-      })
-      .finally(() => setLoading(false));
-  }, [courseId]);
+    const sessionId = searchParams.get("session_id");
+
+    async function init() {
+      setLoading(true);
+
+      // If returning from Stripe, confirm the session first
+      if (sessionId) {
+        setConfirming(true);
+        setConfirmError(null);
+        try {
+          await confirmStripeSession(sessionId);
+        } catch (err) {
+          setConfirmError(
+            err instanceof ApiError ? err.message : "Failed to confirm payment",
+          );
+        } finally {
+          setConfirming(false);
+        }
+      }
+
+      // Load course data
+      const [c, l, q, progress] = await Promise.all([
+        getCourseById(courseId).catch(() => null),
+        getLessons(courseId).catch(() => [] as Lesson[]),
+        getCourseQuizzes(courseId).catch(() => [] as QuizSummary[]),
+        getCourseProgress(courseId).catch(() => ({
+          enrolled: false,
+          completedLessonIds: [] as string[],
+          progressPercent: 0,
+          certificateId: null,
+        })),
+      ]);
+
+      setCourse(c);
+      setLessons(l);
+      setQuizzes(q);
+      setCompletedIds(new Set(progress.completedLessonIds));
+      setProgressPercent(progress.progressPercent);
+      setCertificateId(progress.certificateId ?? null);
+      setShowWelcome(progress.progressPercent === 0 && l.length > 0);
+      setLoading(false);
+    }
+
+    init();
+  }, [courseId, searchParams]);
 
   async function handleComplete(lessonId: string) {
     setCompletingId(lessonId);
     try {
       await completeLesson(lessonId);
       setCompletedIds((prev) => new Set(prev).add(lessonId));
+      // Refresh progress from server
+      const progress = await getCourseProgress(courseId).catch(() => null);
+      if (progress) {
+        setProgressPercent(progress.progressPercent);
+        setCompletedIds(new Set(progress.completedLessonIds));
+        setCertificateId(progress.certificateId ?? null);
+      }
     } catch (err) {
       if (err instanceof ApiError) {
         console.error("Failed to complete lesson:", err.message);
@@ -58,7 +102,7 @@ export default function CurriculumPage() {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
-        <p className="text-sm text-text-secondary">Loading...</p>
+        <p className="text-sm text-brand-text-mid">Loading...</p>
       </div>
     );
   }
@@ -66,10 +110,10 @@ export default function CurriculumPage() {
   if (!course) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
-        <BookOpen className="mb-3 h-12 w-12 text-text-secondary" />
-        <h2 className="text-xl font-semibold text-text-primary">Course not found</h2>
-        <p className="mt-1 text-sm text-text-secondary">This course may have been removed.</p>
-        <Link href="/my-learning" className="mt-4 text-sm text-accent-500 hover:underline">Back to My Learning</Link>
+        <BookOpen className="mb-3 h-12 w-12 text-brand-text-mid" />
+        <h2 className="text-xl font-semibold text-brand-text">Course not found</h2>
+        <p className="mt-1 text-sm text-brand-text-mid">This course may have been removed.</p>
+        <Link href="/my-learning" className="mt-4 text-sm text-brand-green hover:underline">Back to My Learning</Link>
       </div>
     );
   }
@@ -82,43 +126,100 @@ export default function CurriculumPage() {
   }));
 
   const completedCount = displayLessons.filter((l) => l.completed).length;
-  const progress = displayLessons.length > 0
+  const displayProgress = progressPercent > 0 ? progressPercent : displayLessons.length > 0
     ? Math.round((completedCount / displayLessons.length) * 100)
     : 0;
 
   return (
     <div>
       <div className="mb-6 flex items-center gap-3">
-        <Link href="/my-learning" className="flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary">
+        <Link href="/my-learning" className="flex items-center gap-1 text-sm text-brand-text-mid hover:text-brand-text">
           <ArrowLeft className="h-4 w-4" /> My Learning
         </Link>
       </div>
 
-      <PageHeader
-        title={course.title}
-        description="Course curriculum and progress"
-      />
+      {/* Confirming payment after Stripe redirect */}
+      {confirming && (
+        <div className="mb-6 flex items-center gap-3 rounded-xl border border-brand-green/20 bg-brand-green-light/40 p-4">
+          <Loader2 className="h-5 w-5 animate-spin text-brand-text-light" />
+          <p className="text-sm text-brand-text">Confirming your payment...</p>
+        </div>
+      )}
+      {confirmError && (
+        <div className="mb-6 rounded-xl border border-accent-red/20 bg-accent-red/5 p-4">
+          <p className="text-sm text-accent-red">{confirmError}</p>
+        </div>
+      )}
+
+      {showWelcome && (
+        <div className="mb-6 overflow-hidden rounded-xl border border-brand-green/20 bg-gradient-to-r from-brand-green-light/40 to-transparent p-6">
+          <div className="flex items-start gap-4">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-green-light">
+              <Sparkles className="h-6 w-6 text-brand-green" />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-brand-text">
+                Welcome to {course.title}!
+              </h2>
+              <p className="mt-1 text-sm text-brand-text-mid">
+                You&apos;re enrolled and ready to go. Start with the first lesson below, and work your way through the curriculum at your own pace.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="mb-7">
+        <h1 className="text-2xl font-bold tracking-tight text-brand-text sm:text-3xl">{course.title}</h1>
+        <p className="mt-1 text-sm text-brand-text-mid">Course curriculum and progress</p>
+      </div>
 
       {displayLessons.length === 0 ? (
-        <GlassCard>
-          <p className="py-6 text-center text-sm text-text-secondary">No lessons available yet.</p>
-        </GlassCard>
+        <div className="rounded-xl border border-brand-border bg-brand-card p-5">
+          <p className="py-6 text-center text-sm text-brand-text-mid">No lessons available yet.</p>
+        </div>
       ) : (
         <>
-          <GlassCard className="mb-8">
+          <div className="mb-8 rounded-xl border border-brand-border bg-brand-card p-5">
             <div className="flex flex-wrap items-center gap-6">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-accent-500/10">
-                <BookOpen className="h-7 w-7 text-accent-500" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand-green-light">
+                <BookOpen className="h-7 w-7 text-brand-green" />
               </div>
               <div className="flex-1">
-                <ProgressBar value={progress} label="Course Progress" className="max-w-md" />
+                <ProgressBar value={displayProgress} label="Course Progress" className="max-w-md" />
               </div>
               <div className="text-right">
-                <span className="text-2xl font-bold text-text-primary">{completedCount}</span>
-                <span className="text-xs text-text-secondary"> / {displayLessons.length} lessons</span>
+                <span className="text-2xl font-bold text-brand-text">{completedCount}</span>
+                <span className="text-xs text-brand-text-mid"> / {displayLessons.length} lessons</span>
               </div>
             </div>
-          </GlassCard>
+          </div>
+
+          {/* Certificate banner — shown when course is 100% complete */}
+          {displayProgress === 100 && certificateId && (
+            <div className="mb-6 overflow-hidden rounded-xl border border-brand-green/20 bg-brand-green/5 p-6">
+              <div className="flex items-start gap-4">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-green/10">
+                  <Award className="h-6 w-6 text-brand-green" />
+                </div>
+                <div className="flex-1">
+                  <h2 className="text-lg font-semibold text-brand-text">
+                    Course Complete!
+                  </h2>
+                  <p className="mt-1 text-sm text-brand-text-mid">
+                    You&apos;ve completed all the lessons. Claim your on-chain certificate.
+                  </p>
+                </div>
+                <Link
+                  href={`/certificates/${certificateId}`}
+                  className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-brand-green px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-green-dark"
+                >
+                  <Award className="h-4 w-4" />
+                  View Certificate
+                </Link>
+              </div>
+            </div>
+          )}
 
           <div className="space-y-2">
             {displayLessons.map((lesson, i) => (
@@ -127,37 +228,37 @@ export default function CurriculumPage() {
                 href={`/my-learning/${courseId}/lessons/${lesson.id}`}
                 className={`flex items-center gap-4 rounded-xl border px-5 py-4 transition-colors ${
                   lesson.completed
-                    ? "border-accent-green/20 bg-accent-green/5"
+                    ? "border-brand-green/20 bg-brand-green/5"
                     : i === completedCount
-                      ? "border-accent-500/30 bg-accent-500/5"
-                      : "border-border-default bg-surface-dark"
+                      ? "border-brand-green/30 bg-brand-green-light/40"
+                      : "border-brand-border bg-brand-bg"
                 }`}
               >
                 <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${
                   lesson.completed
-                    ? "bg-accent-green/10"
+                    ? "bg-brand-green/10"
                     : i === completedCount
-                      ? "bg-accent-500/10"
-                      : "bg-surface-card"
+                      ? "bg-brand-green-light"
+                      : "bg-brand-card"
                 }`}>
                   {lesson.completed ? (
-                    <Check className="h-4 w-4 text-accent-green" />
+                    <Check className="h-4 w-4 text-brand-green" />
                   ) : i === completedCount ? (
-                    <Play className="h-4 w-4 text-accent-500" />
+                    <Play className="h-4 w-4 text-brand-green" />
                   ) : (
-                    <Lock className="h-4 w-4 text-text-secondary" />
+                    <Lock className="h-4 w-4 text-brand-text-mid" />
                   )}
                 </div>
 
                 <div className="flex-1">
                   <span className={`text-sm font-medium ${
-                    lesson.completed ? "text-accent-green" : "text-text-primary"
+                    lesson.completed ? "text-brand-green" : "text-brand-text"
                   }`}>
                     {lesson.title}
                   </span>
                 </div>
 
-                <span className="rounded-full bg-surface-card px-2.5 py-0.5 text-[10px] font-medium uppercase text-text-secondary">
+                <span className="rounded-full bg-brand-card px-2.5 py-0.5 text-[10px] font-medium uppercase text-brand-text-mid">
                   {lesson.type}
                 </span>
 
@@ -168,7 +269,7 @@ export default function CurriculumPage() {
                       handleComplete(lesson.id);
                     }}
                     disabled={completingId === lesson.id}
-                    className="cursor-pointer rounded-lg bg-accent-500 px-4 py-1.5 text-xs font-medium text-text-on-accent transition-colors hover:bg-accent-500/90 disabled:opacity-50"
+                    className="cursor-pointer rounded-lg bg-brand-green px-4 py-1.5 text-xs font-medium text-white transition-colors hover:bg-brand-green-dark disabled:opacity-50"
                   >
                     {completingId === lesson.id ? "..." : "Complete"}
                   </button>
@@ -179,28 +280,28 @@ export default function CurriculumPage() {
 
           {quizzes.length > 0 && (
             <div className="mt-8">
-              <h2 className="mb-3 text-lg font-semibold text-text-primary">Quizzes</h2>
+              <h2 className="mb-3 text-lg font-semibold text-brand-text">Quizzes</h2>
               <div className="space-y-2">
                 {quizzes.map((quiz) => (
                   <Link
                     key={quiz.id}
                     href={`/my-learning/${courseId}/quiz/${quiz.id}`}
-                    className="flex items-center gap-4 rounded-xl border border-border-default bg-surface-dark px-5 py-4 transition-colors hover:border-accent-500/30"
+                    className="flex items-center gap-4 rounded-xl border border-brand-border bg-brand-bg px-5 py-4 transition-colors hover:border-brand-green/30"
                   >
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent-500/10">
-                      <FileQuestion className="h-4 w-4 text-accent-500" />
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-green-light">
+                      <FileQuestion className="h-4 w-4 text-brand-green" />
                     </div>
                     <div className="flex-1">
-                      <span className="text-sm font-medium text-text-primary">{quiz.title}</span>
-                      <p className="text-xs text-text-tertiary">
+                      <span className="text-sm font-medium text-brand-text">{quiz.title}</span>
+                      <p className="text-xs text-brand-text-light">
                         {quiz._count.questions} questions · {quiz.passingScore}% to pass
                         {quiz.isFinalAssessment && " · Final Assessment"}
                       </p>
                     </div>
-                    <span className="text-xs text-text-tertiary">
+                    <span className="text-xs text-brand-text-light">
                       {quiz.maxAttempts > 0 ? `Up to ${quiz.maxAttempts} attempts` : "Unlimited"}
                     </span>
-                    <span className="rounded-full bg-surface-card px-2.5 py-0.5 text-[10px] font-medium uppercase text-text-secondary">
+                    <span className="rounded-full bg-brand-card px-2.5 py-0.5 text-[10px] font-medium uppercase text-brand-text-mid">
                       Quiz
                     </span>
                   </Link>

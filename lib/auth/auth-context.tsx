@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react"
 import { api, storeTokens, clearTokens, getStoredTokens } from "@/lib/api/client"
 import type { User } from "@/types/db"
-import type { AuthContextValue, LoginInput, RegisterInput, GoogleLoginInput, AuthResponse } from "./types"
+import type { AuthContextValue, LoginInput, RegisterInput, AuthResponse } from "./types"
 
 const AuthContext = createContext<AuthContextValue | null>(null)
 
@@ -50,10 +50,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return data.user
   }, [])
 
-  const googleLogin = useCallback(async (input: GoogleLoginInput) => {
+  const loginWithGoogle = useCallback(async (
+    idToken: string,
+    role?: "STUDENT" | "INSTRUCTOR",
+  ) => {
     const data = await api<AuthResponse>("/auth/google", {
       method: "POST",
-      body: JSON.stringify(input),
+      body: JSON.stringify({ idToken, role }),
     })
     storeTokens(data.accessToken, data.refreshToken)
     setUser(data.user)
@@ -84,8 +87,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isAuthenticated: !!user,
         login,
         register,
-        googleLogin,
         logout,
+        loginWithGoogle,
       }}
     >
       {children}

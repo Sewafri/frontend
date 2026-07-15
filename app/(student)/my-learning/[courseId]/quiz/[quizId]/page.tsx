@@ -9,7 +9,6 @@ import {
   ArrowLeft, XCircle, Award, AlertTriangle, Clock, ShieldAlert,
   FileQuestion, Loader2,
 } from "lucide-react";
-import { PageHeader } from "@/components/ui/page-header";
 import Companion from "@/components/companion/companion";
 import {
   submitQuiz, getQuizQuestions,
@@ -138,14 +137,14 @@ export default function QuizPage() {
           angle: 60,
           spread: 55,
           origin: { x: 0, y: 0.7 },
-          colors: ["#2563eb", "#3b82f6", "#60a5fa"],
+          colors: ["#0a7c42", "#f59e0b", "#10b981"],
         });
         confetti({
           particleCount: 3,
           angle: 120,
           spread: 55,
           origin: { x: 1, y: 0.7 },
-          colors: ["#2563eb", "#3b82f6", "#60a5fa"],
+          colors: ["#0a7c42", "#f59e0b", "#10b981"],
         });
         if (Date.now() < end) requestAnimationFrame(frame);
       };
@@ -160,7 +159,7 @@ export default function QuizPage() {
   if (pageLoading) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-accent-500" />
+        <Loader2 className="h-8 w-8 animate-spin text-brand-text-light" />
       </div>
     );
   }
@@ -169,7 +168,7 @@ export default function QuizPage() {
     return (
       <div>
         <div className="mb-6 flex items-center gap-3">
-          <Link href={`/my-learning/${courseId}`} className="flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary">
+          <Link href={`/my-learning/${courseId}`} className="flex items-center gap-1 text-sm text-brand-text-mid hover:text-brand-text">
             <ArrowLeft className="h-4 w-4" /> Back to Curriculum
           </Link>
         </div>
@@ -177,13 +176,13 @@ export default function QuizPage() {
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent-red/10">
             <XCircle className="h-8 w-8 text-accent-red" />
           </div>
-          <h2 className="text-xl font-bold text-text-primary">Maximum Attempts Reached</h2>
-          <p className="mt-1 text-sm text-text-secondary">
+          <h2 className="text-xl font-bold text-brand-text">Maximum Attempts Reached</h2>
+          <p className="mt-1 text-sm text-brand-text-mid">
             You have used all {session?.maxAttempts} allowed attempts for this quiz.
           </p>
           <Link
             href={`/my-learning/${courseId}`}
-            className="mt-6 rounded-lg bg-accent-500 px-6 py-2 text-sm font-medium text-text-on-accent"
+            className="mt-6 rounded-lg bg-brand-green px-6 py-2 text-sm font-medium text-white"
           >
             Back to Course
           </Link>
@@ -196,11 +195,14 @@ export default function QuizPage() {
     return (
       <div>
         <div className="mb-6 flex items-center gap-3">
-          <Link href={`/my-learning/${courseId}`} className="flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary">
+          <Link href={`/my-learning/${courseId}`} className="flex items-center gap-1 text-sm text-brand-text-mid hover:text-brand-text">
             <ArrowLeft className="h-4 w-4" /> Back to Curriculum
           </Link>
         </div>
-        <PageHeader title="Quiz Unavailable" description={error} />
+        <div className="mb-7">
+          <h1 className="text-2xl font-bold tracking-tight text-brand-text sm:text-3xl">Quiz Unavailable</h1>
+          <p className="mt-1 text-sm text-brand-text-mid">{error}</p>
+        </div>
       </div>
     );
   }
@@ -209,14 +211,14 @@ export default function QuizPage() {
     return (
       <div>
         <div className="mb-6 flex items-center gap-3">
-          <Link href={`/my-learning/${courseId}`} className="flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary">
+          <Link href={`/my-learning/${courseId}`} className="flex items-center gap-1 text-sm text-brand-text-mid hover:text-brand-text">
             <ArrowLeft className="h-4 w-4" /> Back to Curriculum
           </Link>
         </div>
-        <PageHeader
-          title="Quiz Already Open"
-          description="This quiz is already open in another tab. Close the other tab and reload."
-        />
+        <div className="mb-7">
+          <h1 className="text-2xl font-bold tracking-tight text-brand-text sm:text-3xl">Quiz Already Open</h1>
+          <p className="mt-1 text-sm text-brand-text-mid">This quiz is already open in another tab. Close the other tab and reload.</p>
+        </div>
       </div>
     );
   }
@@ -228,12 +230,12 @@ export default function QuizPage() {
       <SessionIndicator studentName={session.title} compact />
 
       {integrity.isFullscreenRequired && !integrity.isFullscreen && !submitted && (
-        <div className="mb-4 flex items-center gap-2 rounded-lg border border-accent-yellow/30 bg-accent-yellow/5 px-4 py-2.5 text-sm text-accent-yellow">
+        <div className="mb-4 flex items-center gap-2 rounded-lg border border-brand-amber/30 bg-brand-amber-light px-4 py-2.5 text-sm text-brand-amber">
           <ShieldAlert className="h-4 w-4 shrink-0" />
           <span>Fullscreen mode required. Please enter fullscreen to continue.</span>
           <button
             onClick={integrity.enterFullscreen}
-            className="ml-auto cursor-pointer rounded-md bg-accent-yellow/10 px-3 py-1 text-xs font-medium underline-offset-2 hover:underline"
+            className="ml-auto cursor-pointer rounded-md bg-brand-amber/10 px-3 py-1 text-xs font-medium underline-offset-2 hover:underline"
           >
             Enter Fullscreen
           </button>
@@ -260,7 +262,7 @@ export default function QuizPage() {
       <div className="mb-6 flex items-center gap-3">
         <Link
           href={`/my-learning/${courseId}`}
-          className="flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary"
+          className="flex items-center gap-1 text-sm text-brand-text-mid hover:text-brand-text"
           onClick={(e) => {
             if (!submitted) {
               e.preventDefault();
@@ -271,22 +273,22 @@ export default function QuizPage() {
           <ArrowLeft className="h-4 w-4" /> Back to Curriculum
         </Link>
         {session.durationMinutes && (
-          <div className="ml-auto flex items-center gap-1.5 text-xs text-text-tertiary">
+          <div className="ml-auto flex items-center gap-1.5 text-xs text-brand-text-light">
             <Clock className="h-3.5 w-3.5" />
             <span>{session.durationMinutes} min</span>
           </div>
         )}
-        <span className="ml-2 text-xs text-text-tertiary">
+        <span className="ml-2 text-xs text-brand-text-light">
           Attempt {session.attemptsUsed + 1} of {session.maxAttempts}
         </span>
       </div>
 
       {!submitted ? (
         <>
-          <PageHeader
-            title={session.title}
-            description={`${session.questions.length} questions · ${session.passingScore}% to pass`}
-          />
+          <div className="mb-7">
+            <h1 className="text-2xl font-bold tracking-tight text-brand-text sm:text-3xl">{session.title}</h1>
+            <p className="mt-1 text-sm text-brand-text-mid">{session.questions.length} questions · {session.passingScore}% to pass</p>
+          </div>
 
           {error && (
             <div className="mb-4 rounded-lg bg-accent-red/10 p-3 text-sm text-accent-red">
@@ -298,12 +300,12 @@ export default function QuizPage() {
             {session.questions.map((q, idx) => (
               <div
                 key={q.id}
-                className="rounded-lg border border-border-default bg-surface-card p-5"
+                className="rounded-lg border border-brand-border bg-brand-card p-5"
               >
-                <h3 className="mb-3 text-sm font-medium text-text-primary">
+                <h3 className="mb-3 text-sm font-medium text-brand-text">
                   {idx + 1}. {q.text}
                   {q.points > 1 && (
-                    <span className="ml-1.5 text-xs text-text-tertiary">
+                    <span className="ml-1.5 text-xs text-brand-text-light">
                       ({q.points} pts)
                     </span>
                   )}
@@ -315,8 +317,8 @@ export default function QuizPage() {
                       onClick={() => handleSelect(q.id, option.id)}
                       className={`w-full cursor-pointer rounded-lg border px-4 py-2.5 text-left text-sm transition-colors ${
                         answers[q.id] === option.id
-                          ? "border-accent-500 bg-accent-500/10 text-text-primary"
-                          : "border-border-default text-text-secondary hover:bg-surface-hover"
+                          ? "border-brand-green bg-brand-green-light text-brand-text"
+                          : "border-brand-border text-brand-text-mid hover:bg-brand-bg"
                       }`}
                     >
                       {option.text}
@@ -328,13 +330,13 @@ export default function QuizPage() {
           </div>
 
           <div className="mt-8 flex items-center justify-between">
-            <span className="text-xs text-text-tertiary">
+            <span className="text-xs text-brand-text-light">
               {Object.keys(answers).length} of {session.questions.length} answered
             </span>
             <button
               onClick={handleSubmit}
               disabled={!allAnswered || submitting}
-              className="cursor-pointer rounded-lg bg-accent-500 px-8 py-3 font-medium text-text-on-accent transition-colors hover:bg-accent-500/90 disabled:cursor-not-allowed disabled:opacity-50"
+              className="cursor-pointer rounded-lg bg-brand-green px-8 py-3 font-medium text-white transition-colors hover:bg-brand-green-dark disabled:cursor-not-allowed disabled:opacity-50"
             >
               {submitting ? "Submitting..." : "Submit Quiz"}
             </button>
@@ -353,12 +355,12 @@ export default function QuizPage() {
             transition={reduced ? {} : { type: "spring", stiffness: 200, damping: 15, delay: 0.1 }}
             className={`mb-6 flex h-20 w-20 items-center justify-center rounded-full ${
               result?.passed
-                ? "bg-accent-500/10"
+                ? "bg-brand-green-light"
                 : "bg-accent-red/10"
             }`}
           >
             {result?.passed ? (
-              <Award className="h-10 w-10 text-accent-500" />
+              <Award className="h-10 w-10 text-brand-green" />
             ) : (
               <XCircle className="h-10 w-10 text-accent-red" />
             )}
@@ -368,7 +370,7 @@ export default function QuizPage() {
             initial={reduced ? {} : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={reduced ? {} : { type: "spring", stiffness: 120, damping: 22, delay: 0.2 }}
-            className="text-2xl font-bold text-text-primary"
+            className="text-2xl font-bold text-brand-text"
           >
             {result?.passed ? "Quiz Passed!" : "Keep Learning!"}
           </motion.h2>
@@ -377,7 +379,7 @@ export default function QuizPage() {
             initial={reduced ? {} : { opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={reduced ? {} : { delay: 0.3, duration: 0.4 }}
-            className="mt-1 text-text-secondary"
+            className="mt-1 text-brand-text-mid"
           >
             You scored {result?.score} out of 100
             {session.passingScore > 0 &&
@@ -426,26 +428,26 @@ export default function QuizPage() {
               initial={reduced ? {} : { opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={reduced ? {} : { type: "spring", stiffness: 100, damping: 18, delay: 0.4 }}
-              className="mt-6 w-full max-w-sm rounded-lg border border-accent-500/20 bg-accent-500/5 p-4 text-center"
+              className="mt-6 w-full max-w-sm rounded-lg border border-brand-green/20 bg-brand-green-light/40 p-4 text-center"
             >
               <motion.div
                 initial={reduced ? {} : { scale: 0, rotate: -20 }}
                 animate={{ scale: 1, rotate: 0 }}
                 transition={reduced ? {} : { type: "spring", stiffness: 250, damping: 15, delay: 0.6 }}
               >
-                <Award className="mx-auto mb-2 h-8 w-8 text-accent-500" />
+                <Award className="mx-auto mb-2 h-8 w-8 text-brand-green" />
               </motion.div>
-              <p className="text-sm font-semibold text-text-primary">
+              <p className="text-sm font-semibold text-brand-text">
                 {result.alreadyIssued
                   ? "Certificate Already Issued"
                   : "Certificate Generated!"}
               </p>
-              <p className="mt-1 text-xs text-text-secondary">
+              <p className="mt-1 text-xs text-brand-text-mid">
                 {result.certificate.courseTitle}
               </p>
               <Link
                 href={`/certificates/${result.certificate.id}`}
-                className="mt-3 inline-block rounded-lg bg-accent-500 px-5 py-2 text-sm font-medium text-text-on-accent hover:bg-accent-500/90"
+                className="mt-3 inline-block rounded-lg bg-brand-green px-5 py-2 text-sm font-medium text-white hover:bg-brand-green-dark"
               >
                 View Certificate
               </Link>
@@ -466,14 +468,14 @@ export default function QuizPage() {
                   setResult(null);
                   setError(null);
                 }}
-                className="cursor-pointer rounded-lg border border-border-default px-6 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-surface-hover"
+                className="cursor-pointer rounded-lg border border-brand-border px-6 py-2 text-sm font-medium text-brand-text transition-colors hover:bg-brand-bg"
               >
                 Retry ({result?.attemptsRemaining} left)
               </button>
             )}
             <Link
               href={`/my-learning/${courseId}`}
-              className="rounded-lg bg-accent-500 px-6 py-2 text-sm font-medium text-text-on-accent transition-colors hover:bg-accent-500/90"
+              className="rounded-lg bg-brand-green px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-green-dark"
             >
               Back to Course
             </Link>

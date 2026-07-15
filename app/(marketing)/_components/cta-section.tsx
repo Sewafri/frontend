@@ -1,52 +1,79 @@
 "use client";
 
-import { useRef } from "react";
 import Link from "next/link";
-import { motion, useInView } from "motion/react";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { ArrowRight, Check } from "lucide-react";
+import { ScrollReveal } from "./scroll-reveal";
 
-export default function CTASection() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
-  const reduced = useReducedMotion();
+const BADGES = [
+  { text: "Free to start" },
+  { text: "No credit card required" },
+  { text: "Cancel anytime" },
+];
 
+export function CTASection() {
   return (
-    <section ref={ref} className="py-24">
-      <motion.div
-        initial={reduced ? {} : { opacity: 0, y: 24 }}
-        animate={reduced || inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-        className="rounded-2xl border border-border-default bg-surface-card p-10 text-center sm:p-16"
-      >
-        <h2 className="text-3xl font-bold tracking-tight text-text-primary text-balance sm:text-4xl">
-          Ready to start?
-        </h2>
-        <p className="mx-auto mt-4 max-w-lg text-base text-text-secondary">
-          Join ambitious African students who&apos;ve chosen to stop watching tutorials and start
-          building real skills, real projects, and real careers.
-        </p>
-        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Link
-            href="/sign-up"
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-text-primary px-7 py-3.5 text-sm font-semibold text-background transition-all hover:opacity-90 active:scale-[0.97]"
-          >
-            Create Free Account
-          </Link>
-          <Link
-            href="/courses"
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-border-default px-7 py-3.5 text-sm font-semibold text-text-primary transition-all hover:bg-surface-card-hover active:scale-[0.97]"
-          >
-            Browse Courses
-          </Link>
-        </div>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs text-text-tertiary">
-          <span>100% Project-Based</span>
-          <span className="h-3 w-px bg-border-default" />
-          <span>Live Expert Mentorship</span>
-          <span className="h-3 w-px bg-border-default" />
-          <span>Portfolio Guaranteed</span>
-        </div>
-      </motion.div>
+    <section
+      className="relative overflow-hidden px-4 py-20 sm:px-6 lg:px-10"
+      style={{
+        background: "linear-gradient(135deg, #065c30 0%, #0a7c42 50%, #10a85a 100%)",
+      }}
+    >
+      {/* Decorative circles */}
+      <div
+        className="pointer-events-none absolute -right-20 -top-40 size-[500px] rounded-full opacity-[0.06]"
+        style={{
+          background: "radial-gradient(circle, rgba(255,255,255,0.06), transparent 65%)",
+        }}
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute -bottom-32 -left-20 size-[400px] rounded-full opacity-[0.08]"
+        style={{
+          background: "radial-gradient(circle, rgba(245,166,35,0.08), transparent 65%)",
+        }}
+        aria-hidden
+      />
+
+      <div className="relative z-10 mx-auto max-w-2xl text-center">
+        <ScrollReveal>
+          <h2 className="text-[clamp(1.875rem,4vw,3rem)] font-black -tracking-[0.03em] leading-tight text-white">
+            Ready to start?
+          </h2>
+          <p className="mx-auto mt-4 max-w-lg text-base leading-relaxed text-white/70">
+            Join thousands of African learners building real skills for real careers.
+            Your first step starts here.
+          </p>
+
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link
+              href="/sign-up"
+              className="inline-flex items-center gap-2 rounded-xl bg-white px-7 py-3.5 text-sm font-bold text-landing-green-dark transition-all hover:bg-gray-100 active:scale-[0.97]"
+              style={{ boxShadow: "0 4px 14px rgba(0,0,0,0.15)" }}
+            >
+              Create Free Account
+              <ArrowRight size={16} />
+            </Link>
+            <Link
+              href="/courses"
+              className="inline-flex items-center gap-2 rounded-xl border-2 border-white/30 px-7 py-3.5 text-sm font-semibold text-white transition-all hover:bg-white/10 hover:border-white/50 active:scale-[0.97]"
+            >
+              Browse Courses
+            </Link>
+          </div>
+
+          <div className="mt-8 flex flex-wrap justify-center gap-6">
+            {BADGES.map((badge) => (
+              <div
+                key={badge.text}
+                className="flex items-center gap-2 text-xs font-medium text-white/65"
+              >
+                <Check size={15} className="text-landing-amber" />
+                {badge.text}
+              </div>
+            ))}
+          </div>
+        </ScrollReveal>
+      </div>
     </section>
   );
 }

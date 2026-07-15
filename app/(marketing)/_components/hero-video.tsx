@@ -67,7 +67,7 @@ export default function HeroVideo() {
         >
           <Link
             href="/courses"
-            className="group inline-flex items-center justify-center gap-2 rounded-xl bg-accent-500 px-7 py-3.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-accent-600 active:scale-[0.97]"
+            className="group inline-flex items-center justify-center gap-2 rounded-xl bg-accent-500 px-7 py-3.5 text-sm font-semibold text-text-on-accent shadow-sm transition-all hover:bg-accent-600 active:scale-[0.97]"
           >
             Browse Courses
             <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-0.5" />

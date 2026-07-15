@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { PageHeader } from "@/components/ui/page-header";
-import GlassCard from "@/components/ui/glass-card";
 import ProgressBar from "@/components/ui/progress-bar";
 import { getCourseEnrollments } from "@/lib/data/enrollments";
 import type { Enrollment } from "@/types/db";
@@ -28,21 +26,21 @@ export default function StudentProgressPage() {
 
   return (
     <div className="">
-      <PageHeader
-        title="Student Progress"
-        description="Track enrolled student performance"
-      />
+      <div className="mb-7">
+        <h1 className="text-2xl font-bold tracking-tight text-brand-text sm:text-3xl">Student Progress</h1>
+        <p className="mt-1 text-sm text-brand-text-mid">Track enrolled student performance</p>
+      </div>
 
       {loading ? (
-        <p className="text-sm text-text-secondary">Loading students...</p>
+        <p className="text-sm text-brand-text-mid">Loading students...</p>
       ) : enrollments.length === 0 ? (
-        <p className="py-8 text-center text-sm text-text-secondary">No students enrolled yet.</p>
+        <p className="py-8 text-center text-sm text-brand-text-mid">No students enrolled yet.</p>
       ) : (
-        <GlassCard>
+        <div className="rounded-xl border border-brand-border bg-brand-card p-5">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
-                <tr className="border-b border-border-default text-xs text-text-secondary">
+                <tr className="border-b border-brand-border text-xs text-brand-text-mid">
                   <th className="pb-3 font-medium">Name</th>
                   <th className="pb-3 font-medium">Email</th>
                   <th className="pb-3 font-medium">Progress</th>
@@ -51,17 +49,17 @@ export default function StudentProgressPage() {
               </thead>
               <tbody>
                 {enrollments.map((e) => (
-                  <tr key={e.id} className="border-b border-border-default last:border-0">
-                    <td className="py-3 font-medium text-text-primary">{e.user?.fullName ?? "Unknown"}</td>
-                    <td className="py-3 text-text-secondary">{e.user?.email ?? "—"}</td>
+                  <tr key={e.id} className="border-b border-brand-border last:border-0">
+                    <td className="py-3 font-medium text-brand-text">{e.user?.fullName ?? "Unknown"}</td>
+                    <td className="py-3 text-brand-text-mid">{e.user?.email ?? "\u2014"}</td>
                     <td className="py-3">
                       <ProgressBar value={e.progressPercent ?? 0} size="sm" className="max-w-[120px]" />
                     </td>
                     <td className="py-3">
                       <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                        e.status === "ACTIVE" ? "bg-accent-green/10 text-accent-green" :
+                        e.status === "ACTIVE" ? "bg-brand-green-light text-brand-green" :
                         e.status === "COMPLETED" ? "bg-accent-blue/10 text-accent-blue" :
-                        "bg-accent-amber/10 text-accent-amber"
+                        "bg-brand-amber/10 text-brand-amber"
                       }`}>{e.status}</span>
                     </td>
                   </tr>
@@ -69,7 +67,7 @@ export default function StudentProgressPage() {
               </tbody>
             </table>
           </div>
-        </GlassCard>
+        </div>
       )}
     </div>
   );

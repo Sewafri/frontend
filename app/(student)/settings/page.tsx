@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { PageHeader } from "@/components/ui/page-header";
-import GlassCard from "@/components/ui/glass-card";
 import { useAuth } from "@/lib/auth/auth-context";
 import { updateProfile, deleteAccount } from "@/lib/data/users";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -41,43 +39,49 @@ export default function SettingsPage() {
 
   return (
     <div className="">
-      <PageHeader
-        title="Settings"
-        description="Manage your account settings and preferences"
-      />
+      {/* Page Header */}
+      <div className="mb-7">
+        <h1 className="text-2xl font-bold tracking-tight text-brand-text sm:text-3xl">
+          Settings
+        </h1>
+        <p className="mt-1 text-sm text-brand-text-mid">
+          Manage your account settings and preferences
+        </p>
+      </div>
 
       <div className="space-y-8">
+        {/* ── Profile ── */}
         <section>
-          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-text-primary">
-            <User className="h-5 w-5 text-accent-500" /> Profile
+          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-brand-text">
+            <User className="h-5 w-5 text-brand-green" /> Profile
           </h2>
-          <GlassCard>
+          <div className="rounded-xl border border-brand-border bg-brand-card p-5">
             <div className="grid gap-6 sm:grid-cols-2">
               <div>
-                <label className="mb-1.5 block text-xs font-medium text-text-secondary">Full Name</label>
+                <label className="mb-1.5 block text-xs font-medium text-brand-text-mid">Full Name</label>
                 <input
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2 text-sm text-text-primary outline-none"
+                  className="w-full rounded-lg border border-brand-border bg-brand-card px-3 py-2 text-sm text-brand-text outline-none transition-colors focus:border-brand-green focus:shadow-[0_0_0_3px_rgba(10,124,66,0.08)]"
                 />
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-medium text-text-secondary">Email</label>
+                <label className="mb-1.5 block text-xs font-medium text-brand-text-mid">Email</label>
                 <input
                   type="email"
                   value={user?.email ?? ""}
                   readOnly
-                  className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2 text-sm text-text-secondary outline-none"
+                  className="w-full rounded-lg border border-brand-border bg-brand-bg px-3 py-2 text-sm text-brand-text-mid outline-none"
                 />
               </div>
               <div className="sm:col-span-2">
-                <label className="mb-1.5 block text-xs font-medium text-text-secondary">Bio</label>
+                <label className="mb-1.5 block text-xs font-medium text-brand-text-mid">Bio</label>
                 <textarea
                   rows={3}
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
-                  className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2 text-sm text-text-primary outline-none"
+                  className="w-full rounded-lg border border-brand-border bg-brand-card px-3 py-2 text-sm text-brand-text outline-none transition-colors focus:border-brand-green focus:shadow-[0_0_0_3px_rgba(10,124,66,0.08)]"
                 />
               </div>
             </div>
@@ -85,71 +89,75 @@ export default function SettingsPage() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="cursor-pointer rounded-lg bg-accent-500 px-5 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-accent-500/90 disabled:opacity-50"
+                className="cursor-pointer rounded-lg bg-brand-green px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-green-dark disabled:opacity-50"
               >
                 {saving ? "Saving..." : saved ? "Saved!" : "Save Profile"}
               </button>
             </div>
-          </GlassCard>
+          </div>
         </section>
 
+        {/* ── Password ── */}
         <section>
-          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-text-primary">
-            <Lock className="h-5 w-5 text-accent-500" /> Password
+          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-brand-text">
+            <Lock className="h-5 w-5 text-brand-green" /> Password
           </h2>
-          <GlassCard>
+          <div className="rounded-xl border border-brand-border bg-brand-card p-5">
             <div className="grid gap-6 sm:grid-cols-2">
               <div>
-                <label className="mb-1.5 block text-xs font-medium text-text-secondary">Current Password</label>
-                <input type="password" placeholder="••••••••" className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2 text-sm text-text-primary placeholder-text-secondary outline-none" />
+                <label className="mb-1.5 block text-xs font-medium text-brand-text-mid">Current Password</label>
+                <input type="password" placeholder="••••••••" className="w-full rounded-lg border border-brand-border bg-brand-card px-3 py-2 text-sm text-brand-text placeholder:text-brand-text-light outline-none transition-colors focus:border-brand-green focus:shadow-[0_0_0_3px_rgba(10,124,66,0.08)]" />
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-medium text-text-secondary">New Password</label>
-                <input type="password" placeholder="Enter new password" className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2 text-sm text-text-primary placeholder-text-secondary outline-none" />
+                <label className="mb-1.5 block text-xs font-medium text-brand-text-mid">New Password</label>
+                <input type="password" placeholder="Enter new password" className="w-full rounded-lg border border-brand-border bg-brand-card px-3 py-2 text-sm text-brand-text placeholder:text-brand-text-light outline-none transition-colors focus:border-brand-green focus:shadow-[0_0_0_3px_rgba(10,124,66,0.08)]" />
               </div>
             </div>
-          </GlassCard>
+          </div>
         </section>
 
+        {/* ── Notifications ── */}
         <section>
-          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-text-primary">
-            <Bell className="h-5 w-5 text-accent-500" /> Notifications
+          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-brand-text">
+            <Bell className="h-5 w-5 text-brand-green" /> Notifications
           </h2>
-          <GlassCard>
+          <div className="rounded-xl border border-brand-border bg-brand-card p-5">
             <div className="space-y-4">
               {NOTIFICATION_SETTINGS.map((n) => (
                 <div key={n.label} className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-text-primary">{n.label}</p>
-                    <p className="text-xs text-text-secondary">{n.description}</p>
+                    <p className="text-sm font-medium text-brand-text">{n.label}</p>
+                    <p className="text-xs text-brand-text-mid">{n.description}</p>
                   </div>
                   <label className="relative inline-flex cursor-pointer items-center">
                     <input type="checkbox" defaultChecked className="peer sr-only" />
-                    <div className="h-5 w-9 rounded-full bg-neutral-700 after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-white after:transition-all peer-checked:bg-accent-500 peer-checked:after:translate-x-full" />
+                    <div className="h-5 w-9 rounded-full bg-neutral-300 transition-colors after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-white after:transition-all peer-checked:bg-brand-green peer-checked:after:translate-x-full dark:bg-neutral-700" />
                   </label>
                 </div>
               ))}
             </div>
-          </GlassCard>
+          </div>
         </section>
 
+        {/* ── Payment History ── */}
         <section>
-          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-text-primary">
-            <CreditCard className="h-5 w-5 text-accent-500" /> Payment History
+          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-brand-text">
+            <CreditCard className="h-5 w-5 text-brand-green" /> Payment History
           </h2>
-          <GlassCard>
-            <p className="py-4 text-center text-sm text-text-secondary">
+          <div className="rounded-xl border border-brand-border bg-brand-card p-5">
+            <p className="py-4 text-center text-sm text-brand-text-mid">
               Payment history will appear here once available.
             </p>
-          </GlassCard>
+          </div>
         </section>
 
+        {/* ── Danger Zone ── */}
         <section>
           <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-accent-red">
             <TriangleAlert className="h-5 w-5" /> Danger Zone
           </h2>
-          <GlassCard>
-            <p className="mb-4 text-sm text-text-secondary">
+          <div className="rounded-xl border border-accent-red/20 bg-brand-card p-5">
+            <p className="mb-4 text-sm text-brand-text-mid">
               Permanently delete your account and all associated data. This action cannot be undone.
             </p>
             <button
@@ -159,7 +167,7 @@ export default function SettingsPage() {
             >
               {deleting ? "Deleting..." : "Delete Account"}
             </button>
-          </GlassCard>
+          </div>
 
           <ConfirmDialog
             open={deleteOpen}

@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { PageHeader } from "@/components/ui/page-header";
-import GlassCard from "@/components/ui/glass-card";
 import { BlockchainBadge } from "@/components/blockchain/blockchain-badge";
 import { WalletLinkButton } from "@/components/wallet/wallet-link-button";
 import { VaultSection } from "@/components/wallet/vault-section";
@@ -67,7 +65,7 @@ export default function WalletPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="h-6 w-6 animate-spin text-text-tertiary" />
+        <Loader2 className="h-6 w-6 animate-spin text-brand-text-light" />
       </div>
     );
   }
@@ -77,16 +75,21 @@ export default function WalletPage() {
 
   return (
     <div>
-      <PageHeader
-        title="My Wallet"
-        description="Your certificates, badges, and public profile"
-      />
+      {/* Page Header */}
+      <div className="mb-7">
+        <h1 className="text-2xl font-bold tracking-tight text-brand-text sm:text-3xl">
+          My Wallet
+        </h1>
+        <p className="mt-1 text-sm text-brand-text-mid">
+          Your certificates, badges, and public profile
+        </p>
+      </div>
 
       {/* Wallet Linking */}
-      <div className="mb-6 rounded-lg border border-border-default bg-surface-card p-4">
+      <div className="mb-6 rounded-xl border border-brand-border bg-brand-card p-4">
         <div className="mb-2 flex items-center gap-2">
-          <Wallet className="h-4 w-4 text-accent-500" />
-          <span className="text-xs font-semibold text-text-primary">Crypto Wallet</span>
+          <Wallet className="h-4 w-4 text-brand-green" />
+          <span className="text-xs font-semibold text-brand-text">Crypto Wallet</span>
         </div>
         <WalletLinkButton
           linkedAddress={user?.walletAddress ?? null}
@@ -101,26 +104,26 @@ export default function WalletPage() {
       </div>
 
       {/* Stats + Controls */}
-      <GlassCard className="mb-8">
+      <div className="mb-8 rounded-xl border border-brand-border bg-brand-card p-5">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-6">
             <div className="text-center">
-              <span className="text-3xl font-bold text-text-primary">{badges.length}</span>
-              <p className="text-xs text-text-tertiary">Badges</p>
+              <span className="text-3xl font-bold text-brand-text">{badges.length}</span>
+              <p className="text-xs text-brand-text-light">Badges</p>
             </div>
-            <div className="h-12 w-px bg-border-default" />
+            <div className="h-12 w-px bg-brand-border" />
             <div className="text-center">
-              <span className="text-3xl font-bold text-text-primary">{certificates.length}</span>
-              <p className="text-xs text-text-tertiary">Certificates</p>
+              <span className="text-3xl font-bold text-brand-text">{certificates.length}</span>
+              <p className="text-xs text-brand-text-light">Certificates</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
             {wallet?.publicUrl && (
               <button
                 onClick={handleCopyLink}
-                className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-border-default px-3 py-2 text-xs font-medium text-text-secondary transition-colors hover:bg-surface-hover"
+                className="flex cursor-pointer items-center gap-1.5 rounded-lg border border-brand-border px-3 py-2 text-xs font-medium text-brand-text-mid transition-colors hover:bg-brand-bg"
               >
-                {copied ? <Check className="h-3.5 w-3.5 text-accent-green" /> : <Copy className="h-3.5 w-3.5" />}
+                {copied ? <Check className="h-3.5 w-3.5 text-brand-green" /> : <Copy className="h-3.5 w-3.5" />}
                 {copied ? "Copied!" : "Copy Wallet Link"}
               </button>
             )}
@@ -129,8 +132,8 @@ export default function WalletPage() {
               disabled={toggling}
               className={`flex cursor-pointer items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-colors ${
                 wallet?.isPublic
-                  ? "border-accent-green/30 bg-accent-green/5 text-accent-green"
-                  : "border-border-default text-text-secondary hover:bg-surface-hover"
+                  ? "border-brand-green/30 bg-brand-green-light text-brand-green"
+                  : "border-brand-border text-brand-text-mid hover:bg-brand-bg"
               }`}
             >
               <Globe className="h-3.5 w-3.5" />
@@ -138,28 +141,28 @@ export default function WalletPage() {
             </button>
           </div>
         </div>
-      </GlassCard>
+      </div>
 
       {/* Certificates */}
       {certificates.length > 0 && (
         <div className="mb-8">
-          <h2 className="mb-4 text-lg font-semibold text-text-primary">Certificates</h2>
+          <h2 className="mb-4 text-lg font-semibold text-brand-text">Certificates</h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {certificates.map((cert) => (
-              <GlassCard key={cert.id} variant="bordered" className="transition-all hover:border-accent-500/30">
+              <div key={cert.id} className="rounded-xl border border-brand-border bg-brand-card p-4 transition-all duration-200 hover:shadow-sm">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent-500/10">
-                      <Award className="h-5 w-5 text-accent-500" />
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-green-light">
+                      <Award className="h-5 w-5 text-brand-green" />
                     </div>
                     <div>
                       <Link
                         href={`/certificates/${cert.id}`}
-                        className="text-sm font-semibold text-text-primary hover:text-accent-500"
+                        className="text-sm font-semibold text-brand-text hover:text-brand-green"
                       >
                         {cert.courseTitle}
                       </Link>
-                      <p className="text-xs text-text-tertiary">
+                      <p className="text-xs text-brand-text-light">
                         {cert.issueDate
                           ? new Date(cert.issueDate).toLocaleDateString("en-US", {
                               year: "numeric",
@@ -173,7 +176,7 @@ export default function WalletPage() {
                     <button
                       onClick={() => handleDownload(cert.id)}
                       disabled={downloading === cert.id}
-                      className="cursor-pointer rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
+                      className="cursor-pointer rounded-lg p-1.5 text-brand-text-mid transition-colors hover:bg-brand-bg hover:text-brand-text"
                       title="Download PDF"
                     >
                       {downloading === cert.id
@@ -187,7 +190,7 @@ export default function WalletPage() {
                     />
                   </div>
                 </div>
-              </GlassCard>
+              </div>
             ))}
           </div>
         </div>
@@ -196,31 +199,31 @@ export default function WalletPage() {
       {/* Badges */}
       {badges.length > 0 ? (
         <div>
-          <h2 className="mb-4 text-lg font-semibold text-text-primary">Badges</h2>
+          <h2 className="mb-4 text-lg font-semibold text-brand-text">Badges</h2>
           <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {badges.map((badge) => (
-              <GlassCard key={badge.id} variant="bordered">
-                <div className="flex flex-col items-center py-4 text-center">
-                  <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-accent-500/10">
-                    <Trophy className="h-6 w-6 text-accent-500" />
+              <div key={badge.id} className="rounded-xl border border-brand-border bg-brand-card p-5 text-center transition-all duration-200 hover:shadow-sm">
+                <div className="mb-3 flex items-center justify-center">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-amber-light">
+                    <Trophy className="h-6 w-6 text-brand-amber" />
                   </div>
-                  <h3 className="text-sm font-semibold text-text-primary">{badge.name}</h3>
-                  <p className="mt-0.5 text-xs text-text-tertiary">
-                    {badge.skills?.join(", ") || "Achievement badge"}
-                  </p>
                 </div>
-              </GlassCard>
+                <h3 className="text-sm font-semibold text-brand-text">{badge.name}</h3>
+                <p className="mt-0.5 text-xs text-brand-text-light">
+                  {badge.skills?.join(", ") || "Achievement badge"}
+                </p>
+              </div>
             ))}
           </div>
         </div>
       ) : (
-        <GlassCard>
+        <div className="rounded-xl border border-brand-border bg-brand-card">
           <div className="flex flex-col items-center py-12">
-            <Trophy className="mb-3 h-10 w-10 text-text-tertiary" />
-            <p className="text-sm text-text-secondary">No badges or certificates yet</p>
-            <p className="mt-1 text-xs text-text-tertiary">Complete courses to earn them</p>
+            <Trophy className="mb-4 h-12 w-12 text-brand-text-light" />
+            <p className="text-sm text-brand-text-mid">No badges or certificates yet</p>
+            <p className="mt-1.5 text-xs text-brand-text-light">Complete courses to earn them</p>
           </div>
-        </GlassCard>
+        </div>
       )}
     </div>
   );

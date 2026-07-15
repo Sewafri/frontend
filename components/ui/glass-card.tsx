@@ -14,10 +14,10 @@ interface CardProps {
 
 const variantClasses: Record<CardVariant, string> = {
   default:
-    "bg-surface-card border border-border-default",
+    "bg-surface-card shadow-sm",
   bordered: [
     "bg-surface-card",
-    "border-2 border-border-strong",
+    "border border-border-default",
   ].join(" "),
 };
 

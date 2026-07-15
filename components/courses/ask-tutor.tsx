@@ -69,7 +69,7 @@ export function AskTutor({ courseId, courseTitle }: AskTutorProps) {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-accent-500 text-white shadow-lg transition-all hover:bg-accent-500/90 hover:shadow-xl active:scale-95"
+        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-accent-500 text-text-on-accent shadow-lg transition-all hover:bg-accent-500/90 hover:shadow-xl active:scale-95"
         aria-label="Ask AI Tutor"
       >
         <Bot className="h-6 w-6" />
@@ -79,19 +79,19 @@ export function AskTutor({ courseId, courseTitle }: AskTutorProps) {
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex w-80 flex-col overflow-hidden rounded-2xl border border-border-default bg-surface-card shadow-2xl sm:w-96">
-      <div className="flex items-center justify-between border-b border-border-default bg-accent-500 px-4 py-3 text-white">
+      <div className="flex items-center justify-between border-b border-border-default bg-accent-500 px-4 py-3 text-text-on-accent">
         <div className="flex items-center gap-2">
           <Bot className="h-5 w-5" />
           <div>
             <p className="text-sm font-semibold">AI Tutor</p>
             {courseTitle && (
-              <p className="truncate text-xs text-white/70">{courseTitle}</p>
+              <p className="truncate text-xs text-text-on-accent/70">{courseTitle}</p>
             )}
           </div>
         </div>
         <button
           onClick={() => setOpen(false)}
-          className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-white/70 transition-colors hover:bg-white/20"
+          className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-text-on-accent/70 transition-colors hover:bg-text-on-accent/20"
           aria-label="Close"
         >
           <X className="h-4 w-4" />
@@ -123,7 +123,7 @@ export function AskTutor({ courseId, courseTitle }: AskTutorProps) {
                   className={cn(
                     "max-w-[85%] rounded-2xl px-3 py-2 text-sm",
                     msg.role === "user"
-                      ? "rounded-br-md bg-accent-500 text-white"
+                      ? "rounded-br-md bg-accent-500 text-text-on-accent"
                       : "rounded-bl-md border border-border-default bg-surface-dark text-text-primary",
                   )}
                 >
@@ -184,7 +184,7 @@ export function AskTutor({ courseId, courseTitle }: AskTutorProps) {
         <button
           type="submit"
           disabled={!input.trim() || loading}
-          className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg bg-accent-500 text-white transition-colors hover:bg-accent-500/90 disabled:opacity-30"
+          className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg bg-accent-500 text-text-on-accent transition-colors hover:bg-accent-500/90 disabled:opacity-30"
           aria-label="Send"
         >
           <Send className="h-4 w-4" />

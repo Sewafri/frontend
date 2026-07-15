@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Download, Award, Loader2, ShieldX } from "lucide-react";
-import GlassCard from "@/components/ui/glass-card";
 import { BlockchainProof } from "@/components/blockchain/blockchain-proof";
 import { CertificateMint } from "@/components/certificates/certificate-mint";
 import { verifyCertificate } from "@/lib/data/verify";
@@ -55,7 +54,7 @@ export default function CertificateDetailPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="h-6 w-6 animate-spin text-text-tertiary" />
+        <Loader2 className="h-6 w-6 animate-spin text-brand-text-light" />
       </div>
     );
   }
@@ -63,17 +62,17 @@ export default function CertificateDetailPage() {
   if (error || !data) {
     return (
       <div>
-        <Link href="/certificates" className="mb-6 flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary">
+        <Link href="/certificates" className="mb-6 flex items-center gap-1 text-sm text-brand-text-mid hover:text-brand-text">
           <ArrowLeft className="h-4 w-4" /> Back to certificates
         </Link>
-        <GlassCard>
+        <div className="rounded-xl border border-brand-border bg-brand-card p-5">
           <div className="flex flex-col items-center py-16 text-center">
             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent-red/10">
               <ShieldX className="h-8 w-8 text-accent-red" />
             </div>
-            <p className="text-lg font-medium text-text-primary">{error}</p>
+            <p className="text-lg font-medium text-brand-text">{error}</p>
           </div>
-        </GlassCard>
+        </div>
       </div>
     );
   }
@@ -95,33 +94,33 @@ export default function CertificateDetailPage() {
 
   return (
     <div className="mx-auto max-w-2xl">
-      <Link href="/certificates" className="mb-6 flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary">
+      <Link href="/certificates" className="mb-6 flex items-center gap-1 text-sm text-brand-text-mid hover:text-brand-text">
         <ArrowLeft className="h-4 w-4" /> Back to certificates
       </Link>
 
-      <GlassCard className="mb-6">
+      <div className="mb-6 rounded-xl border border-brand-border bg-brand-card p-5">
         <div className="mb-6 flex items-center gap-3">
-          <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-accent-500/10">
-            <Award className="h-7 w-7 text-accent-500" />
+          <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-brand-green-light">
+            <Award className="h-7 w-7 text-brand-green" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-text-primary">{data.courseTitle}</h1>
-            <p className="text-sm text-text-secondary">Course Completion Certificate</p>
+            <h1 className="text-xl font-bold text-brand-text">{data.courseTitle}</h1>
+            <p className="text-sm text-brand-text-mid">Course Completion Certificate</p>
           </div>
         </div>
 
-        <div className="mb-6 space-y-3 rounded-lg bg-surface-card p-4">
+        <div className="mb-6 space-y-3 rounded-lg bg-brand-card p-4">
           <div className="flex justify-between">
-            <span className="text-sm text-text-tertiary">Student</span>
-            <span className="text-sm font-medium text-text-primary">{data.studentName}</span>
+            <span className="text-sm text-brand-text-light">Student</span>
+            <span className="text-sm font-medium text-brand-text">{data.studentName}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-sm text-text-tertiary">Issuer</span>
-            <span className="text-sm font-medium text-text-primary">{data.issuerName}</span>
+            <span className="text-sm text-brand-text-light">Issuer</span>
+            <span className="text-sm font-medium text-brand-text">{data.issuerName}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-sm text-text-tertiary">Issued on</span>
-            <span className="text-sm text-text-primary">
+            <span className="text-sm text-brand-text-light">Issued on</span>
+            <span className="text-sm text-brand-text">
               {new Date(data.issueDate).toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "long",
@@ -130,8 +129,8 @@ export default function CertificateDetailPage() {
             </span>
           </div>
           <div className="flex justify-between">
-            <span className="text-sm text-text-tertiary">Certificate ID</span>
-            <span className="font-mono text-sm text-text-primary">{certId}</span>
+            <span className="text-sm text-brand-text-light">Certificate ID</span>
+            <span className="font-mono text-sm text-brand-text">{certId}</span>
           </div>
         </div>
 
@@ -139,13 +138,13 @@ export default function CertificateDetailPage() {
           <button
             onClick={() => { setDownloading(true); downloadCertificate(certId).finally(() => setDownloading(false)); }}
             disabled={downloading}
-            className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-accent-500 px-4 py-2 text-sm font-medium text-text-on-accent transition-colors hover:bg-accent-600 disabled:opacity-50"
+            className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-brand-green px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-green-dark disabled:opacity-50"
           >
             {downloading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
             {downloading ? "Downloading..." : "Download PDF"}
           </button>
         </div>
-      </GlassCard>
+      </div>
 
       <div className="mb-6">
         <CertificateMint

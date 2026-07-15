@@ -67,10 +67,21 @@ export function CourseCard({ course }: { course: LandingCourse }) {
   );
 }
 
+const CATEGORY_GRADIENTS: Record<string, string> = {
+  "Blockchain": "from-gray-700/30 to-gray-900/40",
+  "Design": "from-gray-600/30 to-gray-900/40",
+  "Data Science": "from-gray-700/30 to-gray-900/40",
+  "Development": "from-gray-600/30 to-gray-900/40",
+  "Business": "from-gray-700/30 to-gray-900/40",
+  "Marketing": "from-gray-600/30 to-gray-900/40",
+  "AI": "from-gray-700/30 to-gray-900/40",
+};
+
 export function BackendCourseCard({ course }: { course: BackendCourse }) {
   const reduced = useReducedMotion();
   const displayPrice = course.pricingModel === "FREE" ? 0 : Number(course.price)
   const instructorName = course.instructor?.fullName ?? "Instructor"
+  const gradient = CATEGORY_GRADIENTS[course.category] ?? "from-gray-600/20 to-gray-900/30";
 
   return (
     <motion.div
@@ -78,8 +89,8 @@ export function BackendCourseCard({ course }: { course: BackendCourse }) {
       transition={{ type: "spring", stiffness: 300, damping: 15 }}
     >
       <Link href={`/courses/${course.id}`} className="group block">
-        <div className="overflow-hidden rounded-xl border border-border-default bg-surface-card transition-colors hover:border-border-strong">
-          <div className="relative flex h-40 items-center justify-center bg-surface-sunken">
+        <div className="overflow-hidden rounded-xl border border-border-default bg-surface-card transition-colors hover:border-border-strong hover:shadow-sm">
+          <div className={`relative flex h-40 items-center justify-center bg-gradient-to-br ${gradient}`}>
             {course.coverImageUrl ? (
               <Image
                 src={course.coverImageUrl}
@@ -89,9 +100,11 @@ export function BackendCourseCard({ course }: { course: BackendCourse }) {
                 className="object-contain p-6 transition-transform duration-200 group-hover:scale-105"
               />
             ) : (
-              <BookOpen className="h-12 w-12 text-accent-500" />
+              <div className="flex h-full w-full items-center justify-center">
+                <BookOpen className="h-14 w-14 text-white/40" />
+              </div>
             )}
-            <span className="absolute right-3 top-3 rounded-full bg-accent-500 px-2.5 py-0.5 text-xs font-semibold text-text-on-accent">
+            <span className="absolute right-3 top-3 rounded-full bg-white/90 px-2.5 py-0.5 text-xs font-semibold text-gray-800 shadow-sm backdrop-blur-sm">
               {course.category}
             </span>
           </div>

@@ -76,7 +76,7 @@ export function DashboardHeader({
           </button>
           <ThemeToggle />
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gradient-to-br from-accent-400 to-accent-600 text-xs font-bold text-white shadow-sm ring-2 ring-transparent transition-all hover:ring-accent-500/30">
+            <DropdownMenuTrigger className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-accent-500 text-xs font-bold text-text-on-accent ring-2 ring-transparent transition-all hover:ring-accent-500/30">
               {initials}
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56 rounded-xl border-border-default p-1.5">

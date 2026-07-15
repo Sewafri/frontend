@@ -51,7 +51,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
         mobileOpen={mobileSidebar}
         onMobileClose={() => setMobileSidebar(false)}
       />
-      <div className="ml-0 flex flex-1 flex-col md:ml-56">
+      <div className="ml-0 flex flex-1 flex-col">
         <DashboardHeader
           breadcrumb="Student"
           currentPage="Learning"
@@ -60,7 +60,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
           userRole={capitalizeRole(user.role)}
           onMenuToggle={() => setMobileSidebar(true)}
         />
-        <main className="flex-1 overflow-y-auto bg-surface-dark p-4 lg:p-8">
+        <main className="flex-1 overflow-y-auto bg-surface-dark p-4 lg:p-6">
           <div className="mx-auto max-w-7xl">{children}</div>
         </main>
       </div>

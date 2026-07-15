@@ -51,6 +51,31 @@ export async function checkCryptoPayment(paymentId: string): Promise<CryptoCheck
   })
 }
 
+export async function confirmStripeSession(sessionId: string): Promise<{ enrollment: { id: string } }> {
+  return apiMutate<{ enrollment: { id: string } }>(
+    "/payments/confirm-stripe-session",
+    {
+      method: "POST",
+      body: JSON.stringify({ sessionId }),
+    },
+    "Enrollment confirmed!",
+  )
+}
+
+export async function confirmCryptoTransaction(
+  paymentId: string,
+  txHash: string,
+): Promise<{ status: string }> {
+  return apiMutate<{ status: string }>(
+    `/payments/crypto/${paymentId}/confirm`,
+    {
+      method: "POST",
+      body: JSON.stringify({ txHash }),
+    },
+    "Payment confirmed! You are now enrolled.",
+  )
+}
+
 export async function retryCryptoPayment(paymentId: string): Promise<CryptoRetryResult> {
   return apiMutate<CryptoRetryResult>(
     `/payments/crypto/${paymentId}/retry`,

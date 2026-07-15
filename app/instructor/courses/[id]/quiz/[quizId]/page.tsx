@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { PageHeader } from "@/components/ui/page-header";
-import GlassCard from "@/components/ui/glass-card";
 import { ArrowLeft, Plus, Trash2 } from "lucide-react";
 import {
   addQuizQuestion,
@@ -121,29 +119,29 @@ export default function QuizEditorPage() {
   return (
     <div className="">
       <div className="mb-6 flex items-center gap-3">
-        <Link href={`/instructor/courses/${courseId}/quiz`} className="flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary">
+        <Link href={`/instructor/courses/${courseId}/quiz`} className="flex items-center gap-1 text-sm text-brand-text-mid hover:text-brand-text">
           <ArrowLeft className="h-4 w-4" /> Back to Quizzes
         </Link>
       </div>
 
-      <PageHeader
-        title="Edit Quiz"
-        description={`Quiz: ${quizId}`}
-        actions={
-          <button onClick={handleAddQuestion} className="cursor-pointer flex items-center gap-2 rounded-lg bg-surface-card px-4 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-surface-card-hover">
-            <Plus className="h-4 w-4" /> Add Question
-          </button>
-        }
-      />
+      <div className="mb-7 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-brand-text sm:text-3xl">Edit Quiz</h1>
+          <p className="mt-1 text-sm text-brand-text-mid">Quiz: {quizId}</p>
+        </div>
+        <button onClick={handleAddQuestion} className="cursor-pointer flex items-center gap-2 rounded-lg bg-brand-card px-4 py-2 text-sm font-medium text-brand-text transition-colors hover:bg-brand-bg">
+          <Plus className="h-4 w-4" /> Add Question
+        </button>
+      </div>
 
       {questions.length === 0 ? (
-        <p className="py-8 text-center text-sm text-text-secondary">No questions yet. Add your first question.</p>
+        <p className="py-8 text-center text-sm text-brand-text-mid">No questions yet. Add your first question.</p>
       ) : (
         <div className="space-y-4">
           {questions.map((q, idx) => (
-            <GlassCard key={q.id}>
+            <div key={q.id} className="rounded-xl border border-brand-border bg-brand-card p-5">
               <div className="flex items-start justify-between mb-3">
-                <span className="text-sm font-medium text-text-primary">Question {idx + 1}</span>
+                <span className="text-sm font-medium text-brand-text">Question {idx + 1}</span>
                 <button onClick={() => setDeleteTarget(q.id)} aria-label="Remove question" className="cursor-pointer text-accent-red hover:text-accent-red/80"><Trash2 className="h-4 w-4" /></button>
               </div>
               <input
@@ -152,7 +150,7 @@ export default function QuizEditorPage() {
                 onChange={(e) => updateField(q.id, "text", e.target.value)}
                 placeholder="Enter question..."
                 aria-label="Question text"
-                className="mb-3 w-full rounded-lg border border-border-default bg-surface-card px-3 py-2 text-sm text-text-primary placeholder-text-secondary outline-none focus:border-accent-500/50"
+                className="mb-3 w-full rounded-lg border border-brand-border bg-brand-card px-3 py-2 text-sm text-brand-text placeholder-text-brand-text-mid outline-none focus:border-brand-green focus:shadow-[0_0_0_3px_rgba(10,124,66,0.08)]"
               />
               <div className="space-y-2">
                 {q.answerOptions.map((opt, optIdx) => (
@@ -178,7 +176,7 @@ export default function QuizEditorPage() {
                         );
                       }}
                       aria-label={`Mark option ${optIdx + 1} as correct`}
-                      className="accent-accent-500"
+                      className="accent-brand-green"
                     />
                     <input
                       type="text"
@@ -186,7 +184,7 @@ export default function QuizEditorPage() {
                       onChange={(e) => updateOption(q.id, optIdx, "text", e.target.value)}
                       placeholder={`Option ${optIdx + 1}`}
                       aria-label={`Option ${optIdx + 1}`}
-                      className="flex-1 rounded-lg border border-border-default bg-surface-card px-3 py-2 text-sm text-text-primary placeholder-text-secondary outline-none focus:border-accent-500/50"
+                      className="flex-1 rounded-lg border border-brand-border bg-brand-card px-3 py-2 text-sm text-brand-text placeholder-text-brand-text-mid outline-none focus:border-brand-green focus:shadow-[0_0_0_3px_rgba(10,124,66,0.08)]"
                     />
                   </div>
                 ))}
@@ -195,12 +193,12 @@ export default function QuizEditorPage() {
                 <button
                   onClick={() => handleSaveQuestion(q)}
                   disabled={saving === q.id}
-                  className="cursor-pointer rounded-lg bg-accent-500 px-4 py-1.5 text-xs font-medium text-text-primary transition-colors hover:bg-accent-500/90 disabled:opacity-50"
+                  className="cursor-pointer rounded-lg bg-brand-green px-4 py-1.5 text-xs font-medium text-white transition-colors hover:bg-brand-green-dark disabled:opacity-50"
                 >
                   {saving === q.id ? "Saving..." : "Save Question"}
                 </button>
               </div>
-            </GlassCard>
+            </div>
           ))}
         </div>
       )}

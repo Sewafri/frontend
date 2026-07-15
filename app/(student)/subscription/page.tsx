@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Crown, RefreshCw, AlertCircle, Loader2 } from "lucide-react"
-import { PageHeader } from "@/components/ui/page-header"
 import { getMySubscription, cancelSubscription, renewSubscription } from "@/lib/data/subscriptions"
 import { ConfirmDialog } from "@/components/ui/confirm-dialog"
 import { ApiError } from "@/lib/api/client"
@@ -12,10 +11,10 @@ import type { Subscription } from "@/types/db"
 type SubState = "loading" | "no-sub" | "active" | "error"
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
-  ACTIVE: { label: "Active", color: "text-accent-green" },
+  ACTIVE: { label: "Active", color: "text-brand-green" },
   CANCELED: { label: "Canceled", color: "text-accent-red" },
-  EXPIRED: { label: "Expired", color: "text-text-tertiary" },
-  PAST_DUE: { label: "Past Due", color: "text-accent-amber" },
+  EXPIRED: { label: "Expired", color: "text-brand-text-light" },
+  PAST_DUE: { label: "Past Due", color: "text-brand-amber" },
 }
 
 export default function SubscriptionPage() {
@@ -74,7 +73,7 @@ export default function SubscriptionPage() {
   if (state === "loading") {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="h-6 w-6 animate-spin text-accent-500" />
+        <Loader2 className="h-6 w-6 animate-spin text-brand-text-light" />
       </div>
     )
   }
@@ -83,31 +82,36 @@ export default function SubscriptionPage() {
 
   return (
     <div>
-      <PageHeader
-        title="My Subscription"
-        description="Manage your subscription plan"
-      />
+      {/* Page Header */}
+      <div className="mb-7">
+        <h1 className="text-2xl font-bold tracking-tight text-brand-text sm:text-3xl">
+          My Subscription
+        </h1>
+        <p className="mt-1 text-sm text-brand-text-mid">
+          Manage your subscription plan
+        </p>
+      </div>
 
       {state === "no-sub" && (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-border-default bg-surface-dark py-16">
-          <Crown className="mb-3 h-12 w-12 text-text-tertiary" />
-          <h2 className="text-lg font-semibold text-text-primary">No Active Subscription</h2>
-          <p className="mt-1 text-sm text-text-secondary">
+        <div className="flex flex-col items-center justify-center rounded-xl border border-brand-border bg-brand-card py-16">
+          <Crown className="mb-3 h-12 w-12 text-brand-text-light" />
+          <h2 className="text-lg font-semibold text-brand-text">No Active Subscription</h2>
+          <p className="mt-1 text-sm text-brand-text-mid">
             You don&apos;t have a subscription yet.
           </p>
         </div>
       )}
 
       {state === "error" && (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-border-default bg-surface-dark py-16">
+        <div className="flex flex-col items-center justify-center rounded-xl border border-brand-border bg-brand-card py-16">
           <AlertCircle className="mb-3 h-12 w-12 text-accent-red" />
-          <h2 className="text-lg font-semibold text-text-primary">Something went wrong</h2>
-          <p className="mt-1 text-sm text-text-secondary">
+          <h2 className="text-lg font-semibold text-brand-text">Something went wrong</h2>
+          <p className="mt-1 text-sm text-brand-text-mid">
             Could not load subscription data. Please try again.
           </p>
           <button
             onClick={loadSubscription}
-            className="mt-4 cursor-pointer rounded-lg bg-accent-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-500/90"
+            className="mt-4 cursor-pointer rounded-lg bg-brand-green px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-green-dark"
           >
             Retry
           </button>
@@ -115,13 +119,13 @@ export default function SubscriptionPage() {
       )}
 
       {subscription && statusInfo && (
-        <div className="rounded-xl border border-border-default bg-surface-dark p-6">
+        <div className="rounded-xl border border-brand-border bg-brand-card p-6">
           <div className="mb-6 flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-semibold text-text-primary">
+              <h3 className="text-lg font-semibold text-brand-text">
                 {subscription.plan?.name ?? "Subscription"}
               </h3>
-              <p className="mt-1 text-sm text-text-secondary">
+              <p className="mt-1 text-sm text-brand-text-mid">
                 {subscription.plan?.currency === "XAF"
                   ? `${Number(subscription.plan.price).toLocaleString()} FCFA`
                   : `$${Number(subscription.plan?.price ?? 0)}`
@@ -135,21 +139,21 @@ export default function SubscriptionPage() {
           </div>
 
           <div className="mb-6 space-y-3 text-sm">
-            <div className="flex justify-between text-text-secondary">
+            <div className="flex justify-between text-brand-text-mid">
               <span>Auto-renew</span>
-              <span className={subscription.autoRenew ? "text-accent-green" : "text-text-tertiary"}>
+              <span className={subscription.autoRenew ? "text-brand-green" : "text-brand-text-light"}>
                 {subscription.autoRenew ? "Enabled" : "Disabled"}
               </span>
             </div>
-            <div className="flex justify-between text-text-secondary">
+            <div className="flex justify-between text-brand-text-mid">
               <span>Current period ends</span>
-              <span className="text-text-primary">
+              <span className="text-brand-text">
                 {new Date(subscription.currentPeriodEnd).toLocaleDateString()}
               </span>
             </div>
-            <div className="flex justify-between text-text-secondary">
+            <div className="flex justify-between text-brand-text-mid">
               <span>Started</span>
-              <span className="text-text-primary">
+              <span className="text-brand-text">
                 {new Date(subscription.startedAt).toLocaleDateString()}
               </span>
             </div>
@@ -157,11 +161,11 @@ export default function SubscriptionPage() {
 
           {subscription.plan?.features && subscription.plan.features.length > 0 && (
             <div className="mb-6">
-              <h4 className="mb-2 text-sm font-semibold text-text-primary">Features</h4>
+              <h4 className="mb-2 text-sm font-semibold text-brand-text">Features</h4>
               <ul className="space-y-1">
                 {subscription.plan.features.map((feature, i) => (
-                  <li key={i} className="flex items-center gap-2 text-sm text-text-secondary">
-                    <span className="h-1.5 w-1.5 rounded-full bg-accent-green" />
+                  <li key={i} className="flex items-center gap-2 text-sm text-brand-text-mid">
+                    <span className="h-1.5 w-1.5 rounded-full bg-brand-green" />
                     {feature}
                   </li>
                 ))}
@@ -174,7 +178,7 @@ export default function SubscriptionPage() {
               <button
                 onClick={handleRenew}
                 disabled={renewing}
-                className="flex cursor-pointer items-center gap-2 rounded-lg bg-accent-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-500/90 disabled:opacity-50"
+                className="flex cursor-pointer items-center gap-2 rounded-lg bg-brand-green px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-green-dark disabled:opacity-50"
               >
                 <RefreshCw className={`h-4 w-4 ${renewing ? "animate-spin" : ""}`} />
                 {renewing ? "Enabling..." : "Enable Auto-Renew"}

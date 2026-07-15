@@ -1,8 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { PageHeader } from "@/components/ui/page-header"
-import GlassCard from "@/components/ui/glass-card"
 import { GraduationCap, Send, AlertCircle } from "lucide-react"
 import { applyAsInstructor } from "@/lib/data/instructor-applications"
 import { ApiError } from "@/lib/api/client"
@@ -35,32 +33,38 @@ export default function InstructorApplyPage() {
   if (submitted) {
     return (
       <div>
-        <PageHeader title="Application Submitted" description="We'll review your application and get back to you soon" />
-        <GlassCard>
+        <div className="mb-7">
+          <h1 className="text-2xl font-bold tracking-tight text-brand-text sm:text-3xl">Application Submitted</h1>
+          <p className="mt-1 text-sm text-brand-text-mid">We'll review your application and get back to you soon</p>
+        </div>
+        <div className="rounded-xl border border-brand-border bg-brand-card p-5">
           <div className="flex flex-col items-center py-10 text-center">
-            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent-green/10">
-              <GraduationCap className="h-8 w-8 text-accent-green" />
+            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-brand-green/10">
+              <GraduationCap className="h-8 w-8 text-brand-green" />
             </div>
-            <h2 className="text-xl font-semibold text-text-primary">Thank You!</h2>
-            <p className="mt-2 max-w-md text-sm text-text-secondary">
+            <h2 className="text-xl font-semibold text-brand-text">Thank You!</h2>
+            <p className="mt-2 max-w-md text-sm text-brand-text-mid">
               Your application to become an instructor has been submitted successfully. Our team will review your qualifications and get back to you within 3-5 business days.
             </p>
           </div>
-        </GlassCard>
+        </div>
       </div>
     )
   }
 
   return (
     <div>
-      <PageHeader title="Become an Instructor" description="Share your knowledge with thousands of students" />
+      <div className="mb-7">
+        <h1 className="text-2xl font-bold tracking-tight text-brand-text sm:text-3xl">Become an Instructor</h1>
+        <p className="mt-1 text-sm text-brand-text-mid">Share your knowledge with thousands of students</p>
+      </div>
 
-      <GlassCard>
+      <div className="rounded-xl border border-brand-border bg-brand-card p-5">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <h3 className="mb-4 text-sm font-semibold text-text-primary">Tell Us About Yourself</h3>
+            <h3 className="mb-4 text-sm font-semibold text-brand-text">Tell Us About Yourself</h3>
             <div>
-              <label className="mb-1.5 block text-xs font-medium text-text-secondary">
+              <label className="mb-1.5 block text-xs font-medium text-brand-text-mid">
                 Area of Expertise <span className="text-accent-red">*</span>
               </label>
               <input
@@ -70,11 +74,11 @@ export default function InstructorApplyPage() {
                 placeholder="e.g., Web Development, Data Science, UI/UX Design"
                 maxLength={500}
                 required
-                className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary placeholder-text-tertiary outline-none transition-colors focus:border-accent-500/50 focus:ring-2 focus:ring-accent-500/10"
+                className="w-full rounded-lg border border-brand-border bg-brand-card px-3 py-2.5 text-sm text-brand-text placeholder-text-brand-text-light outline-none transition-colors focus:border-brand-green/50 focus:ring-2 focus:ring-brand-green/10"
               />
             </div>
             <div className="mt-4">
-              <label className="mb-1.5 block text-xs font-medium text-text-secondary">
+              <label className="mb-1.5 block text-xs font-medium text-brand-text-mid">
                 Bio / Teaching Philosophy <span className="text-accent-red">*</span>
               </label>
               <textarea
@@ -85,9 +89,9 @@ export default function InstructorApplyPage() {
                 minLength={10}
                 maxLength={5000}
                 required
-                className="w-full rounded-lg border border-border-default bg-surface-card px-3 py-2.5 text-sm text-text-primary placeholder-text-tertiary outline-none transition-colors focus:border-accent-500/50 focus:ring-2 focus:ring-accent-500/10"
+                className="w-full rounded-lg border border-brand-border bg-brand-card px-3 py-2.5 text-sm text-brand-text placeholder-text-brand-text-light outline-none transition-colors focus:border-brand-green/50 focus:ring-2 focus:ring-brand-green/10"
               />
-              <p className="mt-1 text-right text-xs text-text-tertiary">{bio.length}/5000</p>
+              <p className="mt-1 text-right text-xs text-brand-text-light">{bio.length}/5000</p>
             </div>
           </div>
 
@@ -98,18 +102,18 @@ export default function InstructorApplyPage() {
             </div>
           )}
 
-          <div className="flex justify-end border-t border-border-default pt-6">
+          <div className="flex justify-end border-t border-brand-border pt-6">
             <button
               type="submit"
               disabled={submitting}
-              className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-accent-500 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-accent-500/90 disabled:opacity-50"
+              className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-brand-green px-6 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-brand-green-dark disabled:opacity-50"
             >
               <Send className="h-4 w-4" />
               {submitting ? "Submitting..." : "Submit Application"}
             </button>
           </div>
         </form>
-      </GlassCard>
+      </div>
     </div>
   )
 }
