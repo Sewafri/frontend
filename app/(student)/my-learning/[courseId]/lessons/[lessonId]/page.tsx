@@ -7,6 +7,7 @@ import { ArrowLeft, BookOpen } from "lucide-react";
 import LessonContent from "@/components/lessons/lesson-content";
 import { getLesson, completeLesson } from "@/lib/data/lessons";
 import { LessonResources } from "@/components/lessons/lesson-resources";
+import { AskTutor } from "@/components/courses/ask-tutor";
 import { ApiError } from "@/lib/api/client";
 import type { Lesson } from "@/types/db";
 
@@ -121,6 +122,8 @@ export default function LessonViewerPage() {
       <div className="mt-8">
         <LessonResources lessonId={lessonId} />
       </div>
+
+      <AskTutor courseId={courseId} courseTitle={lesson.title} />
     </div>
   );
 }

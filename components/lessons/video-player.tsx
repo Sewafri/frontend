@@ -154,6 +154,21 @@ export default function VideoPlayer({
     );
   }
 
+  const isYouTube = src.includes("youtube.com") || src.includes("youtu.be");
+  if (isYouTube) {
+    return (
+      <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-border-default bg-black">
+        <iframe
+          src={src}
+          title={title ?? "Video player"}
+          className="absolute inset-0 h-full w-full border-0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+        />
+      </div>
+    );
+  }
+
   return (
     <div
       ref={containerRef}

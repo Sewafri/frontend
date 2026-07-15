@@ -91,6 +91,17 @@ export async function getCourseProgress(courseId: string): Promise<CourseProgres
   return data
 }
 
+export async function getResumeLesson(
+  courseId: string,
+): Promise<{ lessonId: string | null }> {
+  try {
+    const data = await api<{ lessonId: string }>(`/enrollments/${courseId}/resume`)
+    return data
+  } catch {
+    return { lessonId: null }
+  }
+}
+
 export interface CodeExecutionResult {
   output: string
   error?: string
