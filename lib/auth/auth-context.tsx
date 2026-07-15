@@ -50,10 +50,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return data.user
   }, [])
 
-  const googleSignIn = useCallback(async (idToken: string) => {
+  const loginWithGoogle = useCallback(async (
+    idToken: string,
+    role?: "STUDENT" | "INSTRUCTOR",
+  ) => {
     const data = await api<AuthResponse>("/auth/google", {
       method: "POST",
-      body: JSON.stringify({ idToken }),
+      body: JSON.stringify({ idToken, role }),
     })
     storeTokens(data.accessToken, data.refreshToken)
     setUser(data.user)
@@ -84,8 +87,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isAuthenticated: !!user,
         login,
         register,
-        googleSignIn,
         logout,
+        loginWithGoogle,
       }}
     >
       {children}
